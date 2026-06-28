@@ -1,0 +1,30 @@
+{
+  "name": "biaslens",
+  "version": "0.1.0",
+  "private": true,
+  "description": "BiasLens — algorithmic bias testing and accountability platform by BeAccessible",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.45.4",
+    "docx": "^9.0.3",
+    "next": "15.1.6",
+    "pdf-lib": "^1.17.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.10",
+    "@types/react": "19.0.7",
+    "@types/react-dom": "19.0.3",
+    "typescript": "5.5.4"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  }
+}
