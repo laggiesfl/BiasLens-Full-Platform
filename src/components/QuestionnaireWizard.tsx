@@ -98,7 +98,7 @@ export function QuestionnaireWizard({
     <div className="stack">
       <div>
         <p style={{ margin: "0 0 6px", fontWeight: 700 }}>
-          Step {stepIndex + 1} of {total}: {step.title}
+          Step {stepIndex + 1} of {total}
         </p>
         <div
           role="progressbar"
@@ -141,16 +141,20 @@ export function QuestionnaireWizard({
           else void goTo(stepIndex + 1);
         }}
       >
-        <fieldset className="card" style={{ border: "1px solid var(--ba-border)" }}>
-          <legend style={{ padding: "0 8px", fontWeight: 800, color: "var(--ba-deep-blue)" }}>
-            <span
-              tabIndex={-1}
-              ref={headingRef}
-              style={{ outline: "none" }}
-            >
-              {step.title}
-            </span>
-          </legend>
+        <div
+          className="card"
+          role="group"
+          aria-labelledby="step-heading"
+          style={{ border: "1px solid var(--ba-border)" }}
+        >
+          <h2
+            id="step-heading"
+            tabIndex={-1}
+            ref={headingRef}
+            style={{ outline: "none", fontSize: "1.25rem", marginTop: 0 }}
+          >
+            {step.title}
+          </h2>
           {step.intro ? <p className="muted">{step.intro}</p> : null}
 
           <div className="stack">
@@ -165,7 +169,7 @@ export function QuestionnaireWizard({
               />
             ))}
           </div>
-        </fieldset>
+        </div>
 
         <div className="cluster between" style={{ marginTop: 20 }}>
           <button

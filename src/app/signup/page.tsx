@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { t } from "@/lib/i18n";
 import { signUp } from "@/lib/actions/auth";
+import { PasswordField } from "@/components/PasswordField";
 
 export default async function SignUpPage({
   searchParams,
@@ -58,21 +59,17 @@ export default async function SignUpPage({
                 required
               />
             </div>
-            <div className="field">
-              <label htmlFor="password">{t.auth.passwordLabel}</label>
-              <p className="hint" id="pw-hint">
-                Use at least 8 characters.
-              </p>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                aria-describedby="pw-hint"
-                minLength={8}
-                required
-              />
-            </div>
+            <p className="hint" id="pw-hint" style={{ marginBottom: 4 }}>
+              Use at least 8 characters.
+            </p>
+            <PasswordField
+              id="password"
+              name="password"
+              label={t.auth.passwordLabel}
+              autoComplete="new-password"
+              minLength={8}
+              describedBy="pw-hint"
+            />
             <button
               type="submit"
               className="btn btn-primary"

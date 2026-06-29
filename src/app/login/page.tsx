@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { t } from "@/lib/i18n";
 import { signIn, signInWithMagicLink } from "@/lib/actions/auth";
+import { PasswordField } from "@/components/PasswordField";
 
 export default async function LoginPage({
   searchParams,
@@ -48,16 +49,12 @@ export default async function LoginPage({
               required
             />
           </div>
-          <div className="field">
-            <label htmlFor="password">{t.auth.passwordLabel}</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-            />
-          </div>
+          <PasswordField
+            id="password"
+            name="password"
+            label={t.auth.passwordLabel}
+            autoComplete="current-password"
+          />
           <button type="submit" className="btn btn-primary" style={{ width: "100%" }}>
             {t.common.signIn}
           </button>

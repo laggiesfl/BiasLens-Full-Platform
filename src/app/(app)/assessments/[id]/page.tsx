@@ -73,18 +73,20 @@ export default async function AssessmentDetailPage({
           AI system basics
         </h2>
         <p className="muted">
-          Capture the essentials now. The full guided questionnaire arrives in
-          the next sprint and will build on these answers.
+          Capture the essentials here, or use the guided questionnaire below for
+          the full set of questions. Short explanations are under each field.
         </p>
         <form action={updateSystemBasics} className="stack">
           <input type="hidden" name="assessment_id" value={id} />
           <div className="field">
             <label htmlFor="title">Assessment name</label>
+            <p className="hint">A name for this piece of work, so you can find it later.</p>
             <input id="title" name="title" type="text" defaultValue={assessment.title} />
           </div>
           <div className="grid grid-2">
             <div className="field">
               <label htmlFor="system_name">AI system name</label>
+              <p className="hint">The name of the AI tool or system you are looking at.</p>
               <input
                 id="system_name"
                 name="system_name"
@@ -94,6 +96,7 @@ export default async function AssessmentDetailPage({
             </div>
             <div className="field">
               <label htmlFor="decision_domain">Decision domain</label>
+              <p className="hint">The area of life it affects — e.g. welfare, policing, healthcare, employment, finance.</p>
               <select
                 id="decision_domain"
                 name="decision_domain"
@@ -109,6 +112,7 @@ export default async function AssessmentDetailPage({
             </div>
             <div className="field">
               <label htmlFor="provider">System owner or provider</label>
+              <p className="hint">The organisation that built or supplies the system.</p>
               <input
                 id="provider"
                 name="provider"
@@ -118,6 +122,7 @@ export default async function AssessmentDetailPage({
             </div>
             <div className="field">
               <label htmlFor="deployer">Deployer</label>
+              <p className="hint">The organisation that uses the system to make or support decisions.</p>
               <input
                 id="deployer"
                 name="deployer"
@@ -128,6 +133,7 @@ export default async function AssessmentDetailPage({
           </div>
           <div className="field">
             <label htmlFor="purpose">What is the system used for?</label>
+            <p className="hint">In your own words, what does it decide or help to decide?</p>
             <textarea
               id="purpose"
               name="purpose"

@@ -1,5 +1,6 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from "pdf-lib";
 import type { ReportData } from "@/lib/risk/report";
+import { BEACCESSIBLE_LOGO_PNG_BASE64 } from "@/lib/export/logo";
 
 /**
  * Bias Risk Report as a PDF (Brief Section 19). Uses pdf-lib (pure JS, reliable
@@ -74,6 +75,16 @@ export async function buildPdfReport(data: ReportData): Promise<Uint8Array> {
   }
   function label(l: string, v: string) {
     write(`${l}: ${v || "Not provided"}`, { size: 11, gap: 2 });
+  }
+
+  try {
+    const logo = await pdf.embedPng(
+      Uint8Array.from(Buffer.from(BEACCESSIBLE_LOGO_PNG_BASE64, "base64"))
+    );
+    page.drawImage(logo, { x: MARGIN, y: y - 50, width: 50, height: 50 });
+    y -= 60;
+  } catch {
+    // continue without logo if it cannot be embedded
   }
 
   write("Bias Risk Report", { size: 22, f: bold, color: DEEP, gap: 4 });

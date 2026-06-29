@@ -39,11 +39,20 @@ export default async function ReportPage({
             one from your questionnaire answers. You can edit it before exporting.
           </p>
         </div>
+        {sp.message ? (
+          <p className="form-success" role="status">{sp.message}</p>
+        ) : null}
         <form action={generateRiskClassification.bind(null, id)}>
           <button type="submit" className="btn btn-primary">
             Generate Bias Risk Report
           </button>
         </form>
+        <p className="muted">
+          Tip: after generating, you can review and edit the result, then
+          download it as Word, PDF or CSV. The Evidence Log (back on the
+          assessment page) is a separate place for you to track documents you
+          request and receive.
+        </p>
         <p className="muted">
           Tip: complete the{" "}
           <Link href={`/assessments/${id}/questionnaire`}>questionnaire</Link>{" "}

@@ -96,6 +96,25 @@ export async function sendPasswordReset(formData: FormData) {
   redirect("/reset-password?message=" + encodeURIComponent("check-email"));
 }
 
+export async function updatePassword(formData: FormData) {
+  const password = String(formData.get("password") ?? "");
+  if (password.length < 8) {
+    redirect(
+      "/update-password?error=" +
+        encodeURIComponent("Use a password of at least 8 characters.")
+    );
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) {
+    redirect("/update-password?error=" + encodeURIComponent(error.message));
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/");
+}
+
 export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();

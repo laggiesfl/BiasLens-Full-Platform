@@ -8,7 +8,9 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/";
+  const type = searchParams.get("type");
+  // Password recovery links should land on the "set a new password" screen.
+  const next = type === "recovery" ? "/update-password" : searchParams.get("next") ?? "/";
 
   if (code) {
     const supabase = await createClient();

@@ -64,9 +64,15 @@ export default async function EvidencePage({
       <div className="page-header">
         <h1>Evidence Log</h1>
         <p>
-          Keep track of records you have asked for and received for{" "}
-          <strong>{assessment.title}</strong>. You can attach files and record a
-          follow-up date for each item.
+          This is your own record of documents you request and receive for{" "}
+          <strong>{assessment.title}</strong>. It starts empty — you add a row
+          for each document, set its status, attach the file when it arrives, and
+          set a follow-up date. Nothing is added here automatically.
+        </p>
+        <p className="muted">
+          Examples of what to log: technical specifications, training-data
+          sources, vendor contracts, equality or bias evaluations, oversight
+          reports, procurement documents, and complaints or appeals data.
         </p>
       </div>
 

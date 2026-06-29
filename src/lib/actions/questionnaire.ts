@@ -53,5 +53,10 @@ export async function finishQuestionnaire(assessmentId: string) {
   });
 
   revalidatePath(`/assessments/${assessmentId}`);
-  redirect(`/assessments/${assessmentId}/report`);
+  redirect(
+    `/assessments/${assessmentId}/report?message=` +
+      encodeURIComponent(
+        "Questionnaire saved. Now generate your Bias Risk Report below."
+      )
+  );
 }

@@ -9,8 +9,10 @@ import {
   TableCell,
   WidthType,
   AlignmentType,
+  ImageRun,
 } from "docx";
 import type { ReportData } from "@/lib/risk/report";
+import { BEACCESSIBLE_LOGO_PNG_BASE64 } from "@/lib/export/logo";
 
 /**
  * Accessible Bias Risk Report as a Word document (Brief Section 19.3):
@@ -41,6 +43,21 @@ export async function buildDocxReport(data: ReportData): Promise<Buffer> {
   const children: Paragraph[] | (Paragraph | Table)[] = [];
 
   children.push(
+    new Paragraph({
+      children: [
+        new ImageRun({
+          type: "png",
+          data: Buffer.from(BEACCESSIBLE_LOGO_PNG_BASE64, "base64"),
+          transformation: { width: 64, height: 64 },
+          altText: {
+            title: "BeAccessible logo",
+            description:
+              "BeAccessible circular badge logo — Creating Access for All",
+            name: "BeAccessible logo",
+          },
+        }),
+      ],
+    }),
     new Paragraph({ text: "Bias Risk Report", heading: HeadingLevel.TITLE }),
     new Paragraph({
       children: [
