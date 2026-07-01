@@ -20,7 +20,10 @@ export default function AccessibilityStatementPage() {
 
         <h2 style={{ fontSize: "1.2rem" }}>What we have built in</h2>
         <ul>
-          <li>A skip-to-main-content link on every page.</li>
+          <li>
+            A skip-to-main-content link on every page that has a navigation
+            menu (sign-in pages have no repeated blocks to skip past).
+          </li>
           <li>Semantic landmarks and a logical heading order.</li>
           <li>Full keyboard operation with a visible focus indicator.</li>
           <li>Form labels joined to their fields and clear error messages.</li>

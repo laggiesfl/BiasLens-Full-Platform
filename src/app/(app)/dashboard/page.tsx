@@ -91,19 +91,19 @@ export default async function DashboardPage() {
 
       <section className="card" aria-labelledby="modules-h">
         <h2 id="modules-h" style={{ fontSize: "1.2rem" }}>
-          What is coming next
+          What you can do now, and what is coming
         </h2>
-        <p className="muted">
-          This is the foundation release (Sprint 1). The following modules arrive
-          in later sprints:
-        </p>
+        <p className="muted">Available today in every assessment:</p>
         <ul>
-          <li>Guided Bias Risk Questionnaire (Sprint 2)</li>
-          <li>Risk classification and Bias Risk Report export (Sprint 3)</li>
-          <li>Evidence Log with attachments (Sprint 4)</li>
+          <li>Guided Bias Risk Questionnaire (plain language, saves as you go)</li>
+          <li>Risk classification and Bias Risk Report, with Word, PDF and CSV export</li>
+          <li>Evidence Log with file attachments and follow-up dates</li>
+        </ul>
+        <p className="muted" style={{ marginBottom: 0 }}>Coming in future milestones:</p>
+        <ul style={{ marginBottom: 0 }}>
           <li>
             Fairness Metrics Calculator, Compliance Mapper, Access Request
-            Generator and AIA / FRIA Builder (future milestone)
+            Generator and AIA / FRIA Builder
           </li>
         </ul>
       </section>

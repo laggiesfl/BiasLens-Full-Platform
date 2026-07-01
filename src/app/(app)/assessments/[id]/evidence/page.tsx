@@ -1,6 +1,7 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { BackLink } from "@/components/BackLink";
+import { ConfirmSubmit } from "@/components/ConfirmSubmit";
 import {
   EvidenceStatusBadge,
   EVIDENCE_STATUSES,
@@ -58,9 +59,7 @@ export default async function EvidencePage({
 
   return (
     <div className="stack">
-      <p style={{ margin: 0 }}>
-        <Link href={`/assessments/${id}`}>← Back to assessment</Link>
-      </p>
+      <BackLink href={`/assessments/${id}`} label="Back to assessment" />
       <div className="page-header">
         <h1>Evidence Log</h1>
         <p>
@@ -200,9 +199,12 @@ export default async function EvidencePage({
                       <form action={deleteEvidence} style={{ marginTop: 6 }}>
                         <input type="hidden" name="assessment_id" value={id} />
                         <input type="hidden" name="id" value={e.id} />
-                        <button type="submit" className="btn btn-danger" style={{ minHeight: 40 }}>
+                        <ConfirmSubmit
+                          style={{ minHeight: 40 }}
+                          confirmMessage={`Delete the evidence item "${e.document_name}"? This cannot be undone.`}
+                        >
                           Delete<span className="sr-only"> {e.document_name}</span>
-                        </button>
+                        </ConfirmSubmit>
                       </form>
                     </td>
                   </tr>
@@ -214,6 +216,8 @@ export default async function EvidencePage({
           <p className="card muted">No evidence items yet. Add your first one above.</p>
         )}
       </section>
+
+      <BackLink href={`/assessments/${id}`} label="Back to assessment" variant="bottom" />
     </div>
   );
 }

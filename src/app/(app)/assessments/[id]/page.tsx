@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { BackLink } from "@/components/BackLink";
 import { StatusBadge } from "@/components/StatusBadge";
 import {
   updateSystemBasics,
@@ -46,9 +47,7 @@ export default async function AssessmentDetailPage({
 
   return (
     <div className="stack">
-      <p style={{ margin: 0 }}>
-        <Link href="/assessments">← Back to My Assessments</Link>
-      </p>
+      <BackLink href="/assessments" label="Back to My Assessments" />
 
       <div className="page-header cluster between" style={{ alignItems: "flex-start" }}>
         <div>
@@ -215,6 +214,8 @@ export default async function AssessmentDetailPage({
           </Link>
         </p>
       </section>
+
+      <BackLink href="/assessments" label="Back to My Assessments" variant="bottom" />
     </div>
   );
 }

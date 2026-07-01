@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { BackLink } from "@/components/BackLink";
 import { getReportData } from "@/lib/risk/report";
 import { LevelBadge } from "@/components/LevelBadge";
 import { generateRiskClassification, saveRiskOverrides } from "@/lib/actions/risk";
@@ -28,9 +29,7 @@ export default async function ReportPage({
   if (!data) {
     return (
       <div className="stack" style={{ maxWidth: "70ch" }}>
-        <p style={{ margin: 0 }}>
-          <Link href={`/assessments/${id}`}>← Back to assessment</Link>
-        </p>
+        <BackLink href={`/assessments/${id}`} label="Back to assessment" />
         <div className="page-header">
           <h1>Bias Risk Report</h1>
           <p>
@@ -58,15 +57,14 @@ export default async function ReportPage({
           <Link href={`/assessments/${id}/questionnaire`}>questionnaire</Link>{" "}
           first for the most accurate result.
         </p>
+        <BackLink href={`/assessments/${id}`} label="Back to assessment" variant="bottom" />
       </div>
     );
   }
 
   return (
     <div className="stack" style={{ maxWidth: "80ch" }}>
-      <p style={{ margin: 0 }}>
-        <Link href={`/assessments/${id}`}>← Back to assessment</Link>
-      </p>
+      <BackLink href={`/assessments/${id}`} label="Back to assessment" />
 
       <div className="page-header cluster between" style={{ alignItems: "flex-start" }}>
         <div>
@@ -257,8 +255,8 @@ export default async function ReportPage({
             <label htmlFor="executive_summary">Executive summary</label>
             <textarea id="executive_summary" name="executive_summary" rows={4} defaultValue={data.executiveSummary} />
           </div>
-          <label className="cluster" style={{ gap: 8 }}>
-            <input type="checkbox" name="reviewed" defaultChecked={data.reviewed} style={{ width: 22, height: 22 }} />
+          <label className="check-option">
+            <input type="checkbox" name="reviewed" defaultChecked={data.reviewed} />
             <span>Mark this report as reviewed</span>
           </label>
           <button type="submit" className="btn btn-primary">Save reviewer edits</button>
@@ -269,6 +267,8 @@ export default async function ReportPage({
         Generated {new Date(data.generatedAt).toLocaleString("en-ZA")}. BiasLens by
         BeAccessible. Classifications are decision-support, not legal advice.
       </p>
+
+      <BackLink href={`/assessments/${id}`} label="Back to assessment" variant="bottom" />
     </div>
   );
 }

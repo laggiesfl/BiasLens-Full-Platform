@@ -20,10 +20,12 @@
   --ba-shadow: rgba(31, 63, 107, 0.12);
 
   /* Functional status colours — used ONLY with a text label + icon,
-     never as the sole carrier of meaning (Section 16.3 / 17.2). */
-  --status-success: #15803d;
-  --status-warning: #8a5a00;
-  --status-danger: #b42318;
+     never as the sole carrier of meaning (Section 16.3 / 17.2).
+     All darkened to meet WCAG 2.2 AAA (7:1) as text on white and on their
+     tinted message backgrounds. */
+  --status-success: #0d5f2b;
+  --status-warning: #7a4f00;
+  --status-danger: #9a1c12;
 
   --font: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --radius-card: 12px;
@@ -78,11 +80,13 @@ p {
 }
 
 a {
-  color: var(--ba-mid-blue);
+  /* Deep blue reaches 7:1 (AAA) on white and on tinted backgrounds; the
+     underline (not colour) carries the link meaning (WCAG 1.4.1). */
+  color: var(--ba-deep-blue);
   text-underline-offset: 2px;
 }
 a:hover {
-  color: var(--ba-deep-blue);
+  color: var(--ba-dark-blue);
 }
 
 /* ---------- Focus: visible 3px Deep Blue indicator (Section 17.2) ---------- */
@@ -282,11 +286,12 @@ a:hover {
   text-decoration: none;
 }
 .btn-primary {
-  background: var(--ba-mid-blue);
+  /* Deep blue gives white label text 10.6:1 (AAA); mid-blue was only 6.7:1. */
+  background: var(--ba-deep-blue);
   color: var(--ba-white);
 }
 .btn-primary:hover {
-  background: var(--ba-deep-blue);
+  background: var(--ba-dark-blue);
   color: var(--ba-white);
 }
 .btn-secondary {
@@ -417,6 +422,39 @@ tbody tr:nth-child(even) {
 }
 .muted {
   color: var(--ba-text-secondary);
+}
+/* ---------- Back links (consistent top + bottom navigation) ---------- */
+.back-link {
+  margin: 0;
+}
+.back-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 6px 4px;
+  font-weight: 600;
+}
+.back-link--bottom {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ba-border);
+}
+/* ---------- Checkbox / radio rows (box + label alignment) ---------- */
+.check-option {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.check-option input[type="checkbox"],
+.check-option input[type="radio"] {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  margin: 2px 0 0;
+}
+.check-option > span {
+  line-height: 1.5;
 }
 .page-header {
   margin-bottom: 24px;

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { StatusBadge } from "@/components/StatusBadge";
+import { ConfirmSubmit } from "@/components/ConfirmSubmit";
 import { createAssessment, deleteAssessment } from "@/lib/actions/assessments";
 
 function formatDate(value: string) {
@@ -105,14 +106,13 @@ export default async function AssessmentsPage({
                         </Link>
                         <form action={deleteAssessment}>
                           <input type="hidden" name="id" value={a.id} />
-                          <button
-                            type="submit"
-                            className="btn btn-danger"
+                          <ConfirmSubmit
                             style={{ minHeight: 40 }}
+                            confirmMessage={`Delete the assessment "${a.title}"? This permanently removes it and everything in it. This cannot be undone.`}
                           >
                             Delete
                             <span className="sr-only"> {a.title}</span>
-                          </button>
+                          </ConfirmSubmit>
                         </form>
                       </div>
                     </td>

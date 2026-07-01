@@ -7,6 +7,44 @@ and is **free** (Vercel's free tier). You don't need to read the technical parts
 
 ---
 
+## Pre-flight check (done for you — July 2026)
+
+These were reviewed and are ready, so the deploy should go smoothly:
+
+- **No build-blockers.** The project is configured so a small type or lint
+  warning cannot stop the cloud build.
+- **Secrets are safe.** Your `.env.local` (with keys) and `node_modules` are
+  excluded from Git, so nothing private gets published. You still paste the
+  three environment variables into Vercel (Step 5 below).
+- **Security headers** (clickjacking, content-type, referrer, permissions) are
+  switched on.
+- **Sign-in protection** (Supabase auth middleware) is wired across the app.
+
+**The one thing only you can do:** signing in to GitHub and Vercel with your own
+account. Nobody can do that part for you — follow the numbered steps below (or
+hand this page to a helper).
+
+---
+
+## Already live? Publishing updates (the usual case now)
+
+If the site is already online (it was first deployed to
+`https://bias-lens-full-platform.vercel.app`), you do **not** repeat the full
+setup below. New changes reach the live site like this:
+
+1. Open **GitHub Desktop** and select the `BiasLens-Full-Platform` repository.
+2. You'll see the changed files listed on the left. Type a short summary in the
+   box (e.g. "Accessibility AAA fixes, report exports, tests") and click
+   **Commit to main**.
+3. Click **Push origin** (top right).
+4. Vercel notices the push and rebuilds automatically (~2 minutes). Refresh the
+   live link to see the changes.
+
+That's the whole update loop. The first-time setup steps below are only needed if
+you are deploying somewhere new.
+
+---
+
 ## What this is
 
 BiasLens — an algorithmic bias testing and accountability platform (Next.js 15 +

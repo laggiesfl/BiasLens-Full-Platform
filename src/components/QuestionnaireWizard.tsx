@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import {
@@ -172,14 +173,22 @@ export function QuestionnaireWizard({
         </div>
 
         <div className="cluster between" style={{ marginTop: 20 }}>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => void goTo(stepIndex - 1)}
-            disabled={stepIndex === 0}
-          >
-            ← Back
-          </button>
+          {stepIndex === 0 ? (
+            <Link
+              href={`/assessments/${assessmentId}`}
+              className="btn btn-secondary"
+            >
+              ← Back to assessment
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => void goTo(stepIndex - 1)}
+            >
+              ← Back
+            </button>
+          )}
           <button type="submit" className="btn btn-primary" disabled={finishing}>
             {isLast ? (finishing ? "Saving…" : "Finish and save") : "Next →"}
           </button>
@@ -220,13 +229,12 @@ function QuestionField({
             { v: true, l: "Yes" },
             { v: false, l: "No" },
           ].map((opt) => (
-            <label key={opt.l} className="cluster" style={{ gap: 8 }}>
+            <label key={opt.l} className="check-option">
               <input
                 type="radio"
                 name={q.id}
                 checked={value === opt.v}
                 onChange={() => onBool(opt.v)}
-                style={{ width: 22, height: 22 }}
               />
               <span>{opt.l}</span>
             </label>
@@ -250,12 +258,11 @@ function QuestionField({
         ) : null}
         <div className="grid grid-2" style={{ gap: 8 }}>
           {q.options?.map((opt) => (
-            <label key={opt.value} className="cluster" style={{ gap: 8, alignItems: "flex-start" }}>
+            <label key={opt.value} className="check-option">
               <input
                 type="checkbox"
                 checked={arr.includes(opt.value)}
                 onChange={() => onToggleMulti(opt.value)}
-                style={{ width: 22, height: 22, marginTop: 2 }}
               />
               <span>{opt.label}</span>
             </label>

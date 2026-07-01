@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { BackLink } from "@/components/BackLink";
 import { QuestionnaireWizard } from "@/components/QuestionnaireWizard";
 import type { Role } from "@/lib/roles";
 import type { Answers } from "@/lib/questionnaire";
@@ -41,9 +41,7 @@ export default async function QuestionnairePage({
 
   return (
     <div className="stack" style={{ maxWidth: "70ch" }}>
-      <p style={{ margin: 0 }}>
-        <Link href={`/assessments/${id}`}>← Back to assessment</Link>
-      </p>
+      <BackLink href={`/assessments/${id}`} label="Back to assessment" />
       <div className="page-header">
         <h1>Guided Bias Risk Questionnaire</h1>
         <p>
@@ -59,6 +57,8 @@ export default async function QuestionnairePage({
         initialAnswers={(response?.answers ?? {}) as Answers}
         initialStep={response?.current_step ?? 0}
       />
+
+      <BackLink href={`/assessments/${id}`} label="Back to assessment" variant="bottom" />
     </div>
   );
 }
