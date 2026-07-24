@@ -1,0 +1,84 @@
+/* ─── Access Request Generator — BeAccessible Brand ─────────────────────── */
+
+.skipLink { position:absolute;top:-9999px;left:1rem;background:#1F3F6B;color:#fff;padding:.5rem 1rem;border-radius:0 0 4px 4px;font-weight:600;z-index:9999;text-decoration:none; }
+.skipLink:focus { top:0; }
+.page { min-height:100vh;background:#F0F5FB;color:#1A1A2E;font-family:inherit; }
+
+.header { display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;padding:2rem 2rem 1.5rem;background:#1F3F6B;color:#fff; }
+.pageTitle    { font-size:1.75rem;font-weight:700;margin:0 0 .25rem;color:#fff; }
+.pageSubtitle { font-size:.85rem;margin:0;opacity:.85;color:#fff; }
+.headerBadge  { flex-shrink:0;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;font-size:.75rem;font-weight:700;letter-spacing:.04em;padding:.35rem .75rem;border-radius:999px;margin-top:.25rem; }
+
+.stepper { background:#fff;border-bottom:1px solid #C8D8EE;padding:1rem 2rem 0; }
+.progressTrack { height:4px;background:#E6EEF8;border-radius:2px;margin-bottom:1rem;overflow:hidden; }
+.progressFill  { height:100%;background:#2F5C9A;border-radius:2px;transition:width .35s ease; }
+.stepList { display:flex;list-style:none;margin:0;padding:0;overflow-x:auto;scrollbar-width:none; }
+.stepList::-webkit-scrollbar { display:none; }
+.stepItem { display:flex;flex-direction:column;align-items:center;gap:.35rem;padding:0 1.5rem .75rem;min-width:120px;text-align:center;opacity:.45;transition:opacity .2s; }
+.stepCurrent,.stepDone { opacity:1; }
+.stepDot { width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;background:#C8D8EE;color:#3D3D5C;flex-shrink:0; }
+.stepCurrent .stepDot { background:#1F3F6B;color:#fff;outline:3px solid #2F5C9A;outline-offset:2px; }
+.stepDone .stepDot    { background:#2F5C9A;color:#fff; }
+.stepName { font-size:.7rem;font-weight:600;line-height:1.2;color:#1A1A2E; }
+
+.main { max-width:780px;margin:0 auto;padding:2rem 1.5rem 4rem; }
+.stepHeading { margin-bottom:2rem; }
+.stepTitle { font-size:1.4rem;font-weight:700;color:#1F3F6B;margin:0 0 .35rem; }
+.stepDesc  { font-size:.9rem;color:#3D3D5C;margin:0; }
+
+.fieldGroup { display:flex;flex-direction:column;gap:1.5rem; }
+.section { display:flex;flex-direction:column;gap:1rem; }
+.sectionTitle { font-size:1rem;font-weight:700;color:#1F3F6B;margin:0; }
+.row { display:grid;grid-template-columns:1fr 1fr;gap:1rem; }
+.field { display:flex;flex-direction:column;gap:.4rem; }
+.label { font-size:.875rem;font-weight:600;color:#1A1A2E; }
+.req   { color:#C0392B;margin-left:2px; }
+.input,.select,.textarea { width:100%;padding:.6rem .75rem;border:2px solid #C8D8EE;border-radius:6px;font-size:.95rem;color:#1A1A2E;background:#fff;box-sizing:border-box;font-family:inherit;transition:border-color .15s; }
+.input:focus,.select:focus,.textarea:focus { outline:3px solid #FF6B00;outline-offset:2px;border-color:#2F5C9A; }
+.textarea { resize:vertical;min-height:80px; }
+.hint  { font-size:.8rem;color:#3D3D5C;margin:.25rem 0 0; }
+.infoBox { background:#E6EEF8;border-left:3px solid #2F5C9A;border-radius:0 6px 6px 0;padding:.875rem 1rem;font-size:.875rem;color:#1A1A2E;line-height:1.5; }
+
+.fieldset { border:2px solid #C8D8EE;border-radius:8px;padding:1rem 1.25rem;margin:0;display:flex;flex-direction:column;gap:.75rem; }
+.legend   { font-size:.9rem;font-weight:700;color:#1F3F6B;padding:0 .5rem; }
+.checkLabel { display:flex;align-items:flex-start;gap:.75rem;font-size:.9rem;cursor:pointer;padding:.25rem 0;line-height:1.4; }
+.checkLabel input[type="checkbox"] { width:1.1rem;height:1.1rem;accent-color:#1F3F6B;cursor:pointer;flex-shrink:0;margin-top:.15rem; }
+.checkDesc { display:block;font-size:.8rem;color:#3D3D5C;margin-top:.2rem; }
+
+/* Letter preview */
+.generatePanel { display:flex;flex-direction:column;gap:1.5rem; }
+.previewCard   { background:#fff;border:1px solid #C8D8EE;border-radius:8px;overflow:hidden; }
+.previewHeader { display:flex;align-items:center;justify-content:space-between;padding:.875rem 1.25rem;border-bottom:1px solid #C8D8EE;background:#F0F5FB; }
+.previewTitle  { font-size:.95rem;font-weight:700;color:#1F3F6B;margin:0; }
+.previewNote   { font-size:.78rem;color:#3D3D5C; }
+.previewBody   { font-family:"Courier New",monospace;font-size:.78rem;line-height:1.6;padding:1.25rem;margin:0;overflow-x:auto;white-space:pre-wrap;color:#1A1A2E;max-height:400px;overflow-y:auto; }
+
+.actions { display:flex;flex-direction:column;gap:1rem; }
+.warning { background:#FDEDEC;border:1px solid #E6B0AA;border-radius:6px;padding:.75rem 1rem;font-size:.875rem;color:#922B21;margin:0; }
+.successBox { background:#EAFAF1;border:2px solid #1E8449;border-radius:8px;padding:1.25rem 1.5rem;color:#145A32; }
+.successBox p { margin:.25rem 0; }
+.credit   { font-size:.8rem;opacity:.75;margin-top:.5rem !important; }
+.legalNote { font-size:.78rem;color:#145A32;border-top:1px solid #A9DFBF;margin-top:.75rem !important;padding-top:.75rem;opacity:.85; }
+
+.navBar    { display:flex;align-items:center;justify-content:space-between;margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid #C8D8EE; }
+.stepCount { font-size:.8rem;color:#3D3D5C; }
+.btnBack,.btnNext,.btnGenerate { display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.65rem 1.5rem;border-radius:6px;font-size:.95rem;font-weight:600;cursor:pointer;transition:background .15s;border:2px solid transparent;font-family:inherit; }
+.btnBack:focus-visible,.btnNext:focus-visible,.btnGenerate:focus-visible { outline:3px solid #FF6B00;outline-offset:3px; }
+.btnBack { background:#fff;color:#1F3F6B;border-color:#C8D8EE; }
+.btnBack:hover:not(:disabled) { background:#E6EEF8; }
+.btnNext { background:#1F3F6B;color:#fff; }
+.btnNext:hover:not(:disabled) { background:#2F5C9A; }
+.btnGenerate { background:#1F3F6B;color:#fff;width:100%;padding:.85rem 2rem;font-size:1rem;border-radius:8px; }
+.btnGenerate:hover:not(:disabled) { background:#2F5C9A; }
+.btnGenerate:disabled { opacity:.6;cursor:not-allowed; }
+
+@media (max-width:640px) {
+  .header { padding:1.25rem 1rem; }
+  .stepper { padding:.75rem 1rem 0; }
+  .main { padding:1.5rem 1rem 3rem; }
+  .row { grid-template-columns:1fr; }
+}
+@media print {
+  .navBar,.stepper,.btnGenerate,.btnBack,.btnNext { display:none; }
+  .page { background:white; }
+}
