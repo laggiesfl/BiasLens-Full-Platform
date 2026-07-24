@@ -16,12 +16,13 @@
 .progressFill  { height:100%;background:#2F5C9A;border-radius:2px;transition:width .35s ease; }
 .stepList { display:flex;list-style:none;margin:0;padding:0;overflow-x:auto;scrollbar-width:none; }
 .stepList::-webkit-scrollbar { display:none; }
-.stepItem { display:flex;flex-direction:column;align-items:center;gap:.35rem;padding:0 1rem .75rem;min-width:110px;text-align:center;opacity:.45;transition:opacity .2s; }
+.stepItem { display:flex;flex-direction:column;align-items:center;gap:.35rem;padding:0 1rem .75rem;min-width:110px;text-align:center; }
 .stepCurrent,.stepDone { opacity:1; }
 .stepDot { width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;background:#C8D8EE;color:#3D3D5C;flex-shrink:0; }
 .stepCurrent .stepDot { background:#1F3F6B;color:#fff;outline:3px solid #2F5C9A;outline-offset:2px; }
 .stepDone .stepDot    { background:#2F5C9A;color:#fff; }
-.stepName { font-size:.7rem;font-weight:600;line-height:1.2;color:#1A1A2E; }
+.stepName { font-size:.7rem;font-weight:600;line-height:1.2;color:#595959; }
+.stepCurrent .stepName,.stepDone .stepName { color:#1A1A2E; }
 
 /* Main */
 .main { max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem; }
