@@ -15,15 +15,15 @@ export function Sidebar({ isAdmin }: { isAdmin: boolean }) {
   const pathname = usePathname();
 
   const items: NavItem[] = [
-    { href: "/dashboard",               label: t.nav.dashboard,    available: true  },
-    { href: "/assessments",             label: t.nav.assessments,  available: true  },
-    { href: "/metrics",                 label: t.nav.metrics,      available: true  }, // ← Sprint 3 activated
-    { href: "/mapper",                  label: t.nav.mapper,       available: true  },
-    { href: "/requests",                label: t.nav.requests,     available: false }, // Sprint 4
-    { href: "/builder",                 label: t.nav.builder,      available: true  },
+    { href: "/dashboard",               label: t.nav.dashboard,    available: true },
+    { href: "/assessments",             label: t.nav.assessments,  available: true },
+    { href: "/metrics",                 label: t.nav.metrics,      available: true },
+    { href: "/mapper",                  label: t.nav.mapper,       available: true },
+    { href: "/requests",                label: t.nav.requests,     available: true },
+    { href: "/builder",                 label: t.nav.builder,      available: true },
     { href: "/accessibility-statement", label: t.nav.accessibility, available: true },
-    { href: "/privacy",                 label: t.nav.privacy,      available: true  },
-    { href: "/settings",                label: t.nav.settings,     available: true  },
+    { href: "/privacy",                 label: t.nav.privacy,      available: true },
+    { href: "/settings",                label: t.nav.settings,     available: true },
   ];
 
   if (isAdmin) {
@@ -48,23 +48,15 @@ export function Sidebar({ isAdmin }: { isAdmin: boolean }) {
             if (!item.available) {
               return (
                 <li key={item.href}>
-                  <span
-                    className="disabled"
-                    style={{ display: "block", padding: "11px 20px" }}
-                    aria-disabled="true"
-                  >
-                    {item.label}{" "}
-                    <span className="nav-note">({t.nav.comingSoon})</span>
+                  <span className="disabled" style={{ display: "block", padding: "11px 20px" }} aria-disabled="true">
+                    {item.label} <span className="nav-note">({t.nav.comingSoon})</span>
                   </span>
                 </li>
               );
             }
             return (
               <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={current ? "page" : undefined}
-                >
+                <Link href={item.href} aria-current={current ? "page" : undefined}>
                   {item.label}
                 </Link>
               </li>
