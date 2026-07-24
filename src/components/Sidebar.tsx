@@ -17,10 +17,10 @@ export function Sidebar({ isAdmin }: { isAdmin: boolean }) {
   const items: NavItem[] = [
     { href: "/dashboard",               label: t.nav.dashboard,    available: true  },
     { href: "/assessments",             label: t.nav.assessments,  available: true  },
-    { href: "/metrics",                 label: t.nav.metrics,      available: false }, // Sprint 3
-    { href: "/mapper",                  label: t.nav.mapper,       available: true  }, // ← Sprint 2 activated
+    { href: "/metrics",                 label: t.nav.metrics,      available: true  }, // ← Sprint 3 activated
+    { href: "/mapper",                  label: t.nav.mapper,       available: true  },
     { href: "/requests",                label: t.nav.requests,     available: false }, // Sprint 4
-    { href: "/builder",                 label: t.nav.builder,      available: true  }, // Sprint 1 activated
+    { href: "/builder",                 label: t.nav.builder,      available: true  },
     { href: "/accessibility-statement", label: t.nav.accessibility, available: true },
     { href: "/privacy",                 label: t.nav.privacy,      available: true  },
     { href: "/settings",                label: t.nav.settings,     available: true  },
