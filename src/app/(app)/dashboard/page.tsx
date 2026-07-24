@@ -98,14 +98,12 @@ export default async function DashboardPage() {
           <li>Guided Bias Risk Questionnaire (plain language, saves as you go)</li>
           <li>Risk classification and Bias Risk Report, with Word, PDF and CSV export</li>
           <li>Evidence Log with file attachments and follow-up dates</li>
+            <li>Fairness Metrics Calculator — disparate impact and 4/5 rule analysis</li>
+            <li>Compliance Mapper — EU AI Act, GDPR, POPIA, EEA, UNCRPD and UK AI framework</li>
+            <li>Access Request Generator — formal rights request letters</li>
+            <li>AIA / FRIA Builder — Article 27 Fundamental Rights Impact Assessment</li>
         </ul>
-        <p className="muted" style={{ marginBottom: 0 }}>Coming in future milestones:</p>
-        <ul style={{ marginBottom: 0 }}>
-          <li>
-            Fairness Metrics Calculator, Compliance Mapper, Access Request
-            Generator and AIA / FRIA Builder
-          </li>
-        </ul>
+        <!-- All features now live — placeholder removed -->
       </section>
     </div>
   );
