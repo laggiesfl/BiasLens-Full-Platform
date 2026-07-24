@@ -15,15 +15,15 @@ export function Sidebar({ isAdmin }: { isAdmin: boolean }) {
   const pathname = usePathname();
 
   const items: NavItem[] = [
-    { href: "/dashboard",             label: t.nav.dashboard,    available: true  },
-    { href: "/assessments",           label: t.nav.assessments,  available: true  },
-    { href: "/metrics",               label: t.nav.metrics,      available: false },
-    { href: "/mapper",                label: t.nav.mapper,       available: false },
-    { href: "/requests",              label: t.nav.requests,     available: false },
-    { href: "/builder",               label: t.nav.builder,      available: true  }, // ← Sprint 1 activated
+    { href: "/dashboard",               label: t.nav.dashboard,    available: true  },
+    { href: "/assessments",             label: t.nav.assessments,  available: true  },
+    { href: "/metrics",                 label: t.nav.metrics,      available: false }, // Sprint 3
+    { href: "/mapper",                  label: t.nav.mapper,       available: true  }, // ← Sprint 2 activated
+    { href: "/requests",                label: t.nav.requests,     available: false }, // Sprint 4
+    { href: "/builder",                 label: t.nav.builder,      available: true  }, // Sprint 1 activated
     { href: "/accessibility-statement", label: t.nav.accessibility, available: true },
-    { href: "/privacy",               label: t.nav.privacy,      available: true  },
-    { href: "/settings",              label: t.nav.settings,     available: true  },
+    { href: "/privacy",                 label: t.nav.privacy,      available: true  },
+    { href: "/settings",                label: t.nav.settings,     available: true  },
   ];
 
   if (isAdmin) {
