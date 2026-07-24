@@ -1,0 +1,498 @@
+/* ─── FRIA Builder — BeAccessible Brand ─────────────────────────────────── */
+/* WCAG 2.0 / 2.1 / 2.2 Level AAA | Universal Design | BeAccessible          */
+
+/* Brand tokens (match globals.css) */
+:root {
+  --ba-navy:      #1F3F6B;
+  --ba-mid:       #2F5C9A;
+  --ba-soft:      #4A78B5;
+  --ba-tint:      #E6EEF8;
+  --ba-tint2:     #F0F5FB;
+  --ba-white:     #FFFFFF;
+  --ba-text:      #1A1A2E;
+  --ba-text-mid:  #3D3D5C;
+  --ba-border:    #C8D8EE;
+  --ba-risk-high: #C0392B;
+  --ba-risk-med:  #D68910;
+  --ba-risk-low:  #1E8449;
+  --ba-focus:     #FF6B00;
+}
+
+/* ─── Page shell ─────────────────────────────────────────────────────────── */
+.skipLink {
+  position: absolute;
+  top: -9999px;
+  left: 1rem;
+  background: var(--ba-navy);
+  color: var(--ba-white);
+  padding: 0.5rem 1rem;
+  border-radius: 0 0 4px 4px;
+  font-weight: 600;
+  z-index: 9999;
+  text-decoration: none;
+}
+.skipLink:focus { top: 0; }
+
+.page {
+  min-height: 100vh;
+  background: var(--ba-tint2);
+  font-family: inherit;
+  color: var(--ba-text);
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 2rem 2rem 1.5rem;
+  background: var(--ba-navy);
+  color: var(--ba-white);
+}
+
+.pageTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+  color: var(--ba-white);
+}
+
+.pageSubtitle {
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.85;
+  color: var(--ba-white);
+}
+
+.legalBadge {
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.4);
+  color: var(--ba-white);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  margin-top: 0.25rem;
+}
+
+/* ─── Stepper ────────────────────────────────────────────────────────────── */
+.stepper {
+  background: var(--ba-white);
+  border-bottom: 1px solid var(--ba-border);
+  padding: 1rem 2rem 0;
+}
+
+.progressTrack {
+  height: 4px;
+  background: var(--ba-tint);
+  border-radius: 2px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--ba-mid);
+  border-radius: 2px;
+  transition: width 0.35s ease;
+}
+
+.stepList {
+  display: flex;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.stepList::-webkit-scrollbar { display: none; }
+
+.stepItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0 0.75rem 0.75rem;
+  min-width: 90px;
+  text-align: center;
+  opacity: 0.45;
+  transition: opacity 0.2s;
+}
+
+.stepCurrent,
+.stepDone { opacity: 1; }
+
+.stepDot {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--ba-border);
+  color: var(--ba-text-mid);
+  flex-shrink: 0;
+}
+
+.stepCurrent .stepDot {
+  background: var(--ba-navy);
+  color: var(--ba-white);
+  outline: 3px solid var(--ba-mid);
+  outline-offset: 2px;
+}
+
+.stepDone .stepDot {
+  background: var(--ba-mid);
+  color: var(--ba-white);
+}
+
+.stepName {
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ba-text);
+}
+
+/* ─── Main content ───────────────────────────────────────────────────────── */
+.main {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.stepHeading {
+  margin-bottom: 2rem;
+}
+
+.stepTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--ba-navy);
+  margin: 0 0 0.35rem;
+}
+
+.stepDesc {
+  font-size: 0.9rem;
+  color: var(--ba-text-mid);
+  margin: 0;
+}
+
+/* ─── Form elements ──────────────────────────────────────────────────────── */
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ba-text);
+}
+
+.required {
+  color: var(--ba-risk-high);
+  margin-left: 2px;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 2px solid var(--ba-border);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: var(--ba-text);
+  background: var(--ba-white);
+  box-sizing: border-box;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: 3px solid var(--ba-focus);
+  outline-offset: 2px;
+  border-color: var(--ba-mid);
+}
+
+.textarea { resize: vertical; min-height: 80px; }
+
+.hint {
+  font-size: 0.8rem;
+  color: var(--ba-text-mid);
+  margin: 0;
+}
+
+.fieldset {
+  border: 2px solid var(--ba-border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 0;
+}
+
+.legend {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ba-text);
+  padding: 0 0.5rem;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.25rem 0;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--ba-navy);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkboxGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+}
+
+/* ─── Rights cards (Step 5) ──────────────────────────────────────────────── */
+.sectionNote {
+  font-size: 0.875rem;
+  color: var(--ba-text-mid);
+  background: var(--ba-tint);
+  border-left: 3px solid var(--ba-mid);
+  padding: 0.75rem 1rem;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 0.5rem;
+}
+
+.rightCard {
+  background: var(--ba-white);
+  border: 1px solid var(--ba-border);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.rightHeader {
+  margin-bottom: 1rem;
+}
+
+.rightTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ba-navy);
+  margin: 0 0 0.2rem;
+}
+
+.rightRef {
+  font-size: 0.75rem;
+  color: var(--ba-text-mid);
+  font-style: italic;
+}
+
+.rightFields {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+/* Risk-level colour on select */
+.riskHigh   { border-color: var(--ba-risk-high); color: var(--ba-risk-high); font-weight: 700; }
+.riskMedium { border-color: var(--ba-risk-med);  color: var(--ba-risk-med);  font-weight: 700; }
+.riskLow    { border-color: var(--ba-risk-low);  color: var(--ba-risk-low);  font-weight: 700; }
+.riskNotAssessed { border-color: var(--ba-border); }
+
+/* ─── Review & Generate (Step 7) ─────────────────────────────────────────── */
+.reviewPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.summary {
+  background: var(--ba-white);
+  border: 1px solid var(--ba-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.summaryTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ba-navy);
+  margin: 0 0 1rem;
+}
+
+.summaryList { margin: 0; padding: 0; }
+
+.summaryRow {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 0.5rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--ba-tint);
+  font-size: 0.875rem;
+}
+
+.summaryRow:last-child { border-bottom: none; }
+
+.summaryRow dt {
+  font-weight: 600;
+  color: var(--ba-text-mid);
+}
+
+.summaryRow dd {
+  margin: 0;
+  color: var(--ba-text);
+  word-break: break-word;
+}
+
+.alert {
+  background: #FEF9E7;
+  border: 2px solid #E67E22;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  color: #784212;
+}
+
+.generateArea {
+  background: var(--ba-white);
+  border: 1px solid var(--ba-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.generateNote {
+  font-size: 0.875rem;
+  color: var(--ba-text-mid);
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
+}
+
+.successBox {
+  background: #EAFAF1;
+  border: 2px solid var(--ba-risk-low);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  color: #145A32;
+  font-size: 0.9rem;
+}
+
+.successBox p { margin: 0.25rem 0; }
+
+.credit {
+  font-size: 0.8rem;
+  opacity: 0.75;
+  margin-top: 0.5rem !important;
+}
+
+/* ─── Navigation bar ─────────────────────────────────────────────────────── */
+.navBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ba-border);
+}
+
+.stepCount {
+  font-size: 0.8rem;
+  color: var(--ba-text-mid);
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────────────────── */
+.btnBack,
+.btnNext,
+.btnGenerate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  border: 2px solid transparent;
+  font-family: inherit;
+}
+
+.btnBack:focus-visible,
+.btnNext:focus-visible,
+.btnGenerate:focus-visible {
+  outline: 3px solid var(--ba-focus);
+  outline-offset: 3px;
+}
+
+.btnBack {
+  background: var(--ba-white);
+  color: var(--ba-navy);
+  border-color: var(--ba-border);
+}
+
+.btnBack:hover:not(:disabled) { background: var(--ba-tint); }
+
+.btnNext {
+  background: var(--ba-navy);
+  color: var(--ba-white);
+}
+
+.btnNext:hover:not(:disabled) { background: var(--ba-mid); }
+
+.btnGenerate {
+  background: var(--ba-navy);
+  color: var(--ba-white);
+  width: 100%;
+  padding: 0.85rem 2rem;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+.btnGenerate:hover:not(:disabled) { background: var(--ba-mid); }
+
+.btnGenerate:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .header    { padding: 1.25rem 1rem; }
+  .stepper   { padding: 0.75rem 1rem 0; }
+  .main      { padding: 1.5rem 1rem 3rem; }
+  .stepName  { font-size: 0.65rem; }
+  .rightFields { grid-template-columns: 1fr; }
+  .summaryRow  { grid-template-columns: 1fr; }
+}
+
+/* ─── Print ───────────────────────────────────────────────────────────────── */
+@media print {
+  .navBar, .stepper, .btnGenerate, .btnBack, .btnNext { display: none; }
+  .page { background: white; }
+}
