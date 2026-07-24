@@ -1,0 +1,139 @@
+/* ─── Compliance Mapper — BeAccessible Brand ─────────────────────────────── */
+/* WCAG 2.0 / 2.1 / 2.2 Level AAA | Universal Design | BeAccessible          */
+
+.skipLink {
+  position: absolute; top: -9999px; left: 1rem;
+  background: #1F3F6B; color: #fff; padding: 0.5rem 1rem;
+  border-radius: 0 0 4px 4px; font-weight: 600; z-index: 9999; text-decoration: none;
+}
+.skipLink:focus { top: 0; }
+
+.page { min-height: 100vh; background: #F0F5FB; color: #1A1A2E; font-family: inherit; }
+
+/* Header */
+.header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 1rem; padding: 2rem 2rem 1.5rem;
+  background: #1F3F6B; color: #fff;
+}
+.pageTitle  { font-size: 1.75rem; font-weight: 700; margin: 0 0 0.25rem; color: #fff; }
+.pageSubtitle { font-size: 0.85rem; margin: 0; opacity: 0.85; color: #fff; }
+.badge {
+  flex-shrink: 0; background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.4); color: #fff;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em;
+  padding: 0.35rem 0.75rem; border-radius: 999px; margin-top: 0.25rem;
+}
+
+/* Stepper */
+.stepper { background: #fff; border-bottom: 1px solid #C8D8EE; padding: 1rem 2rem 0; }
+.progressTrack { height: 4px; background: #E6EEF8; border-radius: 2px; margin-bottom: 1rem; overflow: hidden; }
+.progressFill  { height: 100%; background: #2F5C9A; border-radius: 2px; transition: width 0.35s ease; }
+.stepList { display: flex; list-style: none; margin: 0; padding: 0; overflow-x: auto; scrollbar-width: none; }
+.stepList::-webkit-scrollbar { display: none; }
+.stepItem { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; padding: 0 1rem 0.75rem; min-width: 110px; text-align: center; opacity: 0.45; transition: opacity 0.2s; }
+.stepCurrent, .stepDone { opacity: 1; }
+.stepDot { width: 2rem; height: 2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; background: #C8D8EE; color: #3D3D5C; flex-shrink: 0; }
+.stepCurrent .stepDot { background: #1F3F6B; color: #fff; outline: 3px solid #2F5C9A; outline-offset: 2px; }
+.stepDone .stepDot    { background: #2F5C9A; color: #fff; }
+.stepName { font-size: 0.7rem; font-weight: 600; line-height: 1.2; color: #1A1A2E; }
+
+/* Main */
+.main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+.stepHeading { margin-bottom: 2rem; }
+.stepTitle { font-size: 1.4rem; font-weight: 700; color: #1F3F6B; margin: 0 0 0.35rem; }
+.stepDesc  { font-size: 0.9rem; color: #3D3D5C; margin: 0; }
+
+/* Form elements */
+.fieldGroup { display: flex; flex-direction: column; gap: 1.5rem; }
+.field { display: flex; flex-direction: column; gap: 0.4rem; }
+.label { font-size: 0.875rem; font-weight: 600; color: #1A1A2E; }
+.req   { color: #C0392B; margin-left: 2px; }
+.input, .select, .textarea {
+  width: 100%; padding: 0.6rem 0.75rem; border: 2px solid #C8D8EE;
+  border-radius: 6px; font-size: 0.95rem; color: #1A1A2E; background: #fff;
+  box-sizing: border-box; font-family: inherit; transition: border-color 0.15s;
+}
+.input:focus, .select:focus, .textarea:focus { outline: 3px solid #FF6B00; outline-offset: 2px; border-color: #2F5C9A; }
+.textarea { resize: vertical; min-height: 80px; }
+.fieldset { border: 2px solid #C8D8EE; border-radius: 8px; padding: 1rem 1.25rem; margin: 0; }
+.legend   { font-size: 0.875rem; font-weight: 600; color: #1A1A2E; padding: 0 0.5rem; }
+.checkLabel { display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.9rem; cursor: pointer; padding: 0.35rem 0; line-height: 1.4; }
+.checkLabel input[type="checkbox"] { width: 1.1rem; height: 1.1rem; accent-color: #1F3F6B; cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+.infoBox { background: #E6EEF8; border-left: 3px solid #2F5C9A; border-radius: 0 6px 6px 0; padding: 0.875rem 1rem; font-size: 0.875rem; color: #1A1A2E; line-height: 1.5; }
+.hint { font-size: 0.8rem; color: #3D3D5C; margin: 0.5rem 0 0; }
+
+/* Compliance map (Step 3) */
+.mapContainer { display: flex; flex-direction: column; gap: 1.5rem; }
+.summaryCards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.card { background: #fff; border: 1px solid #C8D8EE; border-radius: 8px; padding: 1.25rem 1rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+.cardCount { font-size: 2rem; font-weight: 800; color: #1F3F6B; line-height: 1; }
+.cardLabel { font-size: 0.75rem; font-weight: 600; color: #3D3D5C; text-transform: uppercase; letter-spacing: 0.06em; }
+.cardCritical .cardCount { color: #C0392B; }
+.cardHigh     .cardCount { color: #E67E22; }
+.cardMedium   .cardCount { color: #D4AC0D; }
+
+.tableWrap { overflow-x: auto; border-radius: 8px; border: 1px solid #C8D8EE; }
+.table { width: 100%; border-collapse: collapse; font-size: 0.875rem; background: #fff; }
+.table th { background: #1F3F6B; color: #fff; text-align: left; padding: 0.75rem 1rem; font-size: 0.8rem; font-weight: 700; white-space: nowrap; }
+.table td { padding: 0.875rem 1rem; border-bottom: 1px solid #E6EEF8; vertical-align: top; }
+.table tr:last-child td { border-bottom: none; }
+.table tr:hover td { background: #F0F5FB; }
+
+.ruleSummary { margin: 0.25rem 0 0; color: #3D3D5C; font-size: 0.8rem; line-height: 1.4; }
+.ruleNote    { margin: 0.35rem 0 0; color: #784212; font-size: 0.78rem; font-style: italic; }
+
+/* Priority badges */
+.badge    { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
+.critical { background: #FDEDEC; color: #C0392B; border: 1px solid #E6B0AA; }
+.high     { background: #FEF5E7; color: #A04000; border: 1px solid #FAD7A0; }
+.medium   { background: #FEF9E7; color: #7D6608; border: 1px solid #F9E79F; }
+.low      { background: #EAFAF1; color: #1E8449; border: 1px solid #A9DFBF; }
+.na       { background: #F2F3F4; color: #626567; border: 1px solid #D5D8DC; }
+
+/* Empty state */
+.emptyState { text-align: center; padding: 3rem 1rem; color: #3D3D5C; background: #fff; border-radius: 8px; border: 1px solid #C8D8EE; }
+
+/* Generate (Step 4) */
+.generatePanel { display: flex; flex-direction: column; gap: 1.5rem; }
+.docPreview { display: flex; align-items: center; gap: 1rem; background: #fff; border: 1px solid #C8D8EE; border-radius: 8px; padding: 1.25rem; }
+.docIcon    { font-size: 2rem; flex-shrink: 0; }
+.docMeta    { margin: 0.25rem 0 0; font-size: 0.85rem; color: #3D3D5C; }
+.criticalText { color: #C0392B; font-weight: 700; }
+.generateNote { font-size: 0.875rem; color: #3D3D5C; margin: 0; line-height: 1.6; background: #fff; border: 1px solid #C8D8EE; border-radius: 8px; padding: 1.25rem; }
+.successBox { background: #EAFAF1; border: 2px solid #1E8449; border-radius: 8px; padding: 1rem 1.5rem; color: #145A32; font-size: 0.9rem; }
+.successBox p { margin: 0.25rem 0; }
+.credit { font-size: 0.8rem; opacity: 0.75; margin-top: 0.5rem !important; }
+
+/* Nav */
+.navBar { display: flex; align-items: center; justify-content: space-between; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid #C8D8EE; }
+.stepCount { font-size: 0.8rem; color: #3D3D5C; }
+
+/* Buttons */
+.btnBack, .btnNext, .btnGenerate {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  padding: 0.65rem 1.5rem; border-radius: 6px; font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; transition: background 0.15s; border: 2px solid transparent; font-family: inherit;
+}
+.btnBack:focus-visible, .btnNext:focus-visible, .btnGenerate:focus-visible { outline: 3px solid #FF6B00; outline-offset: 3px; }
+.btnBack    { background: #fff; color: #1F3F6B; border-color: #C8D8EE; }
+.btnBack:hover:not(:disabled) { background: #E6EEF8; }
+.btnNext    { background: #1F3F6B; color: #fff; }
+.btnNext:hover:not(:disabled) { background: #2F5C9A; }
+.btnGenerate { background: #1F3F6B; color: #fff; width: 100%; padding: 0.85rem 2rem; font-size: 1rem; border-radius: 8px; }
+.btnGenerate:hover:not(:disabled) { background: #2F5C9A; }
+.btnGenerate:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .header { padding: 1.25rem 1rem; }
+  .stepper { padding: 0.75rem 1rem 0; }
+  .main { padding: 1.5rem 1rem 3rem; }
+  .summaryCards { grid-template-columns: repeat(2, 1fr); }
+  .table th, .table td { padding: 0.6rem 0.75rem; }
+}
+
+@media print {
+  .navBar, .stepper, .btnGenerate, .btnBack, .btnNext { display: none; }
+  .page { background: white; }
+}
