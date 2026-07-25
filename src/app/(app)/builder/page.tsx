@@ -492,8 +492,9 @@ export default function FRIABuilderPage() {
   const [generating, setGen]    = useState(false)
   const [complete, setComplete] = useState(false)
 
-  const update = useCallback(<K extends keyof FRIAFormData>(key: K, value: FRIAFormData[K]) => {
+  const update = useCallback((key: keyof FRIAFormData, value: unknown) => {
     setData(prev => ({ ...prev, [key]: value }))
+  
   }, [])
 
   const updateRight = useCallback((rightKey: string, field: 'risk' | 'notes', value: string) => {
