@@ -103,7 +103,6 @@ export default async function DashboardPage() {
             <li>Access Request Generator — formal rights request letters</li>
             <li>AIA / FRIA Builder — Article 27 Fundamental Rights Impact Assessment</li>
         </ul>
-        <!-- All features now live — placeholder removed -->
       </section>
     </div>
   );
