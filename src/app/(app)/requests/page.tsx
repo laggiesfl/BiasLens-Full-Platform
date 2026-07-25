@@ -324,8 +324,9 @@ export default function AccessRequestPage() {
   const [generating, setGen]    = useState(false)
   const [complete, setComplete] = useState(false)
 
-  const set = useCallback(<K extends keyof RequestData>(key: K, value: RequestData[K]) => {
+  const set = useCallback((key: keyof RequestData, value: unknown) => {
     setData(prev => ({ ...prev, [key]: value }))
+  
   }, [])
 
   const handleGenerate = async () => {
