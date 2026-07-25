@@ -35,10 +35,10 @@ export async function signUp(formData: FormData) {
   if (!email || !password) {
     redirect("/signup?error=" + encodeURIComponent("Enter your email and a password."));
   }
-  if (password.length < 8) {
+  if (password.length < 12) {
     redirect(
       "/signup?error=" +
-        encodeURIComponent("Use a password of at least 8 characters.")
+        encodeURIComponent("Use a password of at least 12 characters for security.")
     );
   }
 
