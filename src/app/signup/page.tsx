@@ -10,7 +10,7 @@ export default async function SignUpPage({
   searchParams: Promise<{ error?: string; message?: string }>;
 }) {
   const sp = await searchParams;
-  const showCheckEmail = sp.message === "check-email";
+  const accountCreated = sp.message === "check-email";
 
   return (
     <main className="auth-wrap" id="main-content">
@@ -32,13 +32,25 @@ export default async function SignUpPage({
             {sp.error}
           </p>
         ) : null}
-        {showCheckEmail ? (
-          <p className="form-success" role="status">
-            {t.auth.checkEmail}
-          </p>
-        ) : null}
 
-        {!showCheckEmail ? (
+        {accountCreated ? (
+          <div role="status">
+            <p className="form-success">
+              Your account has been created successfully.
+            </p>
+            <p style={{ fontSize: "0.9rem", color: "#3D3D5C", marginTop: "0.5rem" }}>
+              Sign in below using your email and password, or use the
+              passwordless magic link option for added security.
+            </p>
+            <Link
+              href="/login"
+              className="btn btn-primary"
+              style={{ display: "block", textAlign: "center", marginTop: "1rem" }}
+            >
+              Sign in to BiasLens →
+            </Link>
+          </div>
+        ) : (
           <form action={signUp} className="stack" style={{ marginTop: 0 }}>
             <div className="field">
               <label htmlFor="full_name">{t.auth.nameLabel}</label>
@@ -57,10 +69,11 @@ export default async function SignUpPage({
                 type="email"
                 autoComplete="email"
                 required
+                aria-required="true"
               />
             </div>
             <p className="hint" id="pw-hint" style={{ marginBottom: 4 }}>
-              Use at least 8 characters.
+              Use at least 8 characters. Combine letters, numbers and symbols for a stronger password.
             </p>
             <PasswordField
               id="password"
@@ -78,11 +91,13 @@ export default async function SignUpPage({
               {t.common.signUp}
             </button>
           </form>
-        ) : null}
+        )}
 
-        <p style={{ marginBottom: 0 }}>
-          {t.auth.haveAccount} <Link href="/login">{t.common.signIn}</Link>
-        </p>
+        {!accountCreated && (
+          <p style={{ marginBottom: 0 }}>
+            {t.auth.haveAccount} <Link href="/login">{t.common.signIn}</Link>
+          </p>
+        )}
       </div>
     </main>
   );
