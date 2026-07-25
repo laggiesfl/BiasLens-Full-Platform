@@ -578,8 +578,9 @@ export default function ComplianceMapperPage() {
   const [generating, setGen]    = useState(false)
   const [complete, setComplete] = useState(false)
 
-  const update = useCallback(<K extends keyof SystemInfo>(key: K, value: SystemInfo[K]) => {
+  const update = useCallback((key: keyof SystemInfo, value: unknown) => {
     setInfo(prev => ({ ...prev, [key]: value }))
+  
   }, [])
 
   const applicable = useMemo(
