@@ -26,9 +26,6 @@ export function Sidebar({ isAdmin }: { isAdmin: boolean }) {
     { href: "/settings",                label: t.nav.settings,     available: true },
   ];
 
-  if (isAdmin) {
-    items.push({ href: "/admin", label: t.nav.admin, available: false });
-  }
 
   return (
     <aside className="sidebar" aria-label="Primary">
