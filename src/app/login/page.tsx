@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { t } from "@/lib/i18n";
-import { signIn, signInWithMagicLink } from "@/lib/actions/auth";
+import { signIn } from "@/lib/actions/auth";
 import { PasswordField } from "@/components/PasswordField";
+import { MagicLinkButton } from "@/components/MagicLinkButton";
 
 export default async function LoginPage({
   searchParams,
@@ -58,19 +59,10 @@ export default async function LoginPage({
           <button type="submit" className="btn btn-primary" style={{ width: "100%" }}>
             {t.common.signIn}
           </button>
-          <button
-            type="submit"
-            formAction={signInWithMagicLink}
-            formNoValidate
-            className="btn btn-secondary"
-            style={{ width: "100%" }}
-          >
-            {t.auth.magicLink}
-          </button>
-          <p className="hint" style={{ marginBottom: 0 }}>
-            The sign-in link uses the email address typed above. No password
-            needed.
-          </p>
+          <MagicLinkButton
+            label={t.auth.magicLink}
+            hint="The sign-in link uses the email address typed above. No password needed. Open the link in this browser."
+          />
         </form>
 
         <p style={{ marginBottom: 0 }}>
