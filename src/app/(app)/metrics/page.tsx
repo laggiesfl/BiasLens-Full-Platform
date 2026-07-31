@@ -324,6 +324,55 @@ function Step1({ ctx, setCtx }: { ctx: SystemContext; setCtx: (c: SystemContext)
   )
 }
 
+/*
+  GroupRow MUST stay outside Step2.
+
+  It used to be declared inside Step2. That meant React saw a brand new kind of
+  component on every single render, threw the old one away, and built a fresh
+  one — taking the cursor with it. Typing one character into a group name moved
+  focus out of the field, so the next character went nowhere.
+
+  Losing focus while typing is a change of context under WCAG 2.2, so this was
+  a failure of 3.2.2 On Input (Level A). It also made the tool close to unusable
+  for anyone typing one-handed, using a switch device, or using speech input.
+
+  Declared here at the top level, the component type is stable, React keeps the
+  existing input element, and focus stays where the person put it.
+*/
+function GroupRow({ g, removable, onUpdate, onRemove }: {
+  g: Group
+  removable: boolean
+  onUpdate: (id: string, field: keyof Group, value: string | boolean) => void
+  onRemove: (id: string) => void
+}) {
+  return (
+    <div className={`${styles.groupCard} ${g.isReference ? styles.refCard : ''}`}>
+      <div className={styles.groupHeader}>
+        <span className={`${styles.groupTag} ${g.isReference ? styles.refTag : styles.compTag}`}>
+          {g.isReference ? 'Reference group' : 'Comparison group'}
+        </span>
+        {removable && (
+          <button className={styles.removeBtn} onClick={() => onRemove(g.id)} type="button" aria-label={`Remove ${g.name || 'group'}`}>Remove</button>
+        )}
+      </div>
+      <div className={styles.groupFields}>
+        <div className={styles.field}>
+          <label htmlFor={`name-${g.id}`} className={styles.label}>Group name</label>
+          <input id={`name-${g.id}`} type="text" className={styles.input} value={g.name} onChange={e => onUpdate(g.id, 'name', e.target.value)} placeholder={g.isReference ? 'e.g. Non-disabled, Men, White' : 'e.g. Disabled people, Women, Black'} />
+        </div>
+        <div className={styles.field}>
+          <label htmlFor={`total-${g.id}`} className={styles.label}>Total decisions</label>
+          <input id={`total-${g.id}`} type="number" min="1" className={styles.input} value={g.total} onChange={e => onUpdate(g.id, 'total', e.target.value)} placeholder="e.g. 500" />
+        </div>
+        <div className={styles.field}>
+          <label htmlFor={`pos-${g.id}`} className={styles.label}>Positive outcomes</label>
+          <input id={`pos-${g.id}`} type="number" min="0" className={styles.input} value={g.positive} onChange={e => onUpdate(g.id, 'positive', e.target.value)} placeholder="e.g. 120" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function Step2({ groups, setGroups }: { groups: Group[]; setGroups: (g: Group[]) => void }) {
   const ref   = groups.find(g => g.isReference)!
   const comps = groups.filter(g => !g.isReference)
@@ -340,40 +389,15 @@ function Step2({ groups, setGroups }: { groups: Group[]; setGroups: (g: Group[])
     setGroups(groups.filter(g => g.id !== id))
   }
 
-  const GroupRow = ({ g, removable }: { g: Group; removable: boolean }) => (
-    <div className={`${styles.groupCard} ${g.isReference ? styles.refCard : ''}`}>
-      <div className={styles.groupHeader}>
-        <span className={`${styles.groupTag} ${g.isReference ? styles.refTag : styles.compTag}`}>
-          {g.isReference ? 'Reference group' : 'Comparison group'}
-        </span>
-        {removable && (
-          <button className={styles.removeBtn} onClick={() => removeGroup(g.id)} type="button" aria-label={`Remove ${g.name || 'group'}`}>Remove</button>
-        )}
-      </div>
-      <div className={styles.groupFields}>
-        <div className={styles.field}>
-          <label htmlFor={`name-${g.id}`} className={styles.label}>Group name</label>
-          <input id={`name-${g.id}`} type="text" className={styles.input} value={g.name} onChange={e => updateGroup(g.id, 'name', e.target.value)} placeholder={g.isReference ? 'e.g. Non-disabled, Men, White' : 'e.g. Disabled people, Women, Black'} />
-        </div>
-        <div className={styles.field}>
-          <label htmlFor={`total-${g.id}`} className={styles.label}>Total decisions</label>
-          <input id={`total-${g.id}`} type="number" min="1" className={styles.input} value={g.total} onChange={e => updateGroup(g.id, 'total', e.target.value)} placeholder="e.g. 500" />
-        </div>
-        <div className={styles.field}>
-          <label htmlFor={`pos-${g.id}`} className={styles.label}>Positive outcomes</label>
-          <input id={`pos-${g.id}`} type="number" min="0" className={styles.input} value={g.positive} onChange={e => updateGroup(g.id, 'positive', e.target.value)} placeholder="e.g. 120" />
-        </div>
-      </div>
-    </div>
-  )
-
   return (
     <div className={styles.fieldGroup}>
       <div className={styles.infoBox}>
         Enter the number of people in each group who went through the AI-assisted decision, and how many received a positive outcome (hired, approved, selected, etc.).
       </div>
-      <GroupRow g={ref} removable={false} />
-      {comps.map(g => <GroupRow key={g.id} g={g} removable={comps.length > 1} />)}
+      <GroupRow g={ref} removable={false} onUpdate={updateGroup} onRemove={removeGroup} />
+      {comps.map(g => (
+        <GroupRow key={g.id} g={g} removable={comps.length > 1} onUpdate={updateGroup} onRemove={removeGroup} />
+      ))}
       {groups.length < 6 && (
         <button className={styles.addBtn} onClick={addGroup} type="button">
           + Add another comparison group
