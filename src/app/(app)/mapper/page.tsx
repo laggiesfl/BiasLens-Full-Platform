@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useMemo } from 'react'
+import { useProfileDefaults } from '@/lib/useProfileDefaults'
 import styles from './compliance-mapper.module.css'
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
@@ -399,21 +400,35 @@ async function generateReport(info: SystemInfo, applicable: ComplianceItem[]): P
 function Step1({ info, update }: { info: SystemInfo; update: (k: keyof SystemInfo, v: unknown) => void }) {
   return (
     <div className={styles.fieldGroup}>
+      {/*
+        Say where the pre-filled text came from. Someone who cannot take the
+        form in at a glance should not have to work out why text is already
+        sitting in a field.
+      */}
+      <div className={styles.infoBox}>
+        Your organisation and name are filled in from your Account Settings where
+        you have set them. Changing them here applies only to this assessment.
+      </div>
       <div className={styles.field}>
-        <label htmlFor="orgName" className={styles.label}>Organisation name <span className={styles.req} aria-hidden="true">*</span></label>
-        <input id="orgName" type="text" className={styles.input} value={info.organisationName} onChange={e => update('organisationName', e.target.value)} placeholder="e.g. Acme Financial Services Ltd" />
+        {/*
+          "required" is written into the label. It used to be a red asterisk
+          marked aria-hidden, which told sighted users something screen reader
+          users were never told. (WCAG 3.3.2 Labels or Instructions.)
+        */}
+        <label htmlFor="orgName" className={styles.label}>Organisation name (required)</label>
+        <input id="orgName" type="text" className={styles.input} autoComplete="organization" required value={info.organisationName} onChange={e => update('organisationName', e.target.value)} placeholder="e.g. Acme Financial Services Ltd" />
       </div>
       <div className={styles.field}>
         <label htmlFor="completedBy" className={styles.label}>Completed by</label>
-        <input id="completedBy" type="text" className={styles.input} value={info.completedBy} onChange={e => update('completedBy', e.target.value)} placeholder="Name and role" />
+        <input id="completedBy" type="text" className={styles.input} autoComplete="name" value={info.completedBy} onChange={e => update('completedBy', e.target.value)} placeholder="Name and role" />
       </div>
       <div className={styles.field}>
         <label htmlFor="date" className={styles.label}>Date</label>
         <input id="date" type="date" className={styles.input} value={info.date} onChange={e => update('date', e.target.value)} />
       </div>
       <div className={styles.field}>
-        <label htmlFor="sysName" className={styles.label}>AI system name <span className={styles.req} aria-hidden="true">*</span></label>
-        <input id="sysName" type="text" className={styles.input} value={info.name} onChange={e => update('name', e.target.value)} placeholder="e.g. HireAI Resume Screening System" />
+        <label htmlFor="sysName" className={styles.label}>AI system name (required)</label>
+        <input id="sysName" type="text" className={styles.input} required value={info.name} onChange={e => update('name', e.target.value)} placeholder="e.g. HireAI Resume Screening System" />
       </div>
       <div className={styles.field}>
         <label htmlFor="sysDesc" className={styles.label}>What does this AI system do?</label>
@@ -435,219 +450,4 @@ function Step2({ info, update }: { info: SystemInfo; update: (k: keyof SystemInf
     <div className={styles.fieldGroup}>
       <fieldset className={styles.fieldset}>
         <legend className={styles.legend}>Jurisdictions — where does this system operate?</legend>
-        <label className={styles.checkLabel}><input type="checkbox" checked={info.euJurisdiction} onChange={e => update('euJurisdiction', e.target.checked)} /> EU / EEA — the system affects people in EU or EEA member states</label>
-        <label className={styles.checkLabel}><input type="checkbox" checked={info.saJurisdiction} onChange={e => update('saJurisdiction', e.target.checked)} /> South Africa — the system operates in or affects people in South Africa</label>
-        <label className={styles.checkLabel}><input type="checkbox" checked={info.ukJurisdiction} onChange={e => update('ukJurisdiction', e.target.checked)} /> United Kingdom — the system affects people in the UK</label>
-      </fieldset>
-      <fieldset className={styles.fieldset}>
-        <legend className={styles.legend}>System characteristics</legend>
-        <label className={styles.checkLabel}>
-          <input type="checkbox" checked={info.makesAutomatedDecisions} onChange={e => update('makesAutomatedDecisions', e.target.checked)} />
-          This system makes or significantly influences decisions about individuals (hiring, credit, access to services, benefits eligibility, etc.)
-        </label>
-        <label className={styles.checkLabel}>
-          <input type="checkbox" checked={info.affectsDisabledPeople} onChange={e => update('affectsDisabledPeople', e.target.checked)} />
-          Disabled people are among the groups affected by this system's decisions
-        </label>
-      </fieldset>
-      <div className={styles.infoBox} role="note">
-        <strong>Why this matters:</strong> The regulations that apply to your system depend heavily on where it operates and what kind of decisions it makes. For example, a hiring AI used in the EU and SA activates six different compliance obligations simultaneously.
-      </div>
-    </div>
-  )
-}
-
-function Step3({ info, applicable }: { info: SystemInfo; applicable: ComplianceItem[] }) {
-  const critical = applicable.filter(r => r.priority(info) === 'Critical')
-  const high     = applicable.filter(r => r.priority(info) === 'High')
-  const medium   = applicable.filter(r => r.priority(info) === 'Medium')
-  const sorted   = [...applicable].sort((a, b) => PRIORITY_ORDER.indexOf(a.priority(info)) - PRIORITY_ORDER.indexOf(b.priority(info)))
-  const frameworks = [...new Set(applicable.map(r => r.framework))]
-
-  if (applicable.length === 0) {
-    return (
-      <div className={styles.emptyState} role="status">
-        <p>No jurisdictions or decision types selected. Go back to Step 2 and select at least one jurisdiction.</p>
-      </div>
-    )
-  }
-
-  return (
-    <div className={styles.mapContainer}>
-      {/* Summary cards */}
-      <div className={styles.summaryCards} aria-label="Compliance summary">
-        <div className={`${styles.card} ${styles.cardCritical}`}>
-          <span className={styles.cardCount} aria-label={`${critical.length} critical obligations`}>{critical.length}</span>
-          <span className={styles.cardLabel}>Critical</span>
-        </div>
-        <div className={`${styles.card} ${styles.cardHigh}`}>
-          <span className={styles.cardCount} aria-label={`${high.length} high priority obligations`}>{high.length}</span>
-          <span className={styles.cardLabel}>High</span>
-        </div>
-        <div className={`${styles.card} ${styles.cardMedium}`}>
-          <span className={styles.cardCount} aria-label={`${medium.length} medium priority obligations`}>{medium.length}</span>
-          <span className={styles.cardLabel}>Medium</span>
-        </div>
-        <div className={styles.card}>
-          <span className={styles.cardCount}>{frameworks.length}</span>
-          <span className={styles.cardLabel}>Frameworks</span>
-        </div>
-      </div>
-
-      {/* Compliance table */}
-      <div className={styles.tableWrap} role="region" aria-label="Compliance obligations table">
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th scope="col">Framework</th>
-              <th scope="col">Article</th>
-              <th scope="col">Requirement</th>
-              <th scope="col">Priority</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sorted.map(rule => {
-              const pri = rule.priority(info)
-              return (
-                <tr key={rule.id}>
-                  <td><strong>{rule.framework}</strong></td>
-                  <td>{rule.article}</td>
-                  <td>
-                    <strong>{rule.title}</strong>
-                    <p className={styles.ruleSummary}>{rule.summary}</p>
-                    {rule.note && <p className={styles.ruleNote}>⚠ {rule.note}</p>}
-                  </td>
-                  <td>
-                    <span className={`${styles.badge} ${priorityClass(pri)}`}>{pri}</span>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  )
-}
-
-function Step4({ info, applicable, isGenerating, isComplete, onGenerate }: {
-  info: SystemInfo
-  applicable: ComplianceItem[]
-  isGenerating: boolean
-  isComplete: boolean
-  onGenerate: () => void
-}) {
-  const critical = applicable.filter(r => r.priority(info) === 'Critical').length
-  return (
-    <div className={styles.generatePanel}>
-      <div className={styles.docPreview} aria-label="Document preview">
-        <div className={styles.docIcon} aria-hidden="true">📄</div>
-        <div>
-          <strong>ComplianceMap-{(info.name || 'system').replace(/\s+/g, '-')}-{info.date}.docx</strong>
-          <p className={styles.docMeta}>
-            {applicable.length} obligations across {[...new Set(applicable.map(r => r.framework))].length} frameworks
-            {critical > 0 && <> · <span className={styles.criticalText}>{critical} critical</span></>}
-          </p>
-        </div>
-      </div>
-      <p className={styles.generateNote}>
-        Your compliance map will be generated as a Word document containing the full regulatory matrix, detailed requirements for each framework, and a prioritised action plan.
-      </p>
-      {isComplete ? (
-        <div className={styles.successBox} role="status">
-          <p>✅ Your compliance map has been downloaded.</p>
-          <p className={styles.credit}>Generated by BiasLens™ — BeAccessible</p>
-        </div>
-      ) : (
-        <button className={styles.btnGenerate} onClick={onGenerate} disabled={isGenerating || applicable.length === 0} type="button" aria-busy={isGenerating}>
-          {isGenerating ? 'Generating your compliance map…' : '⬇ Download Compliance Map as Word Document'}
-        </button>
-      )}
-      {applicable.length === 0 && (
-        <p className={styles.hint}>Go back to Step 2 and select at least one jurisdiction to generate a report.</p>
-      )}
-    </div>
-  )
-}
-
-// ─── MAIN PAGE ────────────────────────────────────────────────────────────────
-
-export default function ComplianceMapperPage() {
-  const [step, setStep]         = useState(1)
-  const [info, setInfo]         = useState<SystemInfo>(INITIAL)
-  const [generating, setGen]    = useState(false)
-  const [complete, setComplete] = useState(false)
-
-  const update = useCallback((key: keyof SystemInfo, value: unknown) => {
-    setInfo(prev => ({ ...prev, [key]: value }))
-  
-  }, [])
-
-  const applicable = useMemo(
-    () => RULES.filter(r => r.applies(info) && r.priority(info) !== 'Not Applicable'),
-    [info]
-  )
-
-  const handleGenerate = async () => {
-    setGen(true)
-    try {
-      await generateReport(info, applicable)
-      setComplete(true)
-    } catch (err) {
-      console.error(err)
-      alert('An error occurred generating the document. Please try again.')
-    } finally {
-      setGen(false)
-    }
-  }
-
-  const progress = Math.round(((step - 1) / (STEPS.length - 1)) * 100)
-
-  return (
-    <div className={styles.page}>
-      <a href="#step-content" className={styles.skipLink}>Skip to form</a>
-
-      <header className={styles.header}>
-        <div>
-          <h1 className={styles.pageTitle}>Compliance Mapper</h1>
-          <p className={styles.pageSubtitle}>EU AI Act · GDPR · POPIA · EEA · UNCRPD · UK AI Governance</p>
-        </div>
-        <span className={styles.badge} aria-label="Maps to 6 regulatory frameworks">6 Frameworks</span>
-      </header>
-
-      <nav className={styles.stepper} aria-label="Mapper steps">
-        <div className={styles.progressTrack}>
-          <div className={styles.progressFill} style={{ width: `${progress}%` }} role="progressbar" aria-valuenow={step} aria-valuemin={1} aria-valuemax={STEPS.length} aria-label={`Step ${step} of ${STEPS.length}`} />
-        </div>
-        <ol className={styles.stepList}>
-          {STEPS.map(s => (
-            <li key={s.id} className={`${styles.stepItem} ${step === s.id ? styles.stepCurrent : ''} ${step > s.id ? styles.stepDone : ''}`} aria-current={step === s.id ? 'step' : undefined}>
-              <span className={styles.stepDot} aria-hidden="true">{step > s.id ? '✓' : s.id}</span>
-              <span className={styles.stepName}>{s.title}</span>
-            </li>
-          ))}
-        </ol>
-      </nav>
-
-      <main id="step-content" className={styles.main}>
-        <div className={styles.stepHeading}>
-          <h2 className={styles.stepTitle}>{STEPS[step - 1].title}</h2>
-          <p className={styles.stepDesc}>{STEPS[step - 1].description}</p>
-        </div>
-
-        <section aria-label={`Step ${step}: ${STEPS[step - 1].title}`}>
-          {step === 1 && <Step1 info={info} update={update} />}
-          {step === 2 && <Step2 info={info} update={update} />}
-          {step === 3 && <Step3 info={info} applicable={applicable} />}
-          {step === 4 && <Step4 info={info} applicable={applicable} isGenerating={generating} isComplete={complete} onGenerate={handleGenerate} />}
-        </section>
-
-        <div className={styles.navBar}>
-          {step > 1 && <button className={styles.btnBack} onClick={() => setStep(s => s - 1)} type="button">← Previous</button>}
-          <span className={styles.stepCount} aria-hidden="true">Step {step} of {STEPS.length}</span>
-          {step < STEPS.length && <button className={styles.btnNext} onClick={() => setStep(s => s + 1)} type="button">Continue →</button>}
-        </div>
-      </main>
-    </div>
-  )
-}
+        <label className={styles.checkLabel}><input type="checkbox"
