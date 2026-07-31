@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import { useProfileDefaults } from '@/lib/useProfileDefaults'
 import styles from './access-request.module.css'
-
-// ─── TYPES ───────────────────────────────────────────────────────────────────
 
 interface RequestData {
   yourName: string
@@ -24,12 +23,10 @@ interface RequestData {
   isDisabled: boolean
 }
 
-// ─── CONSTANTS ────────────────────────────────────────────────────────────────
-
 const STEPS = [
-  { id: 1, title: 'The Decision',       description: 'Tell us about the AI decision that affected you.' },
-  { id: 2, title: 'What You Want',      description: 'Choose what you are requesting.' },
-  { id: 3, title: 'Your Letter',        description: 'Download your formal rights request letter.' },
+  { id: 1, title: 'The Decision',  description: 'Tell us about the AI decision that affected you.' },
+  { id: 2, title: 'What You Want', description: 'Choose what you are requesting.' },
+  { id: 3, title: 'Your Letter',   description: 'Download your formal rights request letter.' },
 ]
 
 const DECISION_TYPES = [
@@ -63,16 +60,14 @@ const INITIAL: RequestData = {
   isDisabled: false,
 }
 
-// ─── LETTER GENERATION ────────────────────────────────────────────────────────
-
 function buildLetter(d: RequestData): string {
-  const today   = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+  const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
   const laws: string[] = []
   if (d.euJurisdiction) laws.push('Article 22, General Data Protection Regulation (GDPR)', 'Article 86, EU AI Act (Regulation 2024/1689)')
   if (d.saJurisdiction) laws.push('Section 71, Protection of Personal Information Act 4 of 2013 (POPIA)')
   if (d.ukJurisdiction) laws.push('Article 22, UK GDPR', 'ICO AI Guidance on Automated Decision-Making')
-  if (d.isDisabled)     laws.push('Article 5, UN Convention on the Rights of Persons with Disabilities (UNCRPD)')
-  if (!laws.length)      laws.push('applicable data protection and AI governance legislation')
+  if (d.isDisabled) laws.push('Article 5, UN Convention on the Rights of Persons with Disabilities (UNCRPD)')
+  if (!laws.length) laws.push('applicable data protection and AI governance legislation')
 
   const requests: string[] = []
   if (d.requestExplanation) requests.push(
@@ -125,8 +120,7 @@ Yours faithfully,
 ${d.yourName || '[Your Full Name]'}
 ${d.yourEmail ? `Email: ${d.yourEmail}` : ''}
 
-—
-This letter was generated using BiasLens™ by BeAccessible (beaccessible.co.za). It is provided as a template and does not constitute legal advice. You should verify the applicable legislation for your jurisdiction before sending.`
+This letter was generated using BiasLens by BeAccessible (beaccessible.co.za). It is provided as a template and does not constitute legal advice. You should verify the applicable legislation for your jurisdiction before sending.`
 }
 
 async function generateLetter(d: RequestData): Promise<void> {
@@ -152,16 +146,16 @@ async function generateLetter(d: RequestData): Promise<void> {
     sections: [{
       children: [
         new Paragraph({ text: 'Formal Rights Request', heading: HeadingLevel.TITLE, alignment: AlignmentType.CENTER, spacing: { after: 80 } }),
-        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 400 }, children: [new TextRun({ text: 'AI Decision — Explanation, Review & Data Access', color: '1F3F6B', size: 22 })] }),
+        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 400 }, children: [new TextRun({ text: 'AI Decision — Explanation, Review and Data Access', color: '1F3F6B', size: 22 })] }),
         ...children,
       ],
     }],
   })
 
   const blob = await Packer.toBlob(doc)
-  const url  = URL.createObjectURL(blob)
-  const a    = document.createElement('a')
-  a.href     = url
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
   a.download = `AccessRequest-${(d.organisationName || 'organisation').replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.docx`
   document.body.appendChild(a)
   a.click()
@@ -169,38 +163,40 @@ async function generateLetter(d: RequestData): Promise<void> {
   URL.revokeObjectURL(url)
 }
 
-// ─── STEP COMPONENTS ──────────────────────────────────────────────────────────
-
 function Step1({ d, set }: { d: RequestData; set: (k: keyof RequestData, v: unknown) => void }) {
   return (
     <div className={styles.fieldGroup}>
       <div className={styles.infoBox}>
-        This tool helps you write a formal letter to an organisation requesting an explanation of an AI or automated decision that affected you — and asking for a human being to review it.
+        This tool helps you write a formal letter to an organisation requesting an explanation of an AI or automated decision that affected you, and asking for a human being to review it.
       </div>
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>About you</h3>
+        <p className={styles.hint}>
+          Your name and email address are filled in from your account. Change them here if you are writing on behalf of someone else.
+        </p>
         <div className={styles.row}>
           <div className={styles.field}>
-            <label htmlFor="name" className={styles.label}>Your full name <span className={styles.req} aria-hidden="true">*</span></label>
-            <input id="name" type="text" className={styles.input} value={d.yourName} onChange={e => set('yourName', e.target.value)} placeholder="Your full name" />
+            <label htmlFor="name" className={styles.label}>Your full name (required)</label>
+            <input id="name" type="text" className={styles.input} autoComplete="name" required value={d.yourName} onChange={e => set('yourName', e.target.value)} placeholder="Your full name" />
           </div>
           <div className={styles.field}>
             <label htmlFor="email" className={styles.label}>Your email address</label>
-            <input id="email" type="email" className={styles.input} value={d.yourEmail} onChange={e => set('yourEmail', e.target.value)} placeholder="your@email.com" />
+            <input id="email" type="email" className={styles.input} autoComplete="email" value={d.yourEmail} onChange={e => set('yourEmail', e.target.value)} placeholder="your@email.com" />
           </div>
         </div>
       </div>
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>The organisation and decision</h3>
         <div className={styles.field}>
-          <label htmlFor="org" className={styles.label}>Organisation name <span className={styles.req} aria-hidden="true">*</span></label>
-          <input id="org" type="text" className={styles.input} value={d.organisationName} onChange={e => set('organisationName', e.target.value)} placeholder="e.g. Acme Bank, City Council, XYZ Employer" />
+          <label htmlFor="org" className={styles.label}>Organisation name (required)</label>
+          <p className={styles.hint} id="org-hint">The organisation that made the decision about you.</p>
+          <input id="org" type="text" className={styles.input} required aria-describedby="org-hint" value={d.organisationName} onChange={e => set('organisationName', e.target.value)} placeholder="e.g. Acme Bank, City Council, XYZ Employer" />
         </div>
         <div className={styles.row}>
           <div className={styles.field}>
             <label htmlFor="dtype" className={styles.label}>Type of decision</label>
             <select id="dtype" className={styles.select} value={d.decisionType} onChange={e => set('decisionType', e.target.value)}>
-              <option value="">Select a decision type…</option>
+              <option value="">Select a decision type</option>
               {DECISION_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
           </div>
@@ -215,11 +211,11 @@ function Step1({ d, set }: { d: RequestData; set: (k: keyof RequestData, v: unkn
         </div>
         <div className={styles.field}>
           <label htmlFor="desc" className={styles.label}>Describe the decision that was made about you</label>
-          <textarea id="desc" className={styles.textarea} rows={3} value={d.decisionDescription} onChange={e => set('decisionDescription', e.target.value)} placeholder="e.g. My loan application was rejected. I was told a credit scoring system was used but received no further explanation…" />
+          <textarea id="desc" className={styles.textarea} rows={3} value={d.decisionDescription} onChange={e => set('decisionDescription', e.target.value)} placeholder="e.g. My loan application was rejected. I was told a credit scoring system was used but received no further explanation" />
         </div>
         <div className={styles.field}>
           <label htmlFor="impact" className={styles.label}>How has this decision affected you?</label>
-          <textarea id="impact" className={styles.textarea} rows={3} value={d.impactDescription} onChange={e => set('impactDescription', e.target.value)} placeholder="e.g. I have been unable to access housing finance and believe I was treated unfairly because the system did not account for my disability…" />
+          <textarea id="impact" className={styles.textarea} rows={3} value={d.impactDescription} onChange={e => set('impactDescription', e.target.value)} placeholder="e.g. I have been unable to access housing finance and believe I was treated unfairly because the system did not account for my disability" />
         </div>
       </div>
     </div>
@@ -236,14 +232,14 @@ function Step2({ d, set }: { d: RequestData; set: (k: keyof RequestData, v: unkn
           <input type="checkbox" checked={d.requestExplanation} onChange={e => set('requestExplanation', e.target.checked)} />
           <span>
             <strong>Explanation of the decision</strong>
-            <span className={styles.checkDesc}>Ask the organisation to explain how the AI reached this decision — what data it used and why.</span>
+            <span className={styles.checkDesc}>Ask the organisation to explain how the AI reached this decision, what data it used and why.</span>
           </span>
         </label>
         <label className={styles.checkLabel}>
           <input type="checkbox" checked={d.requestHumanReview} onChange={e => set('requestHumanReview', e.target.checked)} />
           <span>
             <strong>Human review</strong>
-            <span className={styles.checkDesc}>Ask for a qualified person (not an AI) to review and reconsider the decision.</span>
+            <span className={styles.checkDesc}>Ask for a qualified person, not an AI, to review and reconsider the decision.</span>
           </span>
         </label>
         <label className={styles.checkLabel}>
@@ -257,7 +253,7 @@ function Step2({ d, set }: { d: RequestData; set: (k: keyof RequestData, v: unkn
           <input type="checkbox" checked={d.requestObjection} onChange={e => set('requestObjection', e.target.checked)} />
           <span>
             <strong>Formal objection to automated processing</strong>
-            <span className={styles.checkDesc}>Object to the use of automated decision-making in your case and ask it to be noted on record.</span>
+            <span className={styles.checkDesc}>Object to the use of automated decision-making in your case and ask for it to be noted on record.</span>
           </span>
         </label>
       </fieldset>
@@ -297,9 +293,9 @@ function Step3({ d, isGenerating, isComplete, onGenerate }: {
       <div className={styles.actions}>
         {isComplete ? (
           <div className={styles.successBox} role="status">
-            <p>✅ Your access request letter has been downloaded.</p>
-            <p className={styles.credit}>Generated by BiasLens™ — BeAccessible</p>
-            <p className={styles.legalNote}>This letter is a template and does not constitute legal advice. If your request is refused or ignored, you may escalate to your national supervisory authority (e.g. ICO in the UK, Information Regulator in SA, your national DPA in the EU).</p>
+            <p>Your access request letter has been downloaded.</p>
+            <p className={styles.credit}>Generated by BiasLens — BeAccessible</p>
+            <p className={styles.legalNote}>This letter is a template and does not constitute legal advice. If your request is refused or ignored, you may escalate to your national supervisory authority, for example the ICO in the UK, the Information Regulator in South Africa, or your national data protection authority in the EU.</p>
           </div>
         ) : (
           <>
@@ -307,7 +303,7 @@ function Step3({ d, isGenerating, isComplete, onGenerate }: {
               <p className={styles.warning} role="alert">Please go back and fill in your name, the organisation name, and select at least one request type.</p>
             )}
             <button className={styles.btnGenerate} onClick={onGenerate} disabled={isGenerating || !canGenerate} type="button" aria-busy={isGenerating}>
-              {isGenerating ? 'Generating your letter…' : '⬇ Download Letter as Word Document'}
+              {isGenerating ? 'Generating your letter' : 'Download Letter as Word Document'}
             </button>
           </>
         )}
@@ -316,18 +312,23 @@ function Step3({ d, isGenerating, isComplete, onGenerate }: {
   )
 }
 
-// ─── MAIN PAGE ────────────────────────────────────────────────────────────────
-
 export default function AccessRequestPage() {
-  const [step, setStep]         = useState(1)
-  const [data, setData]         = useState<RequestData>(INITIAL)
-  const [generating, setGen]    = useState(false)
+  const [step, setStep] = useState(1)
+  const [data, setData] = useState<RequestData>(INITIAL)
+  const [generating, setGen] = useState(false)
   const [complete, setComplete] = useState(false)
 
   const set = useCallback((key: keyof RequestData, value: unknown) => {
     setData(prev => ({ ...prev, [key]: value }))
-  
   }, [])
+
+  useProfileDefaults(({ fullName, email }) => {
+    setData(prev => ({
+      ...prev,
+      yourName: prev.yourName || fullName,
+      yourEmail: prev.yourEmail || email,
+    }))
+  })
 
   const handleGenerate = async () => {
     setGen(true)
@@ -363,7 +364,7 @@ export default function AccessRequestPage() {
         <ol className={styles.stepList}>
           {STEPS.map(s => (
             <li key={s.id} className={`${styles.stepItem} ${step === s.id ? styles.stepCurrent : ''} ${step > s.id ? styles.stepDone : ''}`} aria-current={step === s.id ? 'step' : undefined}>
-              <span className={styles.stepDot} aria-hidden="true">{step > s.id ? '✓' : s.id}</span>
+              <span className={styles.stepDot} aria-hidden="true">{step > s.id ? 'done' : s.id}</span>
               <span className={styles.stepName}>{s.title}</span>
             </li>
           ))}
@@ -383,9 +384,9 @@ export default function AccessRequestPage() {
         </section>
 
         <div className={styles.navBar}>
-          {step > 1 && <button className={styles.btnBack} onClick={() => setStep(s => s - 1)} type="button">← Previous</button>}
+          {step > 1 && <button className={styles.btnBack} onClick={() => setStep(s => s - 1)} type="button">Previous</button>}
           <span className={styles.stepCount} aria-hidden="true">Step {step} of {STEPS.length}</span>
-          {step < STEPS.length && <button className={styles.btnNext} onClick={() => setStep(s => s + 1)} type="button">Continue →</button>}
+          {step < STEPS.length && <button className={styles.btnNext} onClick={() => setStep(s => s + 1)} type="button">Continue</button>}
         </div>
       </main>
     </div>
