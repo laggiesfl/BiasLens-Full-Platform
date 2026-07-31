@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useMemo } from 'react'
+import { useProfileDefaults } from '@/lib/useProfileDefaults'
 import styles from './fairness-metrics.module.css'
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
@@ -274,14 +275,23 @@ function Step1({ ctx, setCtx }: { ctx: SystemContext; setCtx: (c: SystemContext)
   const u = (k: keyof SystemContext, v: string) => setCtx({ ...ctx, [k]: v })
   return (
     <div className={styles.fieldGroup}>
+      {/*
+        Tell people where these values came from. Filling fields in silently
+        satisfies the letter of WCAG 3.3.7, but someone who cannot see the form
+        at a glance deserves to know why text is already there.
+      */}
+      <div className={styles.infoBox}>
+        Your organisation and name are filled in from your Account Settings where
+        you have set them. Changing them here applies only to this assessment.
+      </div>
       <div className={styles.row}>
         <div className={styles.field}>
           <label htmlFor="org" className={styles.label}>Organisation</label>
-          <input id="org" type="text" className={styles.input} value={ctx.organisationName} onChange={e => u('organisationName', e.target.value)} placeholder="Organisation name" />
+          <input id="org" type="text" className={styles.input} autoComplete="organization" value={ctx.organisationName} onChange={e => u('organisationName', e.target.value)} placeholder="Organisation name" />
         </div>
         <div className={styles.field}>
           <label htmlFor="by" className={styles.label}>Completed by</label>
-          <input id="by" type="text" className={styles.input} value={ctx.completedBy} onChange={e => u('completedBy', e.target.value)} placeholder="Name and role" />
+          <input id="by" type="text" className={styles.input} autoComplete="name" value={ctx.completedBy} onChange={e => u('completedBy', e.target.value)} placeholder="Name and role" />
         </div>
       </div>
       <div className={styles.row}>
@@ -290,8 +300,13 @@ function Step1({ ctx, setCtx }: { ctx: SystemContext; setCtx: (c: SystemContext)
           <input id="date" type="date" className={styles.input} value={ctx.date} onChange={e => u('date', e.target.value)} />
         </div>
         <div className={styles.field}>
-          <label htmlFor="sys" className={styles.label}>AI system name <span className={styles.req} aria-hidden="true">*</span></label>
-          <input id="sys" type="text" className={styles.input} value={ctx.systemName} onChange={e => u('systemName', e.target.value)} placeholder="e.g. HireAI Screening System" />
+          {/*
+            "required" is written into the label. It used to be a red asterisk
+            marked aria-hidden, which told sighted users something screen reader
+            users never heard. (WCAG 3.3.2 Labels or Instructions.)
+          */}
+          <label htmlFor="sys" className={styles.label}>AI system name (required)</label>
+          <input id="sys" type="text" className={styles.input} required value={ctx.systemName} onChange={e => u('systemName', e.target.value)} placeholder="e.g. HireAI Screening System" />
         </div>
       </div>
       <div className={styles.field}>
@@ -499,6 +514,21 @@ export default function FairnessMetricsPage() {
   const [groups, setGroups]     = useState<Group[]>(INIT_GROUPS)
   const [generating, setGen]    = useState(false)
   const [complete, setComplete] = useState(false)
+
+  /*
+    Fill in the details we already hold, so they are not typed again in every
+    tool. This is WCAG 2.2 SC 3.3.7 Redundant Entry.
+
+    Anything already typed wins: the `prev.x || …` guards mean a value the
+    person has entered is never overwritten by the stored one.
+  */
+  useProfileDefaults(({ fullName, organisationName }) => {
+    setCtx(prev => ({
+      ...prev,
+      organisationName: prev.organisationName || organisationName,
+      completedBy: prev.completedBy || fullName,
+    }))
+  })
 
   const results = useMemo(() => calcMetrics(groups), [groups])
 
