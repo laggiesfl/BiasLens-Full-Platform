@@ -14,8 +14,19 @@ export default async function UpdatePasswordPage({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  // Reached via a recovery link, which establishes a session first.
-  if (!user) redirect("/login");
+
+  // Reached via a recovery link, which establishes a session first. If there
+  // is no session, the link has expired or was already used. Send the person
+  // back to the reset screen WITH an explanation rather than dropping them on
+  // the sign-in page with no idea what happened. (WCAG 3.3.3 Error Suggestion.)
+  if (!user) {
+    redirect(
+      "/reset-password?error=" +
+        encodeURIComponent(
+          "Your password reset link is no longer active. It may have expired or already been used. Request a new one below."
+        )
+    );
+  }
 
   return (
     <main className="auth-wrap" id="main-content">
@@ -33,8 +44,15 @@ export default async function UpdatePasswordPage({
         ) : null}
 
         <form action={updatePassword} className="stack" style={{ marginTop: 0 }}>
+          {/*
+            Kept at 8 to match the server check in updatePassword(). Note for
+            later: sign-up requires 12, so the two paths disagree. Raising this
+            to 12 means changing auth.ts as well — left alone deliberately so
+            this change stays limited to the reset fault.
+          */}
           <p className="hint" id="pw-hint" style={{ marginBottom: 4 }}>
-            Use at least 8 characters.
+            Use at least 8 characters. A short phrase you will remember is
+            stronger, and far easier to type, than a jumble of symbols.
           </p>
           <PasswordField
             id="password"
