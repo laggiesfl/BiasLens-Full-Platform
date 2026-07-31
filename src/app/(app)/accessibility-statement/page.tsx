@@ -280,8 +280,13 @@ export default function AccessibilityStatementPage() {
         <ul>
           <li>
             <strong>South Africa —</strong> the South African Human Rights
-            Commission, which handles complaints of unfair discrimination
-            including on the grounds of disability.
+            Commission, which investigates complaints of human rights violations
+            including unfair discrimination on the grounds of disability. You can
+            lodge a complaint at{" "}
+            <a href="https://www.sahrc.org.za/index.php/lodge-complaints">
+              sahrc.org.za/index.php/lodge-complaints
+            </a>
+            , where complaint forms are provided in eleven languages.
           </li>
           <li>
             <strong>United Kingdom —</strong> the Equality Advisory and Support
