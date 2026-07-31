@@ -6,24 +6,29 @@ import { createClient } from "@/lib/supabase/client";
 export interface ProfileDefaults {
   fullName: string;
   organisationName: string;
+  email: string;
 }
 
 /**
- * Fetches the signed-in person's name and organisation once, and hands them to
- * the caller so a tool can fill its opening fields in automatically.
+ * Fetches the signed-in person's name, organisation and email address once, and
+ * hands them to the caller so a tool can fill its opening fields in
+ * automatically.
  *
  * Why this exists:
- * Each assessment tool used to start from a blank form and ask for the
- * organisation and the person's name all over again. WCAG 2.2 success
- * criterion 3.3.7 Redundant Entry asks that information already given is either
- * filled in automatically or offered for selection. Retyping the same details
- * five times is tiring for anyone, and a genuine barrier for people with
- * limited hand movement, people who type with one hand, people managing
- * fatigue, and people using speech input.
+ * Each assessment tool used to start from a blank form and ask for the same
+ * details all over again. WCAG 2.2 success criterion 3.3.7 Redundant Entry asks
+ * that information already given is either filled in automatically or offered
+ * for selection. Retyping the same details five times is tiring for anyone, and
+ * a genuine barrier for people with limited hand movement, people who type with
+ * one hand, people managing fatigue, and people using speech input.
  *
- * The caller decides what to do with the values. Every tool applies them only
- * to fields that are still empty, so anything already typed is never
- * overwritten.
+ * The caller decides which of these values are appropriate for its own fields.
+ * That decision matters: in the Access Request Generator, for example, the
+ * organisation being asked about is the one that made a decision AGAINST the
+ * person, so the person's own organisation must NOT be filled in there.
+ *
+ * Every tool applies values only to fields that are still empty, so anything
+ * already typed is never overwritten.
  */
 export function useProfileDefaults(apply: (defaults: ProfileDefaults) => void) {
   // Held in a ref so that changing the callback between renders does not cause
@@ -53,6 +58,7 @@ export function useProfileDefaults(apply: (defaults: ProfileDefaults) => void) {
         applyRef.current({
           fullName: data.full_name ?? "",
           organisationName: data.organisation_name ?? "",
+          email: user.email ?? "",
         });
       } catch {
         // Filling fields in is a convenience. If it fails, the person can still
