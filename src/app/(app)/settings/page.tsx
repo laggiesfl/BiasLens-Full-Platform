@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { ROLE_OPTIONS, type Role } from "@/lib/roles";
-import { updateRole } from "@/lib/actions/profile";
+import { updateRole, updateAccountDetails } from "@/lib/actions/profile";
 
 export default async function SettingsPage({
   searchParams,
@@ -15,7 +15,7 @@ export default async function SettingsPage({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, role")
+    .select("full_name, organisation_name, role")
     .eq("id", user!.id)
     .single();
 
@@ -41,13 +41,66 @@ export default async function SettingsPage({
 
       <section className="card" aria-labelledby="acct-h">
         <h2 id="acct-h" style={{ fontSize: "1.2rem" }}>
-          Your account
+          Your details
         </h2>
-        <dl style={{ margin: 0 }}>
-          <dt style={{ fontWeight: 700 }}>Name</dt>
-          <dd style={{ margin: "0 0 12px" }}>{profile?.full_name ?? "Not set"}</dd>
+        <p className="muted">
+          BiasLens fills these in for you at the start of every assessment tool,
+          so you do not have to type them again each time. You can always change
+          them on any individual assessment.
+        </p>
+
+        <form action={updateAccountDetails} className="stack">
+          <div className="field">
+            {/*
+              The word "required" is written into the label rather than shown as
+              an asterisk. An asterisk hidden from screen readers tells sighted
+              users something that other users never hear. (WCAG 3.3.2.)
+            */}
+            <label htmlFor="full_name">Your name (required)</label>
+            <p className="hint" id="name-hint" style={{ marginBottom: 4 }}>
+              How BiasLens greets you, and what appears as “Completed by” on the
+              documents you generate.
+            </p>
+            <input
+              id="full_name"
+              name="full_name"
+              type="text"
+              autoComplete="name"
+              defaultValue={profile?.full_name ?? ""}
+              maxLength={120}
+              required
+              aria-describedby="name-hint"
+            />
+          </div>
+
+          <div className="field">
+            <label htmlFor="organisation_name">Your organisation</label>
+            <p className="hint" id="org-hint" style={{ marginBottom: 4 }}>
+              The organisation you carry out assessments for. Leave this blank if
+              you are working on your own behalf.
+            </p>
+            <input
+              id="organisation_name"
+              name="organisation_name"
+              type="text"
+              autoComplete="organization"
+              defaultValue={profile?.organisation_name ?? ""}
+              maxLength={160}
+              aria-describedby="org-hint"
+            />
+          </div>
+
+          <button type="submit" className="btn btn-primary">
+            Save your details
+          </button>
+        </form>
+
+        <dl style={{ margin: "20px 0 0" }}>
           <dt style={{ fontWeight: 700 }}>Email</dt>
-          <dd style={{ margin: 0 }}>{user?.email}</dd>
+          <dd style={{ margin: 0 }}>
+            {user?.email}
+            <span className="muted"> — contact us if you need this changed.</span>
+          </dd>
         </dl>
       </section>
 
