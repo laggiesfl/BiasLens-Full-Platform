@@ -31,9 +31,7 @@ export default function PrivacyNoticePage() {
           how long for, and what you can ask us to do about it. It is written to
           be read before you decide whether to use the platform, not after.
         </p>
-        <p className="muted">
-          Last updated 1 August 2026.
-        </p>
+        <p className="muted">Last updated 1 August 2026.</p>
       </div>
 
       <section className="card stack" aria-labelledby="who-h">
@@ -55,9 +53,7 @@ export default function PrivacyNoticePage() {
       </section>
 
       <section className="card stack" aria-labelledby="collect-h">
-        <h2 id="collect-h" style={{ fontSize: "1.2rem" }}>
-          2. What we collect
-        </h2>
+        <h2 id="collect-h" style={{ fontSize: "1.2rem" }}>2. What we collect</h2>
         <p>Only what is needed to run the service.</p>
 
         <h3 style={{ fontSize: "1.05rem" }}>Your account</h3>
@@ -97,13 +93,17 @@ export default function PrivacyNoticePage() {
             assessment without the answers to it.
           </li>
           <li>
+            <strong>To support you when something goes wrong.</strong> See section
+            10 on who at BeAccessible can see your work.
+          </li>
+          <li>
             <strong>To keep the platform secure and accountable.</strong> Access is
             by invitation only, and significant changes are logged.
           </li>
         </ul>
         <p>
           That is the whole of it. We do not profile you, we do not advertise to
-          you, and we do not sell or share your information for anyone else's
+          you, and we do not sell or share your information for anyone else&apos;s
           commercial purposes.
         </p>
       </section>
@@ -185,9 +185,7 @@ export default function PrivacyNoticePage() {
       </section>
 
       <section className="card stack" aria-labelledby="notdo-h">
-        <h2 id="notdo-h" style={{ fontSize: "1.2rem" }}>
-          7. What we do not do
-        </h2>
+        <h2 id="notdo-h" style={{ fontSize: "1.2rem" }}>7. What we do not do</h2>
         <p>
           <strong>
             Nothing you enter into BiasLens is sent to an artificial intelligence
@@ -208,35 +206,39 @@ export default function PrivacyNoticePage() {
       </section>
 
       <section className="card stack" aria-labelledby="keep-h">
-        <h2 id="keep-h" style={{ fontSize: "1.2rem" }}>
-          8. How long we keep it
-        </h2>
+        <h2 id="keep-h" style={{ fontSize: "1.2rem" }}>8. How long we keep it</h2>
         <ul>
           <li>
             <strong>While your account is open</strong> — your account details and
             your assessments are kept so you can carry on using them.
           </li>
           <li>
-            <strong>When you ask us to delete</strong> — your account and your
-            assessments are removed <strong>within 30 days</strong>.
+            <strong>When you ask us to delete</strong> — your account, your
+            assessments and any files you uploaded are removed{" "}
+            <strong>within 30 days</strong>.
           </li>
           <li>
             <strong>You can delete individual assessments yourself</strong> at any
             time, without asking us.
           </li>
+          <li>
+            <strong>Our audit record survives, without you in it.</strong> The log
+            of significant actions is kept, but the entry no longer identifies who
+            performed them. What happened remains accountable; who did it does not
+            stay attached to a deleted person.
+          </li>
         </ul>
       </section>
 
       <section className="card stack" aria-labelledby="secure-h">
-        <h2 id="secure-h" style={{ fontSize: "1.2rem" }}>
-          9. How it is protected
-        </h2>
+        <h2 id="secure-h" style={{ fontSize: "1.2rem" }}>9. How it is protected</h2>
         <ul>
           <li>All traffic is encrypted in transit using HTTPS.</li>
           <li>
             Row-level security is enforced in the database itself, not only in the
-            application. You can read and write your own records and no one
-            else's.
+            application. One ordinary user cannot read another ordinary
+            user&apos;s records, and this is enforced below the application rather
+            than by it.
           </li>
           <li>
             Accounts are created by invitation only. Public sign-up is switched off
@@ -247,10 +249,39 @@ export default function PrivacyNoticePage() {
         </ul>
       </section>
 
-      <section className="card stack" aria-labelledby="rights-h">
-        <h2 id="rights-h" style={{ fontSize: "1.2rem" }}>
-          10. Your rights
+      <section className="card stack" aria-labelledby="admin-h">
+        <h2 id="admin-h" style={{ fontSize: "1.2rem" }}>
+          10. Who at BeAccessible can see your work
         </h2>
+        <p>
+          <strong>
+            Administrator accounts at BeAccessible can read the assessments held on
+            the platform, including yours.
+          </strong>{" "}
+          We are telling you this plainly because a privacy notice that implied
+          nobody could would be untrue.
+        </p>
+        <p>This access exists so that we can:</p>
+        <ul>
+          <li>Help you when something has gone wrong with an assessment</li>
+          <li>Investigate a fault or a security concern</li>
+          <li>Respond to a request or a complaint you have made</li>
+        </ul>
+        <p>
+          It is limited to named administrator accounts, not to anyone who happens
+          to work with us. It is not used to review your work, to judge it, or for
+          any commercial purpose. If you would prefer we did not look at a
+          particular assessment while helping you, say so and we will work around
+          it.
+        </p>
+        <p>
+          You can ask us at any time whether an administrator has accessed your
+          records, and we will tell you.
+        </p>
+      </section>
+
+      <section className="card stack" aria-labelledby="rights-h">
+        <h2 id="rights-h" style={{ fontSize: "1.2rem" }}>11. Your rights</h2>
         <p>You can ask us to:</p>
         <ul>
           <li>Tell you what personal information we hold about you</li>
@@ -273,7 +304,7 @@ export default function PrivacyNoticePage() {
       </section>
 
       <section className="card stack" aria-labelledby="cookies-h">
-        <h2 id="cookies-h" style={{ fontSize: "1.2rem" }}>11. Cookies</h2>
+        <h2 id="cookies-h" style={{ fontSize: "1.2rem" }}>12. Cookies</h2>
         <p>
           BiasLens sets a cookie so that you stay signed in as you move between
           pages. That is what it is for and that is all it does.
@@ -287,7 +318,7 @@ export default function PrivacyNoticePage() {
 
       <section className="card stack" aria-labelledby="complain-h">
         <h2 id="complain-h" style={{ fontSize: "1.2rem" }}>
-          12. If you want to complain
+          13. If you want to complain
         </h2>
         <p>
           Please raise it with us first at{" "}
@@ -299,7 +330,7 @@ export default function PrivacyNoticePage() {
             <strong>South Africa —</strong> the Information Regulator. Complaints
             go on Form 5 through the{" "}
             <a href="https://eservices.inforegulator.org.za/">
-              Regulator's eServices portal
+              Regulator&apos;s eServices portal
             </a>
             , or by email to{" "}
             <a href="mailto:POPIAComplaints@inforegulator.org.za">
@@ -309,7 +340,7 @@ export default function PrivacyNoticePage() {
             Johannesburg, 2191.
           </li>
           <li>
-            <strong>United Kingdom —</strong> the Information Commissioner's
+            <strong>United Kingdom —</strong> the Information Commissioner&apos;s
             Office.
           </li>
           <li>
@@ -322,7 +353,7 @@ export default function PrivacyNoticePage() {
 
       <section className="card stack" aria-labelledby="changes-h">
         <h2 id="changes-h" style={{ fontSize: "1.2rem" }}>
-          13. Changes to this notice
+          14. Changes to this notice
         </h2>
         <p>
           We update this notice whenever what we do with your information changes,
