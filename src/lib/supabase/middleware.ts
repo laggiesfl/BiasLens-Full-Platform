@@ -1,12 +1,22 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+/**
+ * Paths reachable without signing in.
+ *
+ * /accessibility-statement is deliberately public. An accessibility statement
+ * exists for people who are hitting a barrier — including people who cannot get
+ * past the sign-in screen. Putting it behind sign-in makes it unreachable by
+ * exactly the people it is written for, and the EU model statement used under
+ * the Web Accessibility Directive expects it to be publicly available.
+ */
 const PUBLIC_PATHS = [
   "/",
   "/login",
   "/signup",
   "/reset-password",
   "/auth/callback",
+  "/accessibility-statement",
 ];
 
 function isPublic(pathname: string) {
