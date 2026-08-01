@@ -4,11 +4,14 @@ import { NextResponse, type NextRequest } from "next/server";
 /**
  * Paths reachable without signing in.
  *
- * /accessibility-statement is deliberately public. An accessibility statement
- * exists for people who are hitting a barrier — including people who cannot get
- * past the sign-in screen. Putting it behind sign-in makes it unreachable by
- * exactly the people it is written for, and the EU model statement used under
- * the Web Accessibility Directive expects it to be publicly available.
+ * /accessibility-statement is public because an accessibility statement exists
+ * for people who are hitting a barrier — including people who cannot get past
+ * the sign-in screen. Behind sign-in it is unreachable by exactly the people it
+ * is written for.
+ *
+ * /privacy is public because POPIA and the GDPR both expect a person to be able
+ * to read how their information will be handled BEFORE they hand any of it
+ * over. Behind sign-in, it could only be read by people who had already decided.
  */
 const PUBLIC_PATHS = [
   "/",
@@ -17,6 +20,7 @@ const PUBLIC_PATHS = [
   "/reset-password",
   "/auth/callback",
   "/accessibility-statement",
+  "/privacy",
 ];
 
 function isPublic(pathname: string) {
