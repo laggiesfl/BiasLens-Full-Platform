@@ -135,11 +135,23 @@ export function classify(answers: Answers): RiskResult {
   const outcomeMonitoring = asStr(answers.outcome_monitoring);
   const disabilityDataHeld = asStr(answers.disability_data_held);
 
-  const lifecycleAsked =
-    answered(answers.carries_state) ||
-    answered(answers.outputs_become_inputs) ||
-    answered(answers.retraining) ||
-    answered(answers.outcome_monitoring);
+  // "Not sure" is a real answer and must never be read as "no". Someone who
+  // does not know whether their supplier retrains the model has told us the
+  // risk is UNVERIFIED, not that it is absent. Three states are counted
+  // separately, because collapsing them is what would let a person who knows
+  // nothing about their system receive a reassuring Low result.
+  const LIFECYCLE_KEYS = [
+    "carries_state",
+    "outputs_become_inputs",
+    "retraining",
+    "outcome_monitoring",
+  ] as const;
+  const isUnsure = (v: unknown) => asStr(v) === "unsure";
+  const lifecycleKnown = LIFECYCLE_KEYS.filter(
+    (k) => answered(answers[k]) && !isUnsure(answers[k])
+  ).length;
+  const lifecycleUnsure = LIFECYCLE_KEYS.filter((k) => isUnsure(answers[k])).length;
+  const lifecycleMissing = LIFECYCLE_KEYS.filter((k) => !answered(answers[k])).length;
 
   const rationale: RationaleItem[] = [];
   const obligations: Obligation[] = [];
@@ -485,10 +497,21 @@ export function classify(answers: Answers): RiskResult {
     },
     {
       type: "Emergent bias (emergent)",
-      level: emergentLevel(carriesState, outputsBecomeInputs, retraining, outcomeMonitoring, lowOversight),
-      evidence: lifecycleAsked ? "Emerging evidence" : "Not established",
+      level: emergentLevel(
+        carriesState,
+        outputsBecomeInputs,
+        retraining,
+        outcomeMonitoring,
+        lowOversight,
+        lifecycleUnsure + lifecycleMissing
+      ),
+      // Evidence is only "Emerging evidence" where at least one lifecycle
+      // question was actually answered. "Not sure" is not evidence.
+      evidence: lifecycleKnown > 0 ? "Emerging evidence" : "Not established",
       note: emergentNote(
-        lifecycleAsked,
+        lifecycleKnown,
+        lifecycleUnsure,
+        lifecycleMissing,
         carriesState,
         outputsBecomeInputs,
         retraining,
@@ -597,7 +620,8 @@ function emergentLevel(
   outputsBecomeInputs: boolean,
   retraining: string,
   outcomeMonitoring: string,
-  lowOversight: boolean
+  lowOversight: boolean,
+  unknownCount: number
 ): Level {
   let signals = 0;
   if (carriesState) signals += 2;
@@ -608,20 +632,38 @@ function emergentLevel(
 
   if (signals >= 4) return "High";
   if (signals >= 2) return "Medium";
+
+  // Not knowing is not the same as being safe. Where two or more of the
+  // lifecycle questions are unanswered or answered "Not sure", this cannot
+  // honestly be reported as Low, because nothing has been established either
+  // way. Reporting Low here would turn the assessment into a reward for not
+  // asking the supplier.
+  if (unknownCount >= 2) return "Medium";
   return "Low";
 }
 
 function emergentNote(
-  asked: boolean,
+  known: number,
+  unsure: number,
+  missing: number,
   carriesState: boolean,
   outputsBecomeInputs: boolean,
   retraining: string,
   outcomeMonitoring: string,
   disabilityDataHeld: string
 ): string {
-  if (!asked) {
+  // Nothing answered at all — the questionnaire has not reached this section.
+  if (known === 0 && unsure === 0) {
     return "Not yet assessed. Emergent bias develops through use rather than being inherited from training data, and it is not detectable from a description of the system alone.";
   }
+
+  // Asked, but nobody knows. This is a finding in its own right, not an
+  // absence of one: a system whose update and monitoring behaviour cannot be
+  // described is a system whose behaviour cannot be assured.
+  if (known === 0) {
+    return `The questions about how this system changes over time were answered "Not sure". That is an honest answer and it is recorded as one, but it is not a clean result. It means nobody available could describe whether the system learns from use, whether the supplier can change it, or whether outcomes are being monitored. Establish these facts with the supplier — they are usually answerable, and often contractual. Until then, emergent bias in this system is unverified rather than absent.`;
+  }
+
   const parts: string[] = [];
   if (carriesState) {
     parts.push(
@@ -643,8 +685,20 @@ function emergentNote(
     );
   }
   if (!parts.length) {
-    parts.push("No strong emergent-bias signals were reported. Reassess if the system begins to learn from use, or is used for a decision it was not assessed for.");
+    parts.push(
+      "None of the emergent-bias signals were present in the answers given. Reassess if the system begins to learn from use, or is used for a decision it was not assessed for."
+    );
   }
+
+  // Partial knowledge must be stated. Without this, a report could list two
+  // clean answers and stay silent about the two nobody could answer.
+  const stillUnknown = unsure + missing;
+  if (stillUnknown > 0) {
+    parts.push(
+      `${stillUnknown} of the ${known + stillUnknown} questions in this section could not be answered. Those aspects are unverified rather than clear, and the finding above is based only on what was known.`
+    );
+  }
+
   return parts.join(" ");
 }
 
