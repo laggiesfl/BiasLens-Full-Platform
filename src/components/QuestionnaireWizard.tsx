@@ -198,6 +198,12 @@ export function QuestionnaireWizard({
   );
 }
 
+const DEFAULT_YNU = [
+  { value: "true", label: "Yes" },
+  { value: "false", label: "No" },
+  { value: "unsure", label: "Not sure" },
+];
+
 function QuestionField({
   q,
   value,
@@ -212,6 +218,54 @@ function QuestionField({
   onToggleMulti: (option: string) => void;
 }) {
   const describedBy = q.help ? `${q.id}-help` : undefined;
+
+  /*
+    Yes / No / Not sure. "Not sure" is offered because the risk engine treats
+    an unknown answer differently from a "no", and without a third option
+    people guess. A guess almost always lands on "no", which makes the report
+    read as safer than the evidence supports.
+
+    Values are stored as strings. Answers saved before this change are real
+    booleans, so they are normalised here — otherwise an existing answer would
+    show as blank and look as though it had been lost.
+  */
+  if (q.type === "yesnounsure") {
+    const current =
+      value === true
+        ? "true"
+        : value === false
+          ? "false"
+          : typeof value === "string"
+            ? value
+            : "";
+    const opts = q.options ?? DEFAULT_YNU;
+    return (
+      <fieldset style={{ border: 0, padding: 0, margin: 0 }} aria-describedby={describedBy}>
+        <legend style={{ fontWeight: 700, color: "var(--ba-deep-blue)", marginBottom: 4 }}>
+          {q.label}
+        </legend>
+        {q.help ? (
+          <p className="hint" id={describedBy}>
+            {q.help}
+          </p>
+        ) : null}
+        <div className="cluster">
+          {opts.map((opt) => (
+            <label key={opt.value} className="check-option">
+              <input
+                type="radio"
+                name={q.id}
+                value={opt.value}
+                checked={current === opt.value}
+                onChange={() => onText(opt.value)}
+              />
+              <span>{opt.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    );
+  }
 
   if (q.type === "yesno") {
     return (
