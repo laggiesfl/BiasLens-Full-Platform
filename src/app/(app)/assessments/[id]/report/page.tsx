@@ -131,15 +131,31 @@ export default async function ReportPage({
         </dl>
       </section>
 
-      <section className="card" aria-labelledby="ibm-h">
-        <h2 id="ibm-h" style={{ fontSize: "1.2rem" }}>IBM eight bias types</h2>
+      {/*
+        Heading is deliberately "Bias findings" rather than naming a vendor.
+        The taxonomy is grounded in Friedman & Nissenbaum, Bias in Computer
+        Systems, ACM TOIS 14(3), 1996 — preexisting, technical and emergent —
+        which is cited in the engine. The heading also carries no count, so it
+        does not go stale when the engine gains or loses a finding.
+
+        "Level" and "Evidence" are separate columns on purpose. Level is how
+        serious the risk would be if present. Evidence is how much is actually
+        known. Collapsing the two would let a High level read as a proven
+        problem, or a Not established evidence read as a clean bill of health.
+      */}
+      <section className="card" aria-labelledby="findings-h">
+        <h2 id="findings-h" style={{ fontSize: "1.2rem" }}>Bias findings</h2>
         <div style={{ overflowX: "auto" }}>
           <table>
-            <caption className="sr-only">IBM bias-type scores with notes</caption>
+            <caption className="sr-only">
+              Bias findings, showing the risk level if present, the strength of
+              evidence actually available, and what each finding means
+            </caption>
             <thead>
               <tr>
                 <th scope="col">Bias type</th>
                 <th scope="col">Level</th>
+                <th scope="col">Evidence</th>
                 <th scope="col">What this means</th>
               </tr>
             </thead>
@@ -148,6 +164,7 @@ export default async function ReportPage({
                 <tr key={b.type}>
                   <th scope="row">{b.type}</th>
                   <td><LevelBadge level={b.level} /></td>
+                  <td>{b.evidence ?? "Not recorded"}</td>
                   <td>{b.note}</td>
                 </tr>
               ))}
@@ -196,27 +213,44 @@ export default async function ReportPage({
         )}
       </section>
 
+      {/*
+        Each rationale entry is a description list, not text separated by <br />.
+        Line breaks are visual only: a screen reader reads a <br /> run as one
+        continuous sentence, so "Triggered by" was not attached to the value
+        that followed it and the explanation had no label at all. A <dl> binds
+        each label to its own value (WCAG 2.2 — 1.3.1 Info and Relationships).
+      */}
       <section className="card" aria-labelledby="why-h">
         <h2 id="why-h" style={{ fontSize: "1.2rem" }}>Why these classifications? (plain language)</h2>
         <ol style={{ paddingLeft: 18 }}>
           {data.rationale.map((r, i) => (
-            <li key={i} style={{ marginBottom: 14 }}>
-              <strong>{r.rule}</strong> <span className="badge" style={{ marginLeft: 6 }}>Confidence: {r.confidence}</span>
-              <br />
-              <span className="muted">Triggered by:</span> {r.trigger}
-              <br />
-              <span className="muted">Framework:</span> {r.framework}
-              <br />
-              {r.explanation}
-              <br />
-              <span className="muted">Recommendation:</span> {r.recommendation}
+            <li key={i} style={{ marginBottom: 20 }}>
+              <p style={{ margin: "0 0 8px" }}>
+                <strong>{r.rule}</strong>{" "}
+                <span className="badge" style={{ marginLeft: 6 }}>
+                  Confidence: {r.confidence}
+                </span>
+              </p>
+              <dl style={{ margin: 0 }}>
+                <dt className="muted" style={{ fontWeight: 400 }}>Triggered by</dt>
+                <dd style={{ margin: "0 0 8px" }}>{r.trigger}</dd>
+
+                <dt className="muted" style={{ fontWeight: 400 }}>Framework</dt>
+                <dd style={{ margin: "0 0 8px" }}>{r.framework}</dd>
+
+                <dt className="muted" style={{ fontWeight: 400 }}>What this means</dt>
+                <dd style={{ margin: "0 0 8px" }}>{r.explanation}</dd>
+
+                <dt className="muted" style={{ fontWeight: 400 }}>Recommendation</dt>
+                <dd style={{ margin: 0 }}>{r.recommendation}</dd>
+              </dl>
             </li>
           ))}
         </ol>
       </section>
 
       <section className="card" aria-labelledby="rem-h">
-        <h2 id="rem-h" style={{ fontSize: "1.2rem" }}>Recommended remediation (IBM three stages)</h2>
+        <h2 id="rem-h" style={{ fontSize: "1.2rem" }}>Recommended remediation</h2>
         <div className="grid grid-3">
           {data.remediation.map((c) => (
             <div key={c.stage} className="card" style={{ background: "var(--ba-tint-3)" }}>
