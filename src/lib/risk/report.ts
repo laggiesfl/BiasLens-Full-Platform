@@ -62,6 +62,14 @@ export async function getReportData(
 
   const ov = (rc.overrides ?? {}) as Record<string, string | null>;
 
+  // Findings are read from `fairness_findings`, falling back to the deprecated
+  // `ibm_bias_scores` column. The fallback exists so that reports generated
+  // before the rename still open. It can be removed once that column is
+  // dropped — see the add_fairness_findings_column migration.
+  const findings = (rc.fairness_findings ??
+    rc.ibm_bias_scores ??
+    []) as BiasScore[];
+
   return {
     assessmentId,
     title: assessment.title,
@@ -71,7 +79,7 @@ export async function getReportData(
     euClassification: ov.eu_classification || rc.eu_classification || "—",
     euAnnex: rc.eu_annex_category ?? null,
     executiveSummary: ov.executive_summary || rc.executive_summary || "",
-    biasScores: (rc.ibm_bias_scores ?? []) as BiasScore[],
+    biasScores: findings,
     pillars: (rc.sa_pillar_alignment ?? []) as PillarAlignment[],
     obligations: (rc.triggered_obligations ?? []) as Obligation[],
     rationale: (rc.rationale ?? []) as RationaleItem[],

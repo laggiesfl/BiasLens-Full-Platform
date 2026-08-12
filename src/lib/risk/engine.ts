@@ -11,11 +11,12 @@
  *                  make a client look worse than staying silent, or the
  *                  assessment measures candour instead of risk.
  *
- * NOTE: the field `ibm_bias_scores` is retained for now because the database
- * column and report generation both depend on it. It is scheduled to be renamed
- * to `fairness_findings` together with report.ts and a migration. The taxonomy
- * itself is grounded in Friedman & Nissenbaum, Bias in Computer Systems,
- * ACM TOIS 14(3), 1996 — preexisting, technical and emergent bias.
+ * The findings field is named `fairness_findings`. The taxonomy is grounded in
+ * Friedman & Nissenbaum, Bias in Computer Systems, ACM TOIS 14(3), 1996 —
+ * preexisting, technical and emergent bias — not in any vendor's material, and
+ * the field name now says so. The database keeps a deprecated `ibm_bias_scores`
+ * column populated in parallel during the rename; it can be dropped once
+ * nothing reads it.
  */
 
 export type Answers = Record<string, string | string[] | boolean | undefined>;
@@ -62,6 +63,12 @@ export interface RiskResult {
   sa_tier: SaTier;
   eu_classification: string;
   eu_annex_category: string | null;
+  fairness_findings: BiasScore[];
+  /**
+   * @deprecated Use `fairness_findings`. Carried in parallel during the rename
+   * so that files updated in a different order still compile, and so that any
+   * caller not yet migrated keeps working. Remove once nothing reads it.
+   */
   ibm_bias_scores: BiasScore[];
   sa_pillar_alignment: PillarAlignment[];
   triggered_obligations: Obligation[];
@@ -416,7 +423,7 @@ export function classify(answers: Answers): RiskResult {
   const histDomain = ["employment", "policing", "financial services", "welfare", "justice"].includes(domain);
   const scopeKnown = populations.length > 0;
 
-  const ibm: BiasScore[] = [
+  const findings: BiasScore[] = [
     {
       type: "Algorithm bias (technical)",
       level: lowOversight ? "High" : "Medium",
@@ -568,7 +575,8 @@ export function classify(answers: Answers): RiskResult {
     sa_tier: saTier,
     eu_classification: euClassification,
     eu_annex_category: euAnnex,
-    ibm_bias_scores: ibm,
+    fairness_findings: findings,
+    ibm_bias_scores: findings, // deprecated alias — see RiskResult
     sa_pillar_alignment: pillars,
     triggered_obligations: obligations,
     rationale,
