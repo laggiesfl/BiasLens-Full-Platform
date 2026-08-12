@@ -18,20 +18,32 @@ function csvCell(v: string) {
   return `"${String(v ?? "").replace(/"/g, '""')}"`;
 }
 
+/**
+ * The CSV carries an Evidence column so that a bias finding's level is never
+ * read in isolation. Level is how serious the risk would be if present;
+ * Evidence is how much is actually known. Rows that are not bias findings
+ * leave the column empty rather than filling it with a value that would look
+ * like a judgement.
+ */
 function buildCsv(data: Awaited<ReturnType<typeof getReportData>>): string {
   if (!data) return "";
   const rows: string[][] = [
-    ["Section", "Item", "Value"],
-    ["Summary", "Assessment", data.title],
-    ["Summary", "SA tier", data.saTier],
-    ["Summary", "EU classification", data.euClassification],
-    ["Summary", "High-risk category", data.euAnnex ?? ""],
-    ["Summary", "Reviewed", data.reviewed ? "Yes" : "No"],
-    ["Profile", "System name", data.profile.system_name ?? ""],
-    ["Profile", "Decision domain", data.profile.decision_domain ?? ""],
-    ...data.biasScores.map((b) => ["IBM bias", b.type, b.level]),
-    ...data.pillars.map((p) => ["SA pillar", p.pillar, p.status]),
-    ...data.obligations.map((o) => ["Obligation", o.ref, o.title]),
+    ["Section", "Item", "Value", "Evidence"],
+    ["Summary", "Assessment", data.title, ""],
+    ["Summary", "SA tier", data.saTier, ""],
+    ["Summary", "EU classification", data.euClassification, ""],
+    ["Summary", "High-risk category", data.euAnnex ?? "", ""],
+    ["Summary", "Reviewed", data.reviewed ? "Yes" : "No", ""],
+    ["Profile", "System name", data.profile.system_name ?? "", ""],
+    ["Profile", "Decision domain", data.profile.decision_domain ?? "", ""],
+    ...data.biasScores.map((b) => [
+      "Bias finding",
+      b.type,
+      b.level,
+      b.evidence ?? "Not recorded",
+    ]),
+    ...data.pillars.map((p) => ["SA pillar", p.pillar, p.status, ""]),
+    ...data.obligations.map((o) => ["Obligation", o.ref, o.title, ""]),
   ];
   return rows.map((r) => r.map(csvCell).join(",")).join("\r\n");
 }
