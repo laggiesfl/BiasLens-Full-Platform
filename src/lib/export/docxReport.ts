@@ -18,6 +18,13 @@ import { BEACCESSIBLE_LOGO_PNG_BASE64 } from "@/lib/export/logo";
  * Accessible Bias Risk Report as a Word document (Brief Section 19.3):
  * document title, real heading styles, table header rows, logical reading
  * order and a plain-language executive summary.
+ *
+ * The bias findings table carries both a Level and an Evidence column. Level
+ * is how serious the risk would be if present; Evidence is how much is
+ * actually known. They are kept apart deliberately — a High level is not a
+ * proven problem, and a Not established evidence is not a clean bill of
+ * health. The taxonomy is grounded in Friedman & Nissenbaum, Bias in Computer
+ * Systems, ACM TOIS 14(3), 1996, cited in the engine.
  */
 const CELL_MARGINS = { top: 80, bottom: 80, left: 110, right: 110 };
 // Tight spacing inside table cells so rows stay compact while body text breathes.
@@ -133,11 +140,13 @@ export async function buildDocxReport(data: ReportData): Promise<Buffer> {
     ],
   });
 
-  const ibmTable = new Table({
+  const findingsTable = new Table({
     width: { size: 100, type: WidthType.PERCENTAGE },
     rows: [
-      headerRow(["Bias type", "Level", "What this means"]),
-      ...data.biasScores.map((b) => bodyRow([b.type, b.level, b.note])),
+      headerRow(["Bias type", "Level", "Evidence", "What this means"]),
+      ...data.biasScores.map((b) =>
+        bodyRow([b.type, b.level, b.evidence ?? "Not recorded", b.note])
+      ),
     ],
   });
 
@@ -152,8 +161,8 @@ export async function buildDocxReport(data: ReportData): Promise<Buffer> {
   const sections: (Paragraph | Table)[] = [
     ...(children as (Paragraph | Table)[]),
     profileTable,
-    new Paragraph({ text: "IBM eight bias types", heading: HeadingLevel.HEADING_1 }),
-    ibmTable,
+    new Paragraph({ text: "Bias findings", heading: HeadingLevel.HEADING_1 }),
+    findingsTable,
     new Paragraph({ text: "SA Draft AI Policy — six pillars", heading: HeadingLevel.HEADING_1 }),
     pillarsTable,
     new Paragraph({ text: "Triggered obligations", heading: HeadingLevel.HEADING_1 }),
@@ -183,7 +192,7 @@ export async function buildDocxReport(data: ReportData): Promise<Buffer> {
   });
 
   sections.push(
-    new Paragraph({ text: "Recommended remediation (IBM three stages)", heading: HeadingLevel.HEADING_1 })
+    new Paragraph({ text: "Recommended remediation", heading: HeadingLevel.HEADING_1 })
   );
   data.remediation.forEach((c) => {
     sections.push(new Paragraph({ text: c.stage, heading: HeadingLevel.HEADING_2 }));

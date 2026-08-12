@@ -6,9 +6,13 @@ import { BEACCESSIBLE_LOGO_PNG_BASE64 } from "@/lib/export/logo";
  * Bias Risk Report as a PDF (Brief Section 19). Uses pdf-lib (pure JS, reliable
  * in serverless). Content is written in a logical reading order with clear
  * heading sizes and the SAME structure as the Word (.docx) export — including
- * bordered tables for the system profile, IBM bias types and six pillars — so
+ * bordered tables for the system profile, bias findings and six pillars — so
  * the two documents match. The Word version is the fully tagged accessible
  * format; this PDF preserves the same structure and reading order.
+ *
+ * The bias findings table carries both a Level and an Evidence column. Level
+ * is how serious the risk would be if present; Evidence is how much is
+ * actually known. They are kept apart deliberately.
  */
 const A4 = { w: 595.28, h: 841.89 };
 const MARGIN = 56;
@@ -180,11 +184,16 @@ export async function buildPdfReport(data: ReportData): Promise<Uint8Array> {
     [0.32, 0.68]
   );
 
-  h1("IBM eight bias types");
+  h1("Bias findings");
   table(
-    ["Bias type", "Level", "What this means"],
-    data.biasScores.map((b) => [b.type, b.level, b.note]),
-    [0.26, 0.16, 0.58]
+    ["Bias type", "Level", "Evidence", "What this means"],
+    data.biasScores.map((b) => [
+      b.type,
+      b.level,
+      b.evidence ?? "Not recorded",
+      b.note,
+    ]),
+    [0.24, 0.12, 0.17, 0.47]
   );
 
   h1("SA Draft AI Policy — six pillars");
@@ -210,7 +219,7 @@ export async function buildPdfReport(data: ReportData): Promise<Uint8Array> {
     write(`Recommendation: ${r.recommendation}`, { size: 10.5, gap: 8 });
   });
 
-  h1("Recommended remediation (IBM three stages)");
+  h1("Recommended remediation");
   data.remediation.forEach((c) => {
     write(c.stage, { size: 12.5, f: bold, color: DEEP, gap: 3 });
     c.actions.forEach((a) => write(`•  ${a}`, { size: 10.5, gap: 2 }));
