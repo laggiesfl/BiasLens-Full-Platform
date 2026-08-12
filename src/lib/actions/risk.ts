@@ -31,7 +31,11 @@ export async function generateRiskClassification(assessmentId: string) {
       sa_tier: result.sa_tier,
       eu_classification: result.eu_classification,
       eu_annex_category: result.eu_annex_category,
-      ibm_bias_scores: result.ibm_bias_scores,
+      fairness_findings: result.fairness_findings,
+      // Written in parallel during the rename so that anything still reading
+      // the old column keeps working. Remove this line when
+      // ibm_bias_scores is dropped — see add_fairness_findings_column.
+      ibm_bias_scores: result.fairness_findings,
       sa_pillar_alignment: result.sa_pillar_alignment,
       triggered_obligations: result.triggered_obligations,
       rationale: result.rationale,
