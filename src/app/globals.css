@@ -107,13 +107,42 @@ a:hover {
 /* ---------- Focus: visible 3px Deep Blue indicator (Section 17.2) ----------
    Measured 10.60:1 against white and 9.67:1 against the page background,
    well above the 3:1 required by 1.4.11. */
+/* TWO-TONE focus indicator. A single-colour ring cannot work on this palette,
+   because the same deep blue is used for the page text, the sidebar and the
+   primary buttons — so wherever the ring landed on blue it measured 1.00:1,
+   the identical colour, and disappeared.
+
+   Two rings solve it: 3px white hugging the element, then 3px deep blue
+   outside it.
+
+     white ring vs deep-blue button      10.60:1
+     white ring vs sidebar (bottom/top)  10.60:1 / 13.42:1
+     white ring vs sidebar current page   6.25:1
+     white ring vs the blue outer ring   10.60:1   <- always present
+     blue ring vs white card              10.60:1
+     blue ring vs page background          9.67:1
+
+   The middle boundary is the important one. White against deep blue is
+   10.60:1 whatever is behind the element, so at least one visible edge always
+   exists. On a white input the white ring vanishes and the blue ring is seen;
+   on a blue button the blue ring vanishes and the white ring is seen.
+
+   Found by keyboard walkthrough, 14 Aug 2026 — twice. First on the sidebar,
+   then on the primary buttons after a sidebar-only fix proved too narrow.
+   Measuring the ring against the page behind it was not enough: an indicator
+   must also contrast with the component it is indicating.
+
+   outline-offset is 0 so the white ring touches the element with no gap.
+   border-radius is deliberately NOT set here — each element keeps its own
+   corner radius instead of snapping to a different shape when focused. */
 :focus-visible {
-  outline: 3px solid var(--ba-deep-blue);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: 3px solid var(--ba-white);
+  outline-offset: 0;
+  box-shadow: 0 0 0 6px var(--ba-deep-blue);
 }
 
-/* Dark surfaces need a LIGHT focus ring.
+/* Superseded by the two-tone rule above, which covers dark surfaces too.
+   Kept as a comment because the measurement is worth not repeating:
    The deep-blue ring above measured 1.00:1 against the bottom of the sidebar
    gradient — the identical colour, so the indicator was mathematically
    invisible — and 1.27:1 at the top, 1.33:1 on hover, 1.70:1 on the
@@ -127,15 +156,10 @@ a:hover {
    White measures 10.60:1 on the gradient bottom, 13.42:1 at the top,
    7.96:1 on hover and 6.25:1 on the current-page highlight.
 
-   The deep-blue box-shadow adds a second, darker ring outside the white one.
-   On a dark surface it is invisible and the white ring does the work; on a
-   light surface the white ring disappears and the dark ring does. One of the
-   two is always visible, whatever is behind the element. */
-.sidebar :focus-visible,
-.skip-link:focus-visible {
-  outline-color: var(--ba-white);
-  box-shadow: 0 0 0 6px var(--ba-deep-blue);
-}
+   That fix was correct but too narrow. It repaired the sidebar and left the
+   primary buttons failing in exactly the same way, because they use the same
+   deep blue as their background. The lesson: fix the rule, not the place it
+   was noticed. */
 
 /* ---------- Skip link ---------- */
 .skip-link {
