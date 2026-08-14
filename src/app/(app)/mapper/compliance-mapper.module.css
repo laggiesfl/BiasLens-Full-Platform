@@ -1,5 +1,21 @@
 /* ─── Compliance Mapper — BeAccessible Brand ─────────────────────────────── */
 /* WCAG 2.0 / 2.1 / 2.2 Level AAA | Universal Design | BeAccessible          */
+/* Accessibility fixes 14 Aug 2026, all measured:
+   1. Focus rings: hard-coded #FF6B00 outlines REMOVED, not replaced. They
+      measured 2.86:1 on white against the 3:1 required by 1.4.11. Removing
+      them lets the two-tone ring in globals.css apply, so this file cannot
+      drift away from the rest of the product again.
+   2. Input borders now use --ba-border-control. #C8D8EE was 1.45:1 against
+      the white fill of the input — a Level AA failure under 1.4.11.
+   3. The stepper wraps instead of scrolling. Four steps at min-width 110px
+      forced a 440px floor, so the page could not lay out at 320px (1.4.10).
+      It also hid its own scrollbar, making the overflow unreachable as well
+      as invisible.
+   4. .stepItem opacity 0.45 REMOVED. It put upcoming step labels at 2.07:1
+      against white, where 4.5:1 is required (1.4.3). These are progress
+      labels, not inactive controls, so no exemption applies — and neither of
+      the other two tools dimmed them, so it was an inconsistency too.
+   5. Checkboxes raised from 17.6px to 24px to meet 2.5.8 on their own.      */
 
 .skipLink {
   position: absolute; top: -9999px; left: 1rem;
@@ -29,9 +45,11 @@
 .stepper { background: #fff; border-bottom: 1px solid #C8D8EE; padding: 1rem 2rem 0; }
 .progressTrack { height: 4px; background: #E6EEF8; border-radius: 2px; margin-bottom: 1rem; overflow: hidden; }
 .progressFill  { height: 100%; background: #2F5C9A; border-radius: 2px; transition: width 0.35s ease; }
-.stepList { display: flex; list-style: none; margin: 0; padding: 0; overflow-x: auto; scrollbar-width: none; }
-.stepList::-webkit-scrollbar { display: none; }
-.stepItem { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; padding: 0 1rem 0.75rem; min-width: 110px; text-align: center; opacity: 0.45;  }
+/* Wraps, does not scroll — see note 3 at the top of this file. */
+.stepList { display: flex; flex-wrap: wrap; list-style: none; margin: 0; padding: 0; }
+/* No opacity here — see note 4. Upcoming steps are distinguished by the dot
+   colour and by .stepName colour, both of which pass contrast on their own. */
+.stepItem { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; padding: 0 1rem 0.75rem; min-width: 110px; text-align: center; }
 .stepCurrent, .stepDone { opacity: 1; }
 .stepDot { width: 2rem; height: 2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; background: #C8D8EE; color: #3D3D5C; flex-shrink: 0; }
 .stepCurrent .stepDot { background: #1F3F6B; color: #fff; outline: 3px solid #2F5C9A; outline-offset: 2px; }
@@ -50,17 +68,20 @@
 .field { display: flex; flex-direction: column; gap: 0.4rem; }
 .label { font-size: 0.875rem; font-weight: 600; color: #1A1A2E; }
 .req   { color: #C0392B; margin-left: 2px; }
+/* --ba-border-control (4.52:1), not #C8D8EE (1.45:1) — see note 2. */
 .input, .select, .textarea {
-  width: 100%; padding: 0.6rem 0.75rem; border: 2px solid #C8D8EE;
+  width: 100%; padding: 0.6rem 0.75rem; border: 2px solid var(--ba-border-control);
   border-radius: 6px; font-size: 0.95rem; color: #1A1A2E; background: #fff;
   box-sizing: border-box; font-family: inherit; transition: border-color 0.15s;
 }
-.input:focus, .select:focus, .textarea:focus { outline: 3px solid #FF6B00; outline-offset: 2px; border-color: #2F5C9A; }
+/* No outline declared — the global :focus-visible two-tone ring handles it. */
+.input:focus, .select:focus, .textarea:focus { border-color: #2F5C9A; }
 .textarea { resize: vertical; min-height: 80px; }
 .fieldset { border: 2px solid #C8D8EE; border-radius: 8px; padding: 1rem 1.25rem; margin: 0; }
 .legend   { font-size: 0.875rem; font-weight: 600; color: #1A1A2E; padding: 0 0.5rem; }
 .checkLabel { display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.9rem; cursor: pointer; padding: 0.35rem 0; line-height: 1.4; }
-.checkLabel input[type="checkbox"] { width: 1.1rem; height: 1.1rem; accent-color: #1F3F6B; cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+/* 24px, so the box meets 2.5.8 without relying on the label to enlarge it. */
+.checkLabel input[type="checkbox"] { width: 24px; height: 24px; accent-color: #1F3F6B; cursor: pointer; flex-shrink: 0; margin-top: 1px; }
 .infoBox { background: #E6EEF8; border-left: 3px solid #2F5C9A; border-radius: 0 6px 6px 0; padding: 0.875rem 1rem; font-size: 0.875rem; color: #1A1A2E; line-height: 1.5; }
 .hint { font-size: 0.8rem; color: #3D3D5C; margin: 0.5rem 0 0; }
 
@@ -116,7 +137,6 @@
   padding: 0.65rem 1.5rem; border-radius: 6px; font-size: 0.95rem; font-weight: 600;
   cursor: pointer; transition: background 0.15s; border: 2px solid transparent; font-family: inherit;
 }
-.btnBack:focus-visible, .btnNext:focus-visible, .btnGenerate:focus-visible { outline: 3px solid #FF6B00; outline-offset: 3px; }
 .btnBack    { background: #fff; color: #1F3F6B; border-color: #C8D8EE; }
 .btnBack:hover:not(:disabled) { background: #E6EEF8; }
 .btnNext    { background: #1F3F6B; color: #fff; }
@@ -132,6 +152,8 @@
   .main { padding: 1.5rem 1rem 3rem; }
   .summaryCards { grid-template-columns: repeat(2, 1fr); }
   .table th, .table td { padding: 0.6rem 0.75rem; }
+  /* Two steps per row at narrow widths — see note 3. */
+  .stepItem { min-width: 0; flex: 1 1 40%; padding-left: 0.25rem; padding-right: 0.25rem; }
 }
 
 @media print {
