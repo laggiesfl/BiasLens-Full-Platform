@@ -113,6 +113,30 @@ a:hover {
   border-radius: 4px;
 }
 
+/* Dark surfaces need a LIGHT focus ring.
+   The deep-blue ring above measured 1.00:1 against the bottom of the sidebar
+   gradient — the identical colour, so the indicator was mathematically
+   invisible — and 1.27:1 at the top, 1.33:1 on hover, 1.70:1 on the
+   current-page highlight. All four fail the 3:1 required by 1.4.11
+   Non-text Contrast and by 2.4.11 Focus Appearance.
+
+   Found by keyboard walkthrough on 14 Aug 2026, not by inspection: the ring
+   had been measured against white and against the page background — the
+   surfaces it was expected to sit on — and never against the sidebar.
+
+   White measures 10.60:1 on the gradient bottom, 13.42:1 at the top,
+   7.96:1 on hover and 6.25:1 on the current-page highlight.
+
+   The deep-blue box-shadow adds a second, darker ring outside the white one.
+   On a dark surface it is invisible and the white ring does the work; on a
+   light surface the white ring disappears and the dark ring does. One of the
+   two is always visible, whatever is behind the element. */
+.sidebar :focus-visible,
+.skip-link:focus-visible {
+  outline-color: var(--ba-white);
+  box-shadow: 0 0 0 6px var(--ba-deep-blue);
+}
+
 /* ---------- Skip link ---------- */
 .skip-link {
   position: absolute;
