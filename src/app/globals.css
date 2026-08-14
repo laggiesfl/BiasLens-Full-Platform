@@ -32,6 +32,15 @@
      the reason it cannot be lightened is recorded where it is used. */
   --ba-border-control: #4a78b5;
 
+  /* Focus indicator — deliberately OUTSIDE the brand palette.
+     This is the only place orange is used in BiasLens, and that is the point:
+     nothing else on screen is this colour, so the ring reads immediately as
+     "you are here" instead of blending into the design.
+     4.43:1 to 5.18:1 against every light surface. Paired with a white inner
+     ring, which does the work on dark surfaces. Do not reuse for anything
+     else — the moment orange appears elsewhere, this stops being a signal. */
+  --ba-focus: #c2410c;
+
   --ba-shadow: rgba(31, 63, 107, 0.12);
 
   /* Functional status colours — used ONLY with a text label + icon,
@@ -112,20 +121,34 @@ a:hover {
    primary buttons — so wherever the ring landed on blue it measured 1.00:1,
    the identical colour, and disappeared.
 
-   Two rings solve it: 3px white hugging the element, then 3px deep blue
-   outside it.
+   A single ORANGE was tested too, and also fails alone. To beat white it must
+   be dark; to beat deep blue it must be light. That leaves a luminance window
+   of only 0.05, and --ba-mid-blue closes it, because a focused input's own
+   border turns mid-blue and sits right against the ring. Twelve oranges were
+   measured; none cleared 3:1 on all six surfaces.
 
-     white ring vs deep-blue button      10.60:1
-     white ring vs sidebar (bottom/top)  10.60:1 / 13.42:1
-     white ring vs sidebar current page   6.25:1
-     white ring vs the blue outer ring   10.60:1   <- always present
-     blue ring vs white card              10.60:1
-     blue ring vs page background          9.67:1
+   Two rings solve it: 3px white hugging the element, then 3px --ba-focus
+   (burnt orange) outside it.
 
-   The middle boundary is the important one. White against deep blue is
-   10.60:1 whatever is behind the element, so at least one visible edge always
-   exists. On a white input the white ring vanishes and the blue ring is seen;
-   on a blue button the blue ring vanishes and the white ring is seen.
+     white ring vs deep-blue button        10.60:1
+     white ring vs sidebar (bottom/top)    10.60:1 / 13.42:1
+     white ring vs sidebar current page     6.25:1
+     white ring vs mid-blue input border    6.73:1
+     white ring vs the orange outer ring    5.18:1   <- always present
+     orange ring vs white card              5.18:1
+     orange ring vs page background         4.72:1
+     orange ring vs tint-1                  4.43:1
+
+   The middle boundary is the important one. White against the orange is
+   5.18:1 whatever is behind the element, so at least one visible edge always
+   exists. On a white input the white ring vanishes and the orange is seen;
+   on a blue button the orange recedes and the white ring is seen.
+
+   Orange rather than deep blue for the outer ring is a deliberate choice.
+   Deep blue measured higher (6.25:1 at worst, against 4.43:1) but it appears
+   all over the interface, so the ring had to be read as a shape. Orange
+   appears nowhere else, so it is read as a meaning. Both clear the 3:1
+   requirement; this one is easier to notice at a glance.
 
    Found by keyboard walkthrough, 14 Aug 2026 — twice. First on the sidebar,
    then on the primary buttons after a sidebar-only fix proved too narrow.
@@ -138,7 +161,7 @@ a:hover {
 :focus-visible {
   outline: 3px solid var(--ba-white);
   outline-offset: 0;
-  box-shadow: 0 0 0 6px var(--ba-deep-blue);
+  box-shadow: 0 0 0 6px var(--ba-focus);
 }
 
 /* Superseded by the two-tone rule above, which covers dark surfaces too.
