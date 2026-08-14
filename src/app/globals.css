@@ -16,7 +16,22 @@
 
   --ba-text: #1f3f6b;
   --ba-text-secondary: #3a4a63;
+
+  /* Decorative boundary — cards, table dividers, rules.
+     1.26:1 to 1.47:1 against its neighbours. That is fine here: these are
+     not user interface components, so WCAG 1.4.11 Non-text Contrast does not
+     apply to them. Do NOT use this on a form control — see below. */
   --ba-border: #c9d6e8;
+
+  /* Form-control boundary — inputs, selects, textareas.
+     MUST be at least 3:1 against the control's own fill (1.4.11, Level AA),
+     because on a white card the border is the only thing showing that an
+     input is there. --ba-border was 1.47:1 and failed. This is 4.52:1 on
+     white, 4.12:1 on the page background, 3.86:1 on tint-1.
+     Measured 14 Aug 2026. Same value as --ba-soft-blue, named separately so
+     the reason it cannot be lightened is recorded where it is used. */
+  --ba-border-control: #4a78b5;
+
   --ba-shadow: rgba(31, 63, 107, 0.12);
 
   /* Functional status colours — used ONLY with a text label + icon,
@@ -89,7 +104,9 @@ a:hover {
   color: var(--ba-dark-blue);
 }
 
-/* ---------- Focus: visible 3px Deep Blue indicator (Section 17.2) ---------- */
+/* ---------- Focus: visible 3px Deep Blue indicator (Section 17.2) ----------
+   Measured 10.60:1 against white and 9.67:1 against the page background,
+   well above the 3:1 required by 1.4.11. */
 :focus-visible {
   outline: 3px solid var(--ba-deep-blue);
   outline-offset: 2px;
@@ -195,6 +212,7 @@ a:hover {
 }
 .sidebar .brand .sub {
   font-size: 0.72rem;
+  /* 0.85 composites to 8.14:1 on the gradient — passes AAA. */
   opacity: 0.85;
 }
 .sidebar nav ul {
@@ -219,12 +237,20 @@ a:hover {
   font-weight: 700;
 }
 .sidebar nav a.disabled {
-  opacity: 0.6;
+  /* Inactive components are exempt from 1.4.3 / 1.4.6, so this is not a
+     conformance issue. Raised from 0.6 (4.93:1) to 0.75 (6.75:1) anyway,
+     because a link a person cannot read is a link they cannot decide about.
+     Disabled state is also conveyed by the cursor and by the accessible
+     name, so it is not carried by dimming alone. */
+  opacity: 0.75;
   cursor: not-allowed;
 }
 .sidebar .nav-note {
   font-size: 0.72rem;
-  opacity: 0.7;
+  /* Was 0.7, which composited to 6.09:1 — passed AA but missed the AAA
+     target of 7:1. This is informational text, not an inactive component,
+     so no exemption applies. 0.85 gives 8.14:1. */
+  opacity: 0.85;
   font-weight: 400;
 }
 
@@ -274,6 +300,7 @@ a:hover {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  /* 48px exceeds both 2.5.8 (24px, AA) and 2.5.5 (44px, AAA). */
   min-height: 48px;
   min-width: 48px;
   padding: 12px 20px;
@@ -311,7 +338,11 @@ a:hover {
   background: #fdecea;
 }
 .btn:disabled {
-  opacity: 0.55;
+  /* Was 0.55, composited to 4.43:1. Inactive components are exempt from
+     1.4.3, so that was not a failure — but this state is used to show
+     "Saving…" on the questionnaire, which is status information a person
+     needs to read. 0.7 gives 6.09:1. */
+  opacity: 0.7;
   cursor: not-allowed;
 }
 
@@ -340,7 +371,11 @@ a:hover {
   font-family: inherit;
   color: var(--ba-text);
   background: var(--ba-white);
-  border: 2px solid var(--ba-border);
+  /* --ba-border-control, NOT --ba-border. The old value was 1.47:1 against
+     this white fill and failed 1.4.11 Non-text Contrast (Level AA): on a
+     white card the border was the only thing showing an input was there.
+     Fixed 14 Aug 2026. Do not lighten this. */
+  border: 2px solid var(--ba-border-control);
   border-radius: 8px;
 }
 .field input:focus,
@@ -405,6 +440,8 @@ th,
 td {
   text-align: left;
   padding: 12px 14px;
+  /* Decorative divider. Table structure is carried by markup (th, scope,
+     caption), not by these lines, so 1.4.11 does not require 3:1 here. */
   border-bottom: 1px solid var(--ba-border);
   vertical-align: top;
 }
@@ -449,9 +486,13 @@ tbody tr:nth-child(even) {
 .check-option input[type="checkbox"],
 .check-option input[type="radio"] {
   flex: 0 0 auto;
-  width: 22px;
-  height: 22px;
-  margin: 2px 0 0;
+  /* Raised from 22px to 24px so the glyph itself meets 2.5.8 Target Size
+     (Minimum, AA) without relying on the wrapping <label> to enlarge the
+     target. The label still wraps the input, so the whole row stays
+     clickable — this just removes the dependency on that argument. */
+  width: 24px;
+  height: 24px;
+  margin: 1px 0 0;
 }
 .check-option > span {
   line-height: 1.5;
