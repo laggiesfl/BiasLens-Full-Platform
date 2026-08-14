@@ -1,4 +1,15 @@
 /* ─── Fairness Metrics Calculator — BeAccessible Brand ───────────────────── */
+/* Accessibility fixes 14 Aug 2026. Three changes, all measured:
+   1. Focus rings: the hard-coded #FF6B00 outlines are REMOVED, not replaced.
+      They measured 2.86:1 on white against the 3:1 required by 1.4.11, and
+      having a private focus style here is why this tool drifted away from the
+      rest of the product. With them gone, the two-tone ring in globals.css
+      applies, and this file can never fall out of step again.
+   2. Input borders now use --ba-border-control. The old #C8D8EE was 1.45:1
+      against the white fill of the input — a Level AA failure under 1.4.11.
+   3. The stepper wraps instead of scrolling. It needed 440px minimum, so the
+      page could not lay out under 320px (1.4.10 Reflow). It also hid its own
+      scrollbar, so the overflow was unreachable as well as invisible.        */
 
 .skipLink { position:absolute;top:-9999px;left:1rem;background:#1F3F6B;color:#fff;padding:.5rem 1rem;border-radius:0 0 4px 4px;font-weight:600;z-index:9999;text-decoration:none; }
 .skipLink:focus { top:0; }
@@ -14,8 +25,11 @@
 .stepper { background:#fff;border-bottom:1px solid #C8D8EE;padding:1rem 2rem 0; }
 .progressTrack { height:4px;background:#E6EEF8;border-radius:2px;margin-bottom:1rem;overflow:hidden; }
 .progressFill  { height:100%;background:#2F5C9A;border-radius:2px;transition:width .35s ease; }
-.stepList { display:flex;list-style:none;margin:0;padding:0;overflow-x:auto;scrollbar-width:none; }
-.stepList::-webkit-scrollbar { display:none; }
+/* WRAPS, does not scroll. Four steps at min-width 110px forced a 440px floor,
+   so the page could not fit 320px. The previous fix for that was overflow-x
+   with the scrollbar hidden — which meant content scrolled sideways with no
+   visible way to reach it. Wrapping removes the overflow instead of hiding it. */
+.stepList { display:flex;flex-wrap:wrap;list-style:none;margin:0;padding:0; }
 .stepItem { display:flex;flex-direction:column;align-items:center;gap:.35rem;padding:0 1rem .75rem;min-width:110px;text-align:center; }
 .stepCurrent,.stepDone { opacity:1; }
 .stepDot { width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;background:#C8D8EE;color:#3D3D5C;flex-shrink:0; }
@@ -36,8 +50,11 @@
 .field { display:flex;flex-direction:column;gap:.4rem; }
 .label { font-size:.875rem;font-weight:600;color:#1A1A2E; }
 .req   { color:#C0392B;margin-left:2px; }
-.input,.select { width:100%;padding:.6rem .75rem;border:2px solid #C8D8EE;border-radius:6px;font-size:.95rem;color:#1A1A2E;background:#fff;box-sizing:border-box;font-family:inherit;transition:border-color .15s; }
-.input:focus,.select:focus { outline:3px solid #FF6B00;outline-offset:2px;border-color:#2F5C9A; }
+/* Border is --ba-border-control (4.52:1), not #C8D8EE (1.45:1). On a white
+   card the border is the only thing showing an input is there. Do not lighten. */
+.input,.select { width:100%;padding:.6rem .75rem;border:2px solid var(--ba-border-control);border-radius:6px;font-size:.95rem;color:#1A1A2E;background:#fff;box-sizing:border-box;font-family:inherit;transition:border-color .15s; }
+/* No outline declared. The global :focus-visible two-tone ring handles it. */
+.input:focus,.select:focus { border-color:#2F5C9A; }
 .infoBox { background:#E6EEF8;border-left:3px solid #2F5C9A;border-radius:0 6px 6px 0;padding:.875rem 1rem;font-size:.875rem;color:#1A1A2E;line-height:1.5; }
 
 /* Group cards */
@@ -50,10 +67,8 @@
 .groupFields { display:grid;grid-template-columns:2fr 1fr 1fr;gap:1rem; }
 .removeBtn { font-size:.8rem;color:#C0392B;background:none;border:1px solid #E6B0AA;border-radius:4px;padding:.2rem .6rem;cursor:pointer; }
 .removeBtn:hover { background:#FDEDEC; }
-.removeBtn:focus-visible { outline:3px solid #FF6B00;outline-offset:2px; }
 .addBtn { background:#fff;border:2px dashed #C8D8EE;border-radius:8px;padding:.875rem;font-size:.9rem;font-weight:600;color:#2F5C9A;cursor:pointer;width:100%;transition:background .15s; }
 .addBtn:hover { background:#E6EEF8; }
-.addBtn:focus-visible { outline:3px solid #FF6B00;outline-offset:2px; }
 
 /* Results */
 .results { display:flex;flex-direction:column;gap:1.25rem; }
@@ -97,7 +112,6 @@
 .navBar    { display:flex;align-items:center;justify-content:space-between;margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid #C8D8EE; }
 .stepCount { font-size:.8rem;color:#3D3D5C; }
 .btnBack,.btnNext,.btnGenerate { display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.65rem 1.5rem;border-radius:6px;font-size:.95rem;font-weight:600;cursor:pointer;transition:background .15s;border:2px solid transparent;font-family:inherit; }
-.btnBack:focus-visible,.btnNext:focus-visible,.btnGenerate:focus-visible { outline:3px solid #FF6B00;outline-offset:3px; }
 .btnBack { background:#fff;color:#1F3F6B;border-color:#C8D8EE; }
 .btnBack:hover:not(:disabled) { background:#E6EEF8; }
 .btnNext { background:#1F3F6B;color:#fff; }
@@ -113,6 +127,9 @@
   .row { grid-template-columns:1fr; }
   .groupFields { grid-template-columns:1fr; }
   .key { gap:.75rem; }
+  /* Two steps per row at narrow widths. Without this the 110px floor plus
+     padding still exceeds 320px on a single row. */
+  .stepItem { min-width:0;flex:1 1 40%;padding-left:.25rem;padding-right:.25rem; }
 }
 @media print {
   .navBar,.stepper,.btnGenerate,.btnBack,.btnNext { display:none; }
