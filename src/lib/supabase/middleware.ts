@@ -13,10 +13,10 @@ import { NextResponse, type NextRequest } from "next/server";
  * to read how their information will be handled BEFORE they hand any of it
  * over. Behind sign-in, it could only be read by people who had already decided.
  *
- * The BiasLens public landing and qualification journey must also remain
- * reachable without an account. The enquiry API is deliberately public because
- * it performs its own validation, honeypot check, server-only Airtable write and
- * owner notification; it does not expose assessment data.
+ * The BiasLens public landing, proof assets and qualification journey must also
+ * remain reachable without an account. The enquiry API is deliberately public
+ * because it performs its own validation, honeypot check, server-only Airtable
+ * write and owner notification; it does not expose assessment data.
  */
 const PUBLIC_PATHS = [
   "/",
@@ -26,6 +26,8 @@ const PUBLIC_PATHS = [
   "/auth/callback",
   "/accessibility-statement",
   "/privacy",
+  "/methodology",
+  "/demo",
   "/enquire",
   "/enquire/thank-you",
   "/api/enquiries",
@@ -33,14 +35,9 @@ const PUBLIC_PATHS = [
 
 function isPublic(pathname: string) {
   if (PUBLIC_PATHS.includes(pathname)) return true;
-  // Allow Next internals and static assets through.
   return pathname.startsWith("/_next") || pathname.startsWith("/favicon");
 }
 
-/**
- * Refreshes the Supabase auth session on every request and guards
- * protected routes. Unauthenticated users are redirected to /login.
- */
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
@@ -53,9 +50,7 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet: { name: string; value: string; options?: any }[]) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          );
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
           supabaseResponse = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
