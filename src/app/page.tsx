@@ -231,8 +231,8 @@ export default function Home() {
               <article className="public-card">
                 <h3>Proof assets</h3>
                 <ul>
-                  <li>BiasLens Methodology Note — coming soon</li>
-                  <li>Two-minute problem-to-evidence demonstration — coming soon</li>
+                  <li><Link href="/methodology">BiasLens Methodology Note</Link> — public methodology and claims boundaries.</li>
+                  <li><Link href="/demo">Two-minute problem-to-evidence demo</Link> — fictional-data walkthrough and narration.</li>
                   <li>Fictional-data recruitment case study — coming soon</li>
                   <li>Sample Algorithm Defence File — coming soon</li>
                 </ul>
