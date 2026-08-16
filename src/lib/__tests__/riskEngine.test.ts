@@ -8,19 +8,24 @@ import { classify, type Answers } from "@/lib/risk/engine";
  */
 
 describe("classify() — structure", () => {
-  it("always returns the eight IBM bias types and six SA pillars", () => {
+  it("returns the current nine fairness findings and six SA pillars", () => {
     const r = classify({});
-    expect(r.ibm_bias_scores).toHaveLength(8);
+    expect(r.fairness_findings).toHaveLength(9);
     expect(r.sa_pillar_alignment).toHaveLength(6);
     expect(r.executive_summary.length).toBeGreaterThan(0);
     expect(Array.isArray(r.rationale)).toBe(true);
     expect(Array.isArray(r.remediation)).toBe(true);
   });
 
-  it("gives every bias score a recognised level", () => {
+  it("keeps the deprecated IBM-named field as a compatibility alias only", () => {
+    const r = classify({});
+    expect(r.ibm_bias_scores).toEqual(r.fairness_findings);
+  });
+
+  it("gives every fairness finding a recognised level", () => {
     const r = classify({ decision_domain: "welfare" });
-    for (const b of r.ibm_bias_scores) {
-      expect(["Low", "Medium", "High"]).toContain(b.level);
+    for (const finding of r.fairness_findings) {
+      expect(["Low", "Medium", "High"]).toContain(finding.level);
     }
   });
 });
@@ -63,8 +68,6 @@ describe("classify() — EU AI Act + SA tier", () => {
 
   it("is deterministic — same answers give the same classification", () => {
     const answers: Answers = { decision_domain: "employment", eu_reach: true };
-    expect(JSON.stringify(classify(answers))).toBe(
-      JSON.stringify(classify(answers))
-    );
+    expect(JSON.stringify(classify(answers))).toBe(JSON.stringify(classify(answers)));
   });
 });
