@@ -7,9 +7,10 @@ const read = (path: string) => readFileSync(join(root, path), "utf8");
 
 describe("public enquiry accessibility regressions", () => {
   it("keeps introductory and callout text high contrast on the light form surface", () => {
-    const css = read("src/app/public-pages.css");
+    const css = read("src/app/public-accessibility-fixes.css");
     expect(css).toContain(".public-form-card .public-lead");
     expect(css).toContain(".public-form-card .public-callout-note");
+    expect(css).toContain("#17324d");
   });
 
   it("provides a prominent back control on the enquiry page", () => {
@@ -21,6 +22,7 @@ describe("public enquiry accessibility regressions", () => {
     const form = read("src/components/public/EnquiryForm.tsx");
     expect(form).toContain("onKeyDown");
     expect(form).toContain('event.key === "Enter"');
+    expect(form).toContain("Use Space or Enter");
   });
 
   it("supports pause, resume and stop without discarding the current utterance", () => {
