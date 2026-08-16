@@ -44,6 +44,16 @@ describe("sendEnquiryNotification", () => {
     expect(body.to).toEqual(["hello@beaccessible.co.za"]);
   });
 
+  it("uses the enquiry reference as a stable Resend idempotency key", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ id: "email-1" }), { status: 200 }));
+    global.fetch = fetchMock as typeof fetch;
+
+    await sendEnquiryNotification(enquiry, "rec123");
+
+    const headers = fetchMock.mock.calls[0][1]?.headers as Record<string, string>;
+    expect(headers["Idempotency-Key"]).toBe("biaslens-enquiry/BL-WEB-12345678");
+  });
+
   it("includes organisation, contact, system, concern and Airtable record id", async () => {
     const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ id: "email-1" }), { status: 200 }));
     global.fetch = fetchMock as typeof fetch;
