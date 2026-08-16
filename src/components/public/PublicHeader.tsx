@@ -23,7 +23,7 @@ export function PublicHeader() {
         </nav>
 
         <div className="public-header-actions">
-          <ListenToPage />
+          <ListenToPage targetId="main-content" />
           <Link href="/login" className="public-text-link">Sign in</Link>
           <Link href="/enquire" className="public-button public-button-primary">Assess one AI system</Link>
         </div>
