@@ -53,6 +53,7 @@ export async function sendEnquiryNotification(
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
+      "Idempotency-Key": `biaslens-enquiry/${enquiry.enquiryReference}`,
     },
     body: JSON.stringify({
       from,
