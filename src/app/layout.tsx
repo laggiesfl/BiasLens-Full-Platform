@@ -1,10 +1,19 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "./public-pages.css";
 
 export const metadata: Metadata = {
-  title: "BiasLens — by BeAccessible",
+  metadataBase: new URL("https://biaslens.beaccessible.co.za"),
+  title: "BiasLens | Evidence-Led Algorithmic Accountability by BeAccessible",
   description:
-    "BiasLens is an algorithmic bias testing and accountability platform that helps organisations and affected communities identify, document and respond to bias in AI-enabled systems.",
+    "Assess one AI system at a time. BiasLens helps organisations separate evidence from assumption, identify bias risks, document uncertainty and build an accountable evidence trail.",
+  openGraph: {
+    title: "BiasLens | Evidence-Led Algorithmic Accountability",
+    description:
+      "Know what your evidence supports — and what it does not. Assess one AI system with BiasLens by BeAccessible.",
+    type: "website",
+    url: "https://biaslens.beaccessible.co.za",
+  },
 };
 
 export const viewport: Viewport = {
