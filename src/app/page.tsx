@@ -233,8 +233,8 @@ export default function Home() {
                 <ul>
                   <li><Link href="/methodology">BiasLens Methodology Note</Link> — public methodology and claims boundaries.</li>
                   <li><Link href="/demo">Two-minute problem-to-evidence demo</Link> — fictional-data walkthrough and narration.</li>
-                  <li>Fictional-data recruitment case study — coming soon</li>
-                  <li>Sample Algorithm Defence File — coming soon</li>
+                  <li><Link href="/case-study/recruitment">Fictional-data recruitment case study</Link> — end-to-end evidence walkthrough using a fictional AI-assisted recruitment scenario.</li>
+                  <li><Link href="/algorithm-defence-file">Sample Algorithm Defence File</Link> — fictional organisation-owned governance evidence record.</li>
                 </ul>
               </article>
               <article className="public-card">
