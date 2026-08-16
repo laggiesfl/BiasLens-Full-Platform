@@ -13,6 +13,12 @@ describe("public enquiry accessibility regressions", () => {
     expect(css).toContain("#17324d");
   });
 
+  it("keeps form-surface links visible instead of inheriting the dark-page white link colour", () => {
+    const css = read("src/app/public-accessibility-fixes.css");
+    expect(css).toContain(".public-page .public-form-card a:not(.public-button):not(.public-brand)");
+    expect(css).toContain("color: #1f3f6b !important");
+  });
+
   it("provides a prominent back control on the enquiry page", () => {
     const page = read("src/app/enquire/page.tsx");
     expect(page).toContain("Back to BiasLens overview");
