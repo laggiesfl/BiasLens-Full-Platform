@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PublicHeader } from "@/components/public/PublicHeader";
+import { PUBLIC_PROOF_DOWNLOADS } from "@/lib/export/publicProofPdfs";
 
 export const metadata = {
   title: "Fictional Recruitment Case Study | BiasLens",
@@ -62,6 +63,15 @@ export default function RecruitmentCaseStudyPage() {
               <p className="public-lead">
                 This case study uses entirely fictional data and a fictional organisation. It demonstrates how BiasLens separates evidence, assumptions, limitations and next actions. It is not a real client finding, legal conclusion or finding of discrimination.
               </p>
+              <div className="public-actions">
+                <a
+                  href={PUBLIC_PROOF_DOWNLOADS.recruitment.href}
+                  className="public-button public-button-secondary"
+                  download={PUBLIC_PROOF_DOWNLOADS.recruitment.filename}
+                >
+                  Download the case study PDF
+                </a>
+              </div>
             </div>
 
             <div className="public-callout public-callout-note">
@@ -167,8 +177,15 @@ export default function RecruitmentCaseStudyPage() {
             <section className="public-section public-section-alt">
               <div className="public-panel">
                 <h2>Continue from the case study</h2>
-                <p>Review the sample Algorithm Defence File built from this same fictional case, or bring one real AI-enabled system into the BiasLens qualification flow.</p>
+                <p>Download the evidence walkthrough, review the sample Algorithm Defence File built from this same fictional case, or bring one real AI-enabled system into the BiasLens qualification flow.</p>
                 <div className="public-actions">
+                  <a
+                    href={PUBLIC_PROOF_DOWNLOADS.recruitment.href}
+                    className="public-button public-button-secondary"
+                    download={PUBLIC_PROOF_DOWNLOADS.recruitment.filename}
+                  >
+                    Download PDF
+                  </a>
                   <Link href="/algorithm-defence-file" className="public-button public-button-secondary">View the sample Algorithm Defence File</Link>
                   <Link href="/enquire" className="public-button public-button-primary">Assess one AI system</Link>
                 </div>
