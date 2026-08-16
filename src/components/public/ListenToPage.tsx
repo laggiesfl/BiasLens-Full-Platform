@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-export function ListenToPage() {
+export function ListenToPage({ targetId }: { targetId: string }) {
   const [speaking, setSpeaking] = useState(false);
   const [status, setStatus] = useState("");
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   useEffect(() => {
     return () => {
@@ -23,7 +22,7 @@ export function ListenToPage() {
 
   function toggle() {
     if (!("speechSynthesis" in window)) {
-      setStatus("Your browser does not support the read-aloud feature.");
+      setStatus("Read-aloud is not available in this browser.");
       return;
     }
 
@@ -32,7 +31,7 @@ export function ListenToPage() {
       return;
     }
 
-    const target = document.querySelector<HTMLElement>("[data-listen-content]");
+    const target = document.getElementById(targetId);
     const text = target?.innerText.replace(/\s+/g, " ").trim();
     if (!text) {
       setStatus("There is no page text available to read.");
@@ -54,14 +53,14 @@ export function ListenToPage() {
       setSpeaking(false);
       setStatus("The read-aloud feature could not complete.");
     };
-    utteranceRef.current = utterance;
+
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
   }
 
   return (
     <div className="public-listen-wrap">
-      <button type="button" className="public-link-button" onClick={toggle}>
+      <button type="button" className="public-link-button" onClick={toggle} aria-pressed={speaking}>
         {speaking ? "Stop listening" : "Listen to this page"}
       </button>
       <span className="sr-only" aria-live="polite">{status}</span>
