@@ -233,6 +233,42 @@ export default function PrivacyNoticePage() {
           <li>Sell, rent or share your information for commercial purposes</li>
           <li>Make automated decisions about you</li>
         </ul>
+
+        <h3 style={{ fontSize: "1rem", marginTop: "1.25rem" }}>
+          BiasLens assesses systems, not people
+        </h3>
+        <p>
+          This one matters enough to state on its own.{" "}
+          <strong>
+            BiasLens is not, and will not become, a tool for monitoring, profiling
+            or scoring individual employees.
+          </strong>{" "}
+          It examines whether a system produces unfair outcomes. It does not
+          examine the people using that system.
+        </p>
+        <p>That means BiasLens does not:</p>
+        <ul>
+          <li>Take in employee-level records, prompts, messages or activity logs</li>
+          <li>Build behavioural profiles of individual workers</li>
+          <li>Produce a risk score attached to a named or identifiable person</li>
+          <li>Support productivity surveillance or performance monitoring</li>
+        </ul>
+        <p>
+          Where BiasLens compares outcomes between groups, it applies minimum
+          population thresholds. Results for very small groups are marked{" "}
+          <strong>indicative only</strong>, and groups below the reporting
+          threshold are <strong>suppressed entirely</strong>. Two reasons, both
+          important: small numbers produce unreliable results, and a small group in
+          a report can make an individual indirectly identifiable even when we hold
+          no names. Removing names does not, by itself, remove the risk of someone
+          being recognised.
+        </p>
+        <p>
+          This is a design boundary, not a temporary limitation. If BiasLens ever
+          receives governance data from other systems in your organisation, it will
+          ask for the least identifiable information capable of answering the
+          question — and this boundary will still apply.
+        </p>
       </section>
 
       <section className="card stack" aria-labelledby="keep-h">
