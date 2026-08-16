@@ -30,6 +30,8 @@ const PUBLIC_PATHS = [
   "/demo",
   "/case-study/recruitment",
   "/algorithm-defence-file",
+  "/downloads/recruitment-case-study",
+  "/downloads/algorithm-defence-file",
   "/enquire",
   "/enquire/thank-you",
   "/api/enquiries",
