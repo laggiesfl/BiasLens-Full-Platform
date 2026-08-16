@@ -1,4 +1,3 @@
-import "server-only";
 import type { EnquiryInput } from "./types";
 
 function requireEnv(name: string): string {
