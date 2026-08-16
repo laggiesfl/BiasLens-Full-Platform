@@ -35,6 +35,36 @@ export default function PrivacyNoticePage() {
       </div>
 
       <section className="card stack" aria-labelledby="who-h">
+        <h2>What BiasLens assesses — and what it does not</h2>
+        <p>
+          BiasLens assesses <strong>systems, not people</strong>. It is a tool for
+          examining whether an AI or automated decision-making system produces
+          unfair outcomes. It is not, and will not become, a tool for monitoring,
+          profiling, scoring or evaluating individual employees.
+        </p>
+        <p>Specifically, BiasLens does not:</p>
+        <ul>
+          <li>ingest employee-level records, prompts, messages or activity logs;</li>
+          <li>build behavioural profiles of individual workers;</li>
+          <li>produce risk scores attached to a named or identifiable person;</li>
+          <li>support productivity surveillance or performance monitoring.</li>
+        </ul>
+        <p>
+          Where BiasLens analyses group outcomes, it applies minimum-population
+          thresholds: results for very small groups are marked as indicative only
+          or suppressed entirely. This is because small groups produce statistically
+          unreliable results, and because a small cell in a report can make an
+          individual indirectly identifiable even when no names or identifiers are
+          held. Removing identifiers does not, by itself, remove re-identification
+          risk.
+        </p>
+        <p>
+          This is a deliberate design boundary rather than a current limitation. If
+          BiasLens later receives governance data from other enterprise systems, it
+          will request the least identifiable data capable of answering the question,
+          and this boundary will continue to apply.
+        </p>
+
         <h2 id="who-h" style={{ fontSize: "1.2rem" }}>1. Who is responsible</h2>
         <p>
           <strong>BeAccessible</strong> is the responsible party for personal
