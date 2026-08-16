@@ -6,7 +6,7 @@ import styles from './fairness-metrics.module.css'
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
 
-type FairnessLevel = 'Fair' | 'Borderline' | 'Concern' | 'Reference'
+type FairnessLevel = 'Fair' | 'Borderline' | 'Concern' | 'Reference' | 'Not assessed'
 
 interface Group {
   id: string
@@ -16,12 +16,37 @@ interface Group {
   isReference: boolean
 }
 
+/**
+ * How much weight this group's result can bear.
+ *
+ * Two separate risks are being guarded against, and they are not the same:
+ *   1. Statistical unreliability — a ratio computed on a handful of decisions
+ *      is noise, not evidence. Presenting it as a finding would be misleading.
+ *   2. Re-identification — a small cell in a report can make an individual
+ *      indirectly identifiable even with no names or IDs present.
+ *
+ * Thresholds below follow common practice in official statistics and
+ * adverse-impact analysis. They are conventions, not statutory figures, and
+ * are stated as such to the user.
+ */
+type Reliability = 'Reliable' | 'Indicative only' | 'Too small to report'
+
+const MIN_RELIABLE = 30   // below this, a DIR is indicative at best
+const MIN_REPORT   = 10   // below this, suppress — re-identification risk
+
+function reliabilityOf(total: number): Reliability {
+  if (total < MIN_REPORT)   return 'Too small to report'
+  if (total < MIN_RELIABLE) return 'Indicative only'
+  return 'Reliable'
+}
+
 interface MetricResult {
   group: Group
   selectionRate: number
   dir: number
   spd: number
   level: FairnessLevel
+  reliability: Reliability
 }
 
 interface SystemContext {
@@ -99,12 +124,19 @@ function calcMetrics(groups: Group[]): MetricResult[] {
     const rate = selRate(g)
     const dir  = refRate > 0 ? rate / refRate : 0
     const spd  = rate - refRate
+    const total = parseInt(g.total) || 0
+    const rel = reliabilityOf(total)
     return {
       group: g,
       selectionRate: rate,
       dir: g.isReference ? 1 : dir,
       spd: g.isReference ? 0 : spd,
-      level: calcLevel(g.isReference ? 1 : dir, g.isReference),
+      // A suppressed group has no fairness finding. Reporting one would state
+      // a conclusion the data cannot support.
+      level: rel === 'Too small to report'
+        ? 'Not assessed'
+        : calcLevel(g.isReference ? 1 : dir, g.isReference),
+      reliability: rel,
     }
   })
 }
@@ -113,6 +145,7 @@ function levelColor(l: FairnessLevel) {
   if (l === 'Fair')      return { bg: '#EAFAF1', text: '#1E8449', hex: '1E8449' }
   if (l === 'Borderline') return { bg: '#FEF9E7', text: '#7D6608', hex: 'D4AC0D' }
   if (l === 'Concern')    return { bg: '#FDEDEC', text: '#C0392B', hex: 'C0392B' }
+  if (l === 'Not assessed') return { bg: '#F2F3F4', text: '#595959', hex: '595959' }
   return { bg: '#EBF5FB', text: '#1F3F6B', hex: '1F3F6B' }
 }
 
