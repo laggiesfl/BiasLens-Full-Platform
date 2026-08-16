@@ -187,6 +187,7 @@ async function generateReport(ctx: SystemContext, groups: Group[], results: Metr
       new TableCell({ children: [new Paragraph({ text: r.dir >= 0.8 ? 'Passes (≥ 0.8)' : 'Fails (< 0.8)' })], width: { size: 20, type: WidthType.PERCENTAGE } }),
       new TableCell({ children: [new Paragraph({ text: `${r.spd >= 0 ? '+' : ''}${pct(r.spd)}` })], width: { size: 20, type: WidthType.PERCENTAGE } }),
       new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: r.level, bold: true, color: levelColor(r.level).hex })] })], width: { size: 15, type: WidthType.PERCENTAGE } }),
+      new TableCell({ children: [new Paragraph({ text: r.reliability })], width: { size: 15, type: WidthType.PERCENTAGE } }),
     ],
   }))
 
@@ -247,17 +248,24 @@ async function generateReport(ctx: SystemContext, groups: Group[], results: Metr
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: '4/5 Rule', bold: true, color: 'FFFFFF' })] })], shading: { fill: '1F3F6B' }, width: { size: 20, type: WidthType.PERCENTAGE } }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'Stat. Parity Diff.', bold: true, color: 'FFFFFF' })] })], shading: { fill: '1F3F6B' }, width: { size: 20, type: WidthType.PERCENTAGE } }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'Finding', bold: true, color: 'FFFFFF' })] })], shading: { fill: '1F3F6B' }, width: { size: 15, type: WidthType.PERCENTAGE } }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'Reliability', bold: true, color: 'FFFFFF' })] })], shading: { fill: '1F3F6B' }, width: { size: 15, type: WidthType.PERCENTAGE } }),
             ]}),
             ...metricsRows,
           ],
         }),
 
-        h('3. Interpretation Guide', HeadingLevel.HEADING_1),
+        h('3. What This Analysis Does and Does Not Establish', HeadingLevel.HEADING_1),
+        p('This is a statistical signal, not a determination of discrimination. A disparate impact ratio shows that outcomes differ between groups. It does not, on its own, establish that the AI system caused that difference, that the difference is unjustified, or that unlawful discrimination has occurred.'),
+        p('Before treating any result here as a finding, the following must be considered: whether the groups compared are genuinely comparable; whether differences in application rates, role types, qualifications or exposure explain the gap; and whether a legitimate, job-related and consistent business justification exists.'),
+        p(`Reliability thresholds applied: groups with fewer than ${MIN_RELIABLE} decisions are marked "Indicative only" because ratios computed on small numbers are statistically unstable. Groups with fewer than ${MIN_REPORT} decisions are suppressed entirely, both for reliability and because small cells can make individuals indirectly identifiable even where no names or identifiers are present. These thresholds reflect common practice in official statistics and adverse-impact analysis; they are conventions rather than statutory figures.`),
+        p('Where this analysis identifies a concern, the appropriate next step is investigation — not conclusion.'),
+
+        h('4. Interpretation Guide', HeadingLevel.HEADING_1),
         p('Fair (DIR ≥ 0.90): The comparison group receives positive outcomes at 90% or more of the reference group rate. No significant disparity detected.'),
         p('Borderline (DIR 0.80–0.89): The comparison group receives positive outcomes at 80–89% of the reference group rate. Falls within legal thresholds but warrants monitoring and investigation.'),
         p('Concern (DIR < 0.80): The comparison group receives positive outcomes at less than 80% of the reference group rate. This triggers the 4/5 Rule and requires documented justification or corrective action.'),
 
-        h('4. Recommended Actions', HeadingLevel.HEADING_1),
+        h('5. Recommended Actions', HeadingLevel.HEADING_1),
         ...(concerns.length > 0 ? [
           p(`URGENT — Bias concern for: ${concerns.map(c => c.group.name).join(', ')}`),
           p('1. Pause or review the AI system before further deployment.'),
@@ -499,11 +507,28 @@ function Step3({ results, ctx }: { results: MetricResult[]; ctx: SystemContext }
               const c = levelColor(r.level)
               return (
                 <tr key={r.group.id}>
-                  <td><strong>{r.group.name}</strong></td>
+                  <td>
+                    <strong>{r.group.name}</strong>
+                    {r.reliability !== 'Reliable' && (
+                      <p className={styles.ruleNote}>⚠ {r.reliability}</p>
+                    )}
+                  </td>
                   <td>{pct(r.selectionRate)}<br /><span className={styles.subtext}>({r.group.positive} of {r.group.total})</span></td>
-                  <td><strong>{fmt(r.dir)}</strong></td>
-                  <td>{r.dir >= 0.8 ? <span className={styles.pass}>Passes ✓</span> : <span className={styles.fail}>Fails ✗</span>}</td>
-                  <td className={r.spd < 0 ? styles.negative : styles.positive}>{r.spd >= 0 ? '+' : ''}{pct(r.spd)}</td>
+                  <td>
+                    {r.reliability === 'Too small to report'
+                      ? <span className={styles.subtext}>Suppressed</span>
+                      : <strong>{fmt(r.dir)}</strong>}
+                  </td>
+                  <td>
+                    {r.reliability === 'Too small to report'
+                      ? <span className={styles.subtext}>—</span>
+                      : r.dir >= 0.8
+                        ? <span className={styles.pass}>Passes ✓</span>
+                        : <span className={styles.fail}>Fails ✗</span>}
+                  </td>
+                  <td className={r.spd < 0 ? styles.negative : styles.positive}>
+                    {r.reliability === 'Too small to report' ? '—' : `${r.spd >= 0 ? '+' : ''}${pct(r.spd)}`}
+                  </td>
                   <td><span className={styles.badge} style={{ background: c.bg, color: c.text }}>{r.level}</span></td>
                 </tr>
               )
@@ -517,6 +542,17 @@ function Step3({ results, ctx }: { results: MetricResult[]; ctx: SystemContext }
         <span className={styles.keyItem}><span className={styles.badge} style={{ background: '#EAFAF1', color: '#1E8449' }}>Fair</span> DIR ≥ 0.90</span>
         <span className={styles.keyItem}><span className={styles.badge} style={{ background: '#FEF9E7', color: '#7D6608' }}>Borderline</span> DIR 0.80–0.89</span>
         <span className={styles.keyItem}><span className={styles.badge} style={{ background: '#FDEDEC', color: '#C0392B' }}>Concern</span> DIR &lt; 0.80</span>
+      </div>
+
+      <div className={styles.sectionNote} role="note">
+        <strong>What this result can and cannot support.</strong> A disparate impact
+        ratio is a <em>signal</em>, not a finding of discrimination. It shows that
+        outcomes differ; it does not explain why. Groups under {MIN_RELIABLE} decisions are
+        marked indicative only, and groups under {MIN_REPORT} are suppressed — both because
+        small numbers produce unreliable ratios and because small cells can make
+        individuals indirectly identifiable. Before drawing any conclusion, confirm
+        the groups are genuinely comparable and that a legitimate explanation for
+        the difference has been ruled out.
       </div>
     </div>
   )
