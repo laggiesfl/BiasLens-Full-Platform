@@ -60,3 +60,95 @@
 .public-listen-stop {
   padding-inline: 8px;
 }
+
+/* Homepage section navigation for sighted keyboard users who need controlled page movement. */
+.public-section-navigator {
+  position: sticky;
+  top: 78px;
+  z-index: 45;
+  background: #102b4d;
+  border-bottom: 1px solid rgba(230, 238, 248, 0.26);
+  box-shadow: 0 8px 20px rgba(3, 16, 34, 0.18);
+}
+
+.public-section-navigator-inner {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-block: 7px;
+}
+
+.public-section-navigator-title {
+  color: #ffffff;
+  margin-right: 4px;
+}
+
+.public-section-nav-button,
+.public-section-select {
+  min-height: 42px;
+  border: 2px solid #8eb5df;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 700;
+}
+
+.public-section-nav-button {
+  padding: 7px 12px;
+  background: transparent;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.public-section-nav-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.public-section-nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.public-section-select-label {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.public-section-select {
+  max-width: min(38vw, 360px);
+  padding: 6px 34px 6px 10px;
+  background: #ffffff;
+  color: #17324d;
+}
+
+.public-section-nav-button:focus-visible,
+.public-section-select:focus-visible {
+  outline: 4px solid #ffffff;
+  outline-offset: 3px;
+}
+
+#main-content > section {
+  scroll-margin-top: 150px;
+}
+
+@media (max-width: 680px) {
+  .public-section-navigator {
+    position: static;
+  }
+
+  .public-section-navigator-inner {
+    align-items: stretch;
+  }
+
+  .public-section-navigator-title,
+  .public-section-select-label {
+    width: 100%;
+  }
+
+  .public-section-nav-button,
+  .public-section-select {
+    width: 100%;
+    max-width: none;
+  }
+}
