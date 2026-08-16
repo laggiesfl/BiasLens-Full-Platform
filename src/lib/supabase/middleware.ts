@@ -12,6 +12,11 @@ import { NextResponse, type NextRequest } from "next/server";
  * /privacy is public because POPIA and the GDPR both expect a person to be able
  * to read how their information will be handled BEFORE they hand any of it
  * over. Behind sign-in, it could only be read by people who had already decided.
+ *
+ * The BiasLens public landing and qualification journey must also remain
+ * reachable without an account. The enquiry API is deliberately public because
+ * it performs its own validation, honeypot check, server-only Airtable write and
+ * owner notification; it does not expose assessment data.
  */
 const PUBLIC_PATHS = [
   "/",
@@ -21,6 +26,10 @@ const PUBLIC_PATHS = [
   "/auth/callback",
   "/accessibility-statement",
   "/privacy",
+  "/enquire",
+  "/enquire/thank-you",
+  "/api/enquiries",
+  "/api/enquiries/e2e-test",
 ];
 
 function isPublic(pathname: string) {
