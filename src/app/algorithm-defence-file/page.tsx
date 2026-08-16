@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PublicHeader } from "@/components/public/PublicHeader";
+import { PUBLIC_PROOF_DOWNLOADS } from "@/lib/export/publicProofPdfs";
 
 export const metadata = {
   title: "Sample Algorithm Defence File | BiasLens",
@@ -57,6 +58,15 @@ export default function AlgorithmDefenceFilePage() {
               <p className="public-lead">
                 This sample is built from the same entirely fictional recruitment scenario used in the BiasLens case study. It demonstrates organisation-owned governance evidence. It is not legal immunity, certification, legal advice or a formal conformity assessment.
               </p>
+              <div className="public-actions">
+                <a
+                  href={PUBLIC_PROOF_DOWNLOADS.algorithmDefenceFile.href}
+                  className="public-button public-button-secondary"
+                  download={PUBLIC_PROOF_DOWNLOADS.algorithmDefenceFile.filename}
+                >
+                  Download the sample file PDF
+                </a>
+              </div>
             </div>
 
             <div className="public-callout public-callout-note">
@@ -160,8 +170,15 @@ export default function AlgorithmDefenceFilePage() {
             <section className="public-section">
               <div className="public-panel">
                 <h2>Continue from the sample file</h2>
-                <p>Read the fictional recruitment case study that produced this evidence record, review the BiasLens methodology, or bring one real AI system into qualification.</p>
+                <p>Download the sample governance evidence record, read the fictional recruitment case study that produced it, review the BiasLens methodology, or bring one real AI system into qualification.</p>
                 <div className="public-actions">
+                  <a
+                    href={PUBLIC_PROOF_DOWNLOADS.algorithmDefenceFile.href}
+                    className="public-button public-button-secondary"
+                    download={PUBLIC_PROOF_DOWNLOADS.algorithmDefenceFile.filename}
+                  >
+                    Download PDF
+                  </a>
                   <Link href="/case-study/recruitment" className="public-button public-button-secondary">Read the recruitment case study</Link>
                   <Link href="/methodology" className="public-button public-button-secondary">Read the Methodology Note</Link>
                   <Link href="/enquire" className="public-button public-button-primary">Assess one AI system</Link>
