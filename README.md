@@ -61,7 +61,7 @@ BIASLENS_NOTIFICATION_TO=hello@beaccessible.co.za
 BIASLENS_NOTIFICATION_FROM=BiasLens <hello@beaccessible.co.za>
 ```
 
-`AIRTABLE_API_TOKEN`, `RESEND_API_KEY` and the other server-only values must never use a `NEXT_PUBLIC_` prefix.
+`AIRTABLE_API_TOKEN`, `RESEND_API_KEY` and the other server-only values must never use a `NEXT_PUBLIC_` prefix. The enquiry variables must be available to both Vercel Preview and Production deployments before end-to-end verification.
 
 The Resend domain `beaccessible.co.za` must be verified and sending-enabled before using `hello@beaccessible.co.za` as the sender.
 
