@@ -23,6 +23,20 @@
   color: #17324d !important;
 }
 
+/* The dark public-page link rule is intentionally strong, so links inside the
+   light form surface need an explicit local override. This covers both Back
+   links and the Privacy Notice link without changing the global focus ring. */
+.public-page .public-form-card a:not(.public-button):not(.public-brand) {
+  color: #1f3f6b !important;
+  text-decoration-color: #1f3f6b;
+}
+
+.public-page .public-form-card a:not(.public-button):not(.public-brand):hover,
+.public-page .public-form-card a:not(.public-button):not(.public-brand):focus-visible {
+  color: #172f52 !important;
+  text-decoration-color: #172f52;
+}
+
 .public-form-back {
   margin-bottom: 22px;
 }
