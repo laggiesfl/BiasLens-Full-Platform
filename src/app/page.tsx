@@ -146,7 +146,40 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="offers" className="public-section public-section-alt">
+        <section className="public-section public-section-alt">
+          <div className="public-shell">
+            <div className="public-section-heading">
+              <h2>What BiasLens can assess</h2>
+              <p>BiasLens works best when an organisation brings one defined AI-enabled system, workflow or decision process into view. Scope is confirmed during qualification.</p>
+            </div>
+            <div className="public-grid-2">
+              <article className="public-card">
+                <h3>Example systems and workflows</h3>
+                <ul>
+                  <li>AI-assisted recruitment and candidate screening</li>
+                  <li>Workforce decision support</li>
+                  <li>Education, learning and assessment systems</li>
+                  <li>Financial, insurance or eligibility systems</li>
+                  <li>Public-sector or essential-service decision workflows</li>
+                  <li>Third-party AI tools affecting customers, employees or applicants</li>
+                </ul>
+              </article>
+              <article className="public-card">
+                <h3>Questions BiasLens helps surface</h3>
+                <ul>
+                  <li>What evidence do we actually have about this system?</li>
+                  <li>Which affected groups are visible in the evidence?</li>
+                  <li>What vendor claims remain unverified?</li>
+                  <li>Where could preexisting, technical or emergent bias arise?</li>
+                  <li>Which outcome differences need further investigation?</li>
+                  <li>What should be documented for governance and oversight?</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="offers" className="public-section">
           <div className="public-shell">
             <div className="public-section-heading">
               <h2>Start with one system. Build stronger assurance over time.</h2>
@@ -165,7 +198,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="public-section">
+        <section className="public-section public-section-alt">
           <div className="public-shell">
             <div className="public-section-heading"><h2>Why BiasLens is different</h2><p>BiasLens is designed to improve the quality and honesty of the evidence an organisation relies on — not to manufacture false confidence.</p></div>
             <div className="public-grid-3">
@@ -179,7 +212,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="public-section public-section-alt">
+        <section className="public-section">
           <div className="public-shell">
             <div className="public-section-heading"><h2>How a BiasLens engagement works</h2><p>The aim is to move one real system from vague concern toward documented evidence and an explicit next decision.</p></div>
             <div className="public-flow">
@@ -191,17 +224,17 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="proof" className="public-section">
+        <section id="proof" className="public-section public-section-alt">
           <div className="public-shell">
             <div className="public-section-heading"><h2>Proof and trust</h2><p>BiasLens is being taken to market with the same evidence discipline it asks of clients.</p></div>
             <div className="public-grid-2">
               <article className="public-card">
                 <h3>Proof assets</h3>
                 <ul>
-                  <li>BiasLens Methodology Note — in preparation</li>
-                  <li>Two-minute problem-to-evidence demonstration — in preparation</li>
-                  <li>Fictional-data recruitment case study — in preparation</li>
-                  <li>Sample Algorithm Defence File — in preparation</li>
+                  <li>BiasLens Methodology Note — coming soon</li>
+                  <li>Two-minute problem-to-evidence demonstration — coming soon</li>
+                  <li>Fictional-data recruitment case study — coming soon</li>
+                  <li>Sample Algorithm Defence File — coming soon</li>
                 </ul>
               </article>
               <article className="public-card">
@@ -218,7 +251,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="founder" className="public-section public-section-alt">
+        <section id="founder" className="public-section">
           <div className="public-shell">
             <div className="public-section-heading"><h2>Why this product exists</h2></div>
             <div className="public-callout public-callout-strong">
@@ -231,7 +264,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="public-section">
+        <section className="public-section public-section-alt">
           <div className="public-shell">
             <div className="public-panel">
               <h2>Ready to assess one AI system?</h2>
@@ -253,8 +286,9 @@ export default function Home() {
             <p><a href="mailto:hello@beaccessible.co.za">hello@beaccessible.co.za</a></p>
           </div>
           <div>
-            <h2>Accessibility</h2>
+            <h2>Accessibility and privacy</h2>
             <p>This public experience is designed for keyboard operation, screen-reader navigation, reflow and visible focus, with a read-aloud convenience control that does not replace semantic accessibility.</p>
+            <p><Link href="/accessibility-statement">Accessibility Statement</Link> · <Link href="/privacy">Privacy Notice</Link></p>
           </div>
         </div>
       </footer>
