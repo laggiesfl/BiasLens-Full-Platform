@@ -29,7 +29,6 @@ const PUBLIC_PATHS = [
   "/enquire",
   "/enquire/thank-you",
   "/api/enquiries",
-  "/api/enquiries/e2e-test",
 ];
 
 function isPublic(pathname: string) {
