@@ -6,26 +6,25 @@ const root = process.cwd();
 const read = (path: string) => readFileSync(join(root, path), "utf8");
 
 describe("homepage keyboard section navigation", () => {
-  it("provides a visible page sections navigation near the top", () => {
-    const page = read("src/app/page.tsx");
-    expect(page).toContain('aria-label="Page sections"');
-    expect(page).toContain('href="#who"');
-    expect(page).toContain('href="#assess"');
-    expect(page).toContain('href="#offers"');
-    expect(page).toContain('href="#proof"');
+  it("exposes a visible page-section navigator from the public header", () => {
+    const header = read("src/components/public/PublicHeader.tsx");
+    expect(header).toContain("HomeSectionNavigator");
   });
 
-  it("gives major content sections stable fragment targets", () => {
-    const page = read("src/app/page.tsx");
-    for (const id of ["why", "who", "assess", "offers", "difference", "process", "proof", "founder", "ready"]) {
-      expect(page).toContain(`id="${id}"`);
-    }
+  it("provides direct and sequential movement through homepage sections", () => {
+    const navigator = read("src/components/public/HomeSectionNavigator.tsx");
+    expect(navigator).toContain('aria-label="Page sections"');
+    expect(navigator).toContain("Previous section");
+    expect(navigator).toContain("Next section");
+    expect(navigator).toContain("scrollIntoView");
+    expect(navigator).toContain('#main-content > section');
   });
 
-  it("provides sequential previous and next section controls", () => {
-    const page = read("src/app/page.tsx");
-    expect(page).toContain("Previous section");
-    expect(page).toContain("Next section");
-    expect(page).toContain("public-section-nav");
+  it("keeps the section navigator visible and gives its controls strong focus styling", () => {
+    const css = read("src/app/public-accessibility-fixes.css");
+    expect(css).toContain(".public-section-navigator");
+    expect(css).toContain("position: sticky");
+    expect(css).toContain(".public-section-nav-button:focus-visible");
+    expect(css).toContain(".public-section-select:focus-visible");
   });
 });
