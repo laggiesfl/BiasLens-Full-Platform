@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useMemo, useRef, useState } from "react";
+import { FormEvent, KeyboardEvent, useMemo, useRef, useState } from "react";
 import { DOCUMENTATION_VALUES, REGION_VALUES, ROLE_VALUES, SECTOR_VALUES } from "@/lib/enquiries/types";
 
 function newReference(): string {
@@ -59,6 +59,13 @@ export function EnquiryForm() {
       requestAnimationFrame(() => summaryRef.current?.focus());
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  function activateConsentWithEnter(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      event.currentTarget.click();
     }
   }
 
@@ -158,10 +165,19 @@ export function EnquiryForm() {
 
       <div className="public-field">
         <div className="public-consent">
-          <input id="consent" name="consent" type="checkbox" required aria-invalid={!!fieldError("consent")} aria-describedby={fieldError("consent") ? "consent-error" : "consent-help"} />
+          <input
+            id="consent"
+            name="consent"
+            type="checkbox"
+            required
+            onKeyDown={activateConsentWithEnter}
+            aria-keyshortcuts="Enter Space"
+            aria-invalid={!!fieldError("consent")}
+            aria-describedby={fieldError("consent") ? "consent-error" : "consent-help"}
+          />
           <label htmlFor="consent">I consent to BeAccessible using the information in this form to respond to this BiasLens enquiry. <span aria-hidden="true">*</span></label>
         </div>
-        <p id="consent-help" className="public-help">Read the <Link href="/privacy">BiasLens Privacy Notice</Link>. Do not submit sensitive person-level records through this form.</p>
+        <p id="consent-help" className="public-help">Use Space or Enter to select the consent checkbox. Read the <Link href="/privacy">BiasLens Privacy Notice</Link>. Do not submit sensitive person-level records through this form.</p>
         {fieldError("consent") && <p id="consent-error" className="public-error">{fieldError("consent")}</p>}
       </div>
 

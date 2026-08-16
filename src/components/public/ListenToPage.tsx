@@ -1,33 +1,48 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+type ListenState = "idle" | "speaking" | "paused";
 
 export function ListenToPage({ targetId }: { targetId: string }) {
-  const [speaking, setSpeaking] = useState(false);
+  const [listenState, setListenState] = useState<ListenState>("idle");
   const [status, setStatus] = useState("");
+  const stoppingRef = useRef(false);
 
   useEffect(() => {
     return () => {
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        stoppingRef.current = true;
         window.speechSynthesis.cancel();
       }
     };
   }, []);
 
   function stop() {
+    if (!("speechSynthesis" in window)) return;
+    stoppingRef.current = true;
     window.speechSynthesis.cancel();
-    setSpeaking(false);
+    setListenState("idle");
     setStatus("Reading stopped.");
   }
 
-  function toggle() {
+  function pause() {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.pause();
+    setListenState("paused");
+    setStatus("Reading paused. Choose Resume listening to continue from this point.");
+  }
+
+  function resume() {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.resume();
+    setListenState("speaking");
+    setStatus("Reading resumed from the paused position.");
+  }
+
+  function start() {
     if (!("speechSynthesis" in window)) {
       setStatus("Read-aloud is not available in this browser.");
-      return;
-    }
-
-    if (speaking) {
-      stop();
       return;
     }
 
@@ -38,19 +53,22 @@ export function ListenToPage({ targetId }: { targetId: string }) {
       return;
     }
 
+    stoppingRef.current = false;
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = document.documentElement.lang || "en";
     utterance.rate = 1;
     utterance.onstart = () => {
-      setSpeaking(true);
+      setListenState("speaking");
       setStatus("Reading started.");
     };
     utterance.onend = () => {
-      setSpeaking(false);
+      if (stoppingRef.current) return;
+      setListenState("idle");
       setStatus("Finished reading the page.");
     };
-    utterance.onerror = () => {
-      setSpeaking(false);
+    utterance.onerror = (event) => {
+      if (stoppingRef.current || event.error === "canceled" || event.error === "interrupted") return;
+      setListenState("idle");
       setStatus("The read-aloud feature could not complete.");
     };
 
@@ -58,11 +76,39 @@ export function ListenToPage({ targetId }: { targetId: string }) {
     window.speechSynthesis.speak(utterance);
   }
 
+  function togglePauseResume() {
+    if (listenState === "paused") {
+      resume();
+      return;
+    }
+    if (listenState === "speaking") {
+      pause();
+      return;
+    }
+    start();
+  }
+
+  const primaryLabel = listenState === "speaking"
+    ? "Pause listening"
+    : listenState === "paused"
+      ? "Resume listening"
+      : "Listen to this page";
+
   return (
     <div className="public-listen-wrap">
-      <button type="button" className="public-link-button" onClick={toggle} aria-pressed={speaking}>
-        {speaking ? "Stop listening" : "Listen to this page"}
+      <button
+        type="button"
+        className="public-link-button"
+        onClick={togglePauseResume}
+        aria-pressed={listenState === "paused"}
+      >
+        {primaryLabel}
       </button>
+      {listenState !== "idle" && (
+        <button type="button" className="public-link-button public-listen-stop" onClick={stop}>
+          Stop listening
+        </button>
+      )}
       <span className="sr-only" aria-live="polite">{status}</span>
     </div>
   );

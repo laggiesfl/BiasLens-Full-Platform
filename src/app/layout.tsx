@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./public-pages.css";
+import "./public-accessibility-fixes.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://biaslens.beaccessible.co.za"),

@@ -15,6 +15,9 @@ export default function EnquirePage() {
         <section className="public-form-wrap">
           <div className="public-shell">
             <div className="public-form-card">
+              <div className="public-form-back">
+                <Link href="/">← Back to BiasLens overview</Link>
+              </div>
               <div className="public-form-intro">
                 <span className="public-kicker">BiasLens qualification</span>
                 <h1>Assess one AI system</h1>
@@ -26,7 +29,7 @@ export default function EnquirePage() {
                 </div>
               </div>
               <EnquiryForm />
-              <p style={{ marginTop: 24 }}><Link href="/">Return to the BiasLens overview</Link></p>
+              <p style={{ marginTop: 24 }}><Link href="/">← Back to BiasLens overview</Link></p>
             </div>
           </div>
         </section>
