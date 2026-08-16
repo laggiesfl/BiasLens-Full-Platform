@@ -1,0 +1,62 @@
+/* Accessibility corrections identified during live keyboard and low-vision review. */
+
+.public-form-card .public-lead {
+  color: #294668 !important;
+}
+
+.public-form-card .public-kicker {
+  background: #2f5c9a;
+  border-color: #2f5c9a;
+  color: #ffffff;
+}
+
+.public-form-card .public-callout-note {
+  background: #e6eef8;
+  border-color: #2f5c9a;
+  box-shadow: none;
+  color: #17324d;
+}
+
+.public-form-card .public-callout-note,
+.public-form-card .public-callout-note p,
+.public-form-card .public-callout-note strong {
+  color: #17324d !important;
+}
+
+.public-form-back {
+  margin-bottom: 22px;
+}
+
+.public-form-back a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 0;
+  font-weight: 800;
+}
+
+.public-consent input:focus-visible,
+.public-consent label:has(+ input:focus-visible) {
+  outline: none;
+}
+
+.public-consent:focus-within {
+  border-radius: 8px;
+  outline: 4px solid #111111;
+  outline-offset: 4px;
+}
+
+.public-consent input {
+  accent-color: #1f3f6b;
+}
+
+.public-listen-wrap {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.public-listen-stop {
+  padding-inline: 8px;
+}
