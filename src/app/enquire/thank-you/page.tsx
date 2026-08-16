@@ -21,7 +21,7 @@ export default async function ThankYouPage({
           <div className="public-shell public-thank-you">
             <div className="public-form-card">
               <span className="public-kicker">Enquiry received</span>
-              <h1>Thank you. Your BiasLens enquiry has been submitted.</h1>
+              <h1>Thank you. Your BiasLens enquiry has been received.</h1>
               <p className="public-lead">
                 BeAccessible will review the system and decision context you described. If the enquiry is a fit, the next step is a short 10-minute qualification conversation.
               </p>
@@ -35,6 +35,7 @@ export default async function ThankYouPage({
               </div>
               <div className="public-actions">
                 <Link href="/" className="public-button public-button-primary">Return to BiasLens</Link>
+                <Link href="/login" className="public-button public-button-secondary">Sign in to BiasLens</Link>
                 <a href="mailto:hello@beaccessible.co.za?subject=BiasLens%20enquiry%20follow-up" className="public-button public-button-secondary">Email BeAccessible</a>
               </div>
             </div>
