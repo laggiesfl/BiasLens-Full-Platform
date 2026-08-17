@@ -29,6 +29,7 @@ export function GuideLauncher() {
     <>
       {open && (
         <aside
+          id="biaslens-guide-panel"
           className={styles.panel}
           role="dialog"
           aria-modal="false"
