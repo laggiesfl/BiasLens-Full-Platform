@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { BiasLensGuide } from "./BiasLensGuide";
 import styles from "./GuideLauncher.module.css";
 
 export function GuideLauncher() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const closeRef = useRef<HTMLButtonElement | null>(null);
   const launcherRef = useRef<HTMLButtonElement | null>(null);
@@ -24,6 +26,8 @@ export function GuideLauncher() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open]);
+
+  if (pathname === "/guide") return null;
 
   return (
     <>
