@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
+import { GuideLauncher } from "@/components/guide/GuideLauncher";
 import { ListenToPage } from "./ListenToPage";
 import { HomeSectionNavigator } from "./HomeSectionNavigator";
 
@@ -21,6 +22,7 @@ export function PublicHeader() {
             <a href="/#why">Why BiasLens</a>
             <a href="/#offers">Offers</a>
             <a href="/#proof">Proof</a>
+            <Link href="/guide">BiasLens Guide</Link>
             <a href="/#founder">Founder note</a>
           </nav>
 
@@ -32,6 +34,7 @@ export function PublicHeader() {
         </div>
       </header>
       <HomeSectionNavigator />
+      <GuideLauncher />
     </>
   );
 }
