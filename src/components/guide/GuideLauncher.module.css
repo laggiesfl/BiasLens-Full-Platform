@@ -1,0 +1,108 @@
+.launcher {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 60;
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+  border: 2px solid #ffffff;
+  border-radius: 999px;
+  background: #1f3f6b;
+  color: #ffffff;
+  box-shadow: 0 8px 28px rgba(23, 50, 77, 0.28);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.launcher:hover,
+.launcher:focus-visible {
+  background: #17324d;
+}
+
+.launcher:focus-visible,
+.close:focus-visible,
+.fullPage:focus-visible {
+  outline: 4px solid #d9a441;
+  outline-offset: 3px;
+}
+
+.panel {
+  position: fixed;
+  right: 1rem;
+  bottom: 5.5rem;
+  z-index: 59;
+  width: min(680px, calc(100vw - 2rem));
+  max-height: calc(100vh - 7rem);
+  overflow: auto;
+  background: #ffffff;
+  border: 2px solid #1f3f6b;
+  border-radius: 16px;
+  box-shadow: 0 18px 55px rgba(23, 50, 77, 0.3);
+}
+
+.panelHeader {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  background: #e6eef8;
+  border-bottom: 1px solid #b8c9df;
+}
+
+.panelHeader strong {
+  color: #17324d;
+}
+
+.panelActions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.close,
+.fullPage {
+  min-height: 40px;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid #1f3f6b;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #17324d;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.panelBody {
+  padding: 0.75rem;
+}
+
+.panelBody > section {
+  border: 0;
+  box-shadow: none;
+}
+
+@media (max-width: 700px) {
+  .launcher {
+    right: 0.75rem;
+    bottom: 0.75rem;
+  }
+
+  .panel {
+    inset: 0.5rem;
+    width: auto;
+    max-height: none;
+    bottom: 4.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .launcher,
+  .panel {
+    transition: none;
+  }
+}
