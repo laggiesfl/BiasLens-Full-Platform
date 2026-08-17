@@ -31,7 +31,7 @@ export default function PrivacyNoticePage() {
           how long for, and what you can ask us to do about it. It is written to
           be read before you decide whether to use the platform, not after.
         </p>
-        <p className="muted">Last updated 1 August 2026.</p>
+        <p className="muted">Last updated 17 August 2026.</p>
       </div>
 
       <section className="card stack" aria-labelledby="who-h">
@@ -102,6 +102,19 @@ export default function PrivacyNoticePage() {
           <li>The documents BiasLens generates for you</li>
         </ul>
 
+        <h3 style={{ fontSize: "1.05rem" }}>What you ask BiasLens Guide</h3>
+        <p>
+          BiasLens Guide is a public informational assistant. When you send a
+          message to BiasLens Guide, the text of that Guide conversation is sent to
+          the AI service used to generate the answer. The Guide is deliberately
+          separated from the private assessment environment: it does not read your
+          account, assessment answers, evidence files or private fairness data.
+        </p>
+        <p>
+          Please do not put employee, applicant, health, disability, identification,
+          credential or other sensitive person-level information into BiasLens Guide.
+        </p>
+
         <h3 style={{ fontSize: "1.05rem" }}>Technical</h3>
         <ul>
           <li>
@@ -121,6 +134,11 @@ export default function PrivacyNoticePage() {
           <li>
             <strong>To provide the service you asked for.</strong> We cannot run an
             assessment without the answers to it.
+          </li>
+          <li>
+            <strong>To answer a BiasLens Guide question.</strong> Guide messages are
+            processed only so the public assistant can generate a response to the
+            question you chose to submit.
           </li>
           <li>
             <strong>To support you when something goes wrong.</strong> See section
@@ -161,6 +179,11 @@ export default function PrivacyNoticePage() {
           for no other purpose. Only upload what you genuinely need, and remove it
           when you no longer need it.
         </p>
+        <p>
+          <strong>Do not submit that information to BiasLens Guide.</strong> The
+          public Guide only needs a general description of the system, workflow,
+          decision context or evidence question.
+        </p>
       </section>
 
       <section className="card stack" aria-labelledby="where-h">
@@ -169,7 +192,7 @@ export default function PrivacyNoticePage() {
         </h2>
         <p>
           <strong>
-            Your data is stored in the United Kingdom, not in South Africa.
+            Your assessment data is stored in the United Kingdom, not in South Africa.
           </strong>{" "}
           Our database is hosted in London.
         </p>
@@ -191,15 +214,22 @@ export default function PrivacyNoticePage() {
         <h2 id="processors-h" style={{ fontSize: "1.2rem" }}>
           6. Who else handles it
         </h2>
-        <p>Three companies process information on our behalf:</p>
+        <p>These service providers process information on our behalf for the functions described below:</p>
         <ul>
           <li>
             <strong>Supabase</strong> — accounts, sign-in and the database. This is
             where your assessments live.
           </li>
           <li>
-            <strong>Vercel</strong> — hosting. This is what serves the pages to
-            your browser.
+            <strong>Vercel</strong> — hosting and the AI gateway used by the public
+            BiasLens Guide. Vercel serves the pages to your browser and routes Guide
+            requests to the selected AI model.
+          </li>
+          <li>
+            <strong>OpenAI</strong> — the AI model provider used to generate public
+            BiasLens Guide responses. Only the Guide conversation submitted to that
+            feature is sent for model processing; private assessment content is not
+            connected to the Guide route.
           </li>
           <li>
             <strong>Resend</strong> — sending the emails we send you, such as
@@ -207,10 +237,9 @@ export default function PrivacyNoticePage() {
           </li>
         </ul>
         <p>
-          These are the only three. Each operates internationally, which means
-          information may be handled outside South Africa. We have not
-          independently audited their internal practices and we will not claim
-          otherwise.
+          These providers operate internationally, which means information may be
+          handled outside South Africa. We have not independently audited their
+          internal practices and we will not claim otherwise.
         </p>
       </section>
 
@@ -218,13 +247,14 @@ export default function PrivacyNoticePage() {
         <h2 id="notdo-h" style={{ fontSize: "1.2rem" }}>7. What we do not do</h2>
         <p>
           <strong>
-            Nothing you enter into BiasLens is sent to an artificial intelligence
-            model.
+            Private BiasLens assessment content is not sent to BiasLens Guide or to
+            the Guide&apos;s AI model.
           </strong>{" "}
-          There is no AI inside this platform. The fairness calculations are
-          arithmetic. The compliance mapping is a fixed set of rules. Your
-          documents are assembled from what you typed. Your assessment content is
-          never used to train anything, by us or by anyone else.
+          The assessment calculations remain arithmetic, the compliance mapping is
+          a fixed set of rules, and assessment documents are assembled from the
+          information entered into those workflows. BiasLens Guide is a separate,
+          public AI-assisted information feature and receives only the conversation
+          a visitor deliberately submits to the Guide.
         </p>
         <p>We also do not:</p>
         <ul>
@@ -294,6 +324,10 @@ export default function PrivacyNoticePage() {
             stay attached to a deleted person.
           </li>
         </ul>
+        <p>
+          BiasLens Guide conversations are not written into the private BiasLens
+          assessment database by the Guide feature.
+        </p>
       </section>
 
       <section className="card stack" aria-labelledby="secure-h">
@@ -312,6 +346,10 @@ export default function PrivacyNoticePage() {
           </li>
           <li>Sensitive actions such as deletions and role changes are logged.</li>
           <li>You control your own exports.</li>
+          <li>
+            BiasLens Guide is kept outside the authenticated assessment data path and
+            has no code connection to assessment records or uploaded evidence.
+          </li>
         </ul>
       </section>
 
