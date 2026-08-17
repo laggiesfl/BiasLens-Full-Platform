@@ -13,10 +13,9 @@ import { NextResponse, type NextRequest } from "next/server";
  * to read how their information will be handled BEFORE they hand any of it
  * over. Behind sign-in, it could only be read by people who had already decided.
  *
- * The BiasLens public landing, proof assets and qualification journey must also
- * remain reachable without an account. The enquiry API is deliberately public
- * because it performs its own validation, honeypot check, server-only Airtable
- * write and owner notification; it does not expose assessment data.
+ * The BiasLens public landing, proof assets, Guide and qualification journey must
+ * also remain reachable without an account. Public APIs listed here perform their
+ * own validation and do not expose private assessment data.
  */
 const PUBLIC_PATHS = [
   "/",
@@ -28,6 +27,7 @@ const PUBLIC_PATHS = [
   "/privacy",
   "/methodology",
   "/demo",
+  "/guide",
   "/case-study/recruitment",
   "/algorithm-defence-file",
   "/downloads/recruitment-case-study",
@@ -35,6 +35,7 @@ const PUBLIC_PATHS = [
   "/enquire",
   "/enquire/thank-you",
   "/api/enquiries",
+  "/api/guide",
 ];
 
 function isPublic(pathname: string) {
