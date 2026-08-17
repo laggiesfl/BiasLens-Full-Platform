@@ -1,0 +1,271 @@
+.guide {
+  max-width: 920px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 2px solid #1f3f6b;
+  border-radius: 16px;
+  box-shadow: 0 18px 45px rgba(31, 63, 107, 0.12);
+  overflow: hidden;
+}
+
+.header {
+  padding: 1.25rem;
+  background: #e6eef8;
+  border-bottom: 1px solid #b8c9df;
+}
+
+.header h2,
+.header h1 {
+  color: #1f3f6b;
+  margin: 0 0 0.5rem;
+}
+
+.header p {
+  margin: 0.35rem 0;
+  max-width: 75ch;
+}
+
+.languageRow {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: end;
+  margin-top: 1rem;
+}
+
+.languageRow label {
+  font-weight: 700;
+  color: #17324d;
+}
+
+.languageRow select,
+.rateControl select {
+  display: block;
+  min-height: 44px;
+  padding: 0.55rem 0.75rem;
+  border: 2px solid #1f3f6b;
+  border-radius: 8px;
+  background: #fff;
+  color: #222;
+  font: inherit;
+}
+
+.starters {
+  padding: 1rem 1.25rem 0;
+}
+
+.starters h3 {
+  margin: 0 0 0.75rem;
+  color: #17324d;
+  font-size: 1rem;
+}
+
+.starterGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.starterButton {
+  min-height: 44px;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid #2f5c9a;
+  border-radius: 10px;
+  background: #f0f5fb;
+  color: #17324d;
+  font: inherit;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+}
+
+.starterButton:hover,
+.starterButton:focus-visible {
+  background: #dce8f6;
+}
+
+.messages {
+  min-height: 260px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  scroll-behavior: smooth;
+}
+
+.message {
+  max-width: 78%;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.userMessage {
+  align-self: flex-end;
+  background: #1f3f6b;
+  color: #fff;
+}
+
+.assistantMessage {
+  align-self: flex-start;
+  background: #f0f5fb;
+  color: #222;
+  border: 1px solid #c5d4e6;
+}
+
+.messageActions {
+  margin-top: 0.7rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.smallButton,
+.button,
+.secondaryButton {
+  min-height: 44px;
+  padding: 0.55rem 0.85rem;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.smallButton {
+  min-height: 36px;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid #2f5c9a;
+  background: #fff;
+  color: #17324d;
+}
+
+.button {
+  border: 2px solid #1f3f6b;
+  background: #1f3f6b;
+  color: #fff;
+}
+
+.secondaryButton {
+  border: 2px solid #1f3f6b;
+  background: #fff;
+  color: #17324d;
+}
+
+.button:disabled,
+.secondaryButton:disabled,
+.starterButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.button:focus-visible,
+.secondaryButton:focus-visible,
+.smallButton:focus-visible,
+.starterButton:focus-visible,
+.languageRow select:focus-visible,
+.rateControl select:focus-visible,
+.composer textarea:focus-visible {
+  outline: 4px solid #d9a441;
+  outline-offset: 3px;
+}
+
+.composer {
+  padding: 1.25rem;
+  border-top: 1px solid #c5d4e6;
+  background: #fff;
+}
+
+.composer label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: #17324d;
+  font-weight: 700;
+}
+
+.composer textarea {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+  border: 2px solid #1f3f6b;
+  border-radius: 10px;
+  padding: 0.8rem;
+  font: inherit;
+  color: #222;
+  background: #fff;
+}
+
+.controls {
+  margin-top: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.rateControl {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.rateControl label {
+  margin: 0;
+}
+
+.status {
+  margin: 0.75rem 0 0;
+  min-height: 1.5em;
+  font-weight: 650;
+  color: #17324d;
+}
+
+.error {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem;
+  border-left: 5px solid #7a1f5c;
+  background: #f7f4ef;
+  color: #222;
+}
+
+.transcriptBox {
+  margin-top: 0.85rem;
+  padding: 0.9rem;
+  border: 2px solid #d9a441;
+  border-radius: 10px;
+  background: #fffaf0;
+}
+
+.transcriptBox strong {
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.privacy {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+@media (max-width: 700px) {
+  .guide {
+    border-radius: 10px;
+  }
+
+  .starterGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .message {
+    max-width: 92%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .messages {
+    scroll-behavior: auto;
+  }
+}
