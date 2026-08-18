@@ -75,16 +75,18 @@ export function GuideLauncher() {
         </aside>
       )}
 
-      <button
-        ref={launcherRef}
-        type="button"
-        className={styles.launcher}
-        aria-expanded={open}
-        aria-controls="biaslens-guide-panel"
-        onClick={() => setOpen((current) => !current)}
-      >
-        {open ? "Close BiasLens Guide" : "Ask BiasLens Guide"}
-      </button>
+      {!open && (
+        <button
+          ref={launcherRef}
+          type="button"
+          className={styles.launcher}
+          aria-expanded="false"
+          aria-controls="biaslens-guide-panel"
+          onClick={() => setOpen(true)}
+        >
+          Ask BiasLens Guide
+        </button>
+      )}
     </>
   );
 }
