@@ -54,8 +54,9 @@ export default function AccessibilityStatementPage() {
         </p>
         <p>
           This statement applies to the BiasLens platform at{" "}
-          <strong>biaslens.beaccessible.co.za</strong>, including the assessment
-          tools, the documents it generates, and the emails it sends.
+          <strong>biaslens.beaccessible.co.za</strong>, including the public
+          BiasLens Guide, assessment tools, the documents the platform generates,
+          and the emails it sends.
         </p>
       </section>
 
@@ -63,7 +64,7 @@ export default function AccessibilityStatementPage() {
         <h2 id="verified-h" style={{ fontSize: "1.2rem" }}>
           2. What we have verified
         </h2>
-        <p>Each of these has been checked against the code, page by page:</p>
+        <p>Each of these has been checked against the code, page by page, or through real-use testing where stated:</p>
         <ul>
           <li>A skip link to the main content on every assessment tool.</li>
           <li>Semantic landmarks and a logical heading order.</li>
@@ -93,6 +94,17 @@ export default function AccessibilityStatementPage() {
           <li>
             Your organisation and name are carried across the tools, so you do not
             have to type them again in each one.
+          </li>
+          <li>
+            BiasLens Guide supports typed questions, optional microphone input,
+            editable speech transcription before sending, and optional read-aloud
+            of answers. Real-use testing in Firefox on 19 August 2026 confirmed
+            that speech input, text answers and read-aloud can all complete an
+            end-to-end question-and-answer journey.
+          </li>
+          <li>
+            BiasLens Guide keeps voice optional: every voice interaction has a
+            text equivalent, and microphone input never submits automatically.
           </li>
         </ul>
       </section>
@@ -160,6 +172,89 @@ export default function AccessibilityStatementPage() {
           or was opened in a different browser, and return you to the screen where
           you can request a new one.
         </p>
+
+        <h3 style={{ fontSize: "1.05rem" }}>
+          BiasLens Guide duplicated itself on its own page (fixed 19 August 2026)
+        </h3>
+        <p>
+          The floating Guide launcher appeared on the dedicated Guide page, so
+          opening it created a second copy of the same interface. The launcher is
+          now suppressed on the dedicated Guide route and hidden while the floating
+          panel is open.
+        </p>
+
+        <h3 style={{ fontSize: "1.05rem" }}>
+          BiasLens Guide had nested scrolling and duplicate close controls (fixed 19 August 2026)
+        </h3>
+        <p>
+          The page and the conversation panel could scroll independently, and more
+          than one control could appear to close or leave the Guide. This increased
+          mouse precision demands and made the interaction harder to understand.
+          The page behind the Guide is now locked while the panel is open, the
+          inner conversation scrollbar has been removed, and the open panel has a
+          single clear Close control.
+        </p>
+
+        <h3 style={{ fontSize: "1.05rem" }}>
+          Voice input did not work reliably in Firefox (fixed 19 August 2026)
+        </h3>
+        <p>
+          The first implementation depended on browser speech-recognition support,
+          which Firefox does not provide consistently. We replaced that dependency
+          with user-controlled microphone recording followed by server-side audio
+          transcription. The recognised words are placed into the question box for
+          review before the user presses Send.
+        </p>
+
+        <h3 style={{ fontSize: "1.05rem" }}>
+          Voice transcription was blocked by an unavailable model (fixed 19 August 2026)
+        </h3>
+        <p>
+          Microphone recording worked, but the first server-side transcription
+          model was unavailable on the deployed service tier. The voice route was
+          changed to a supported audio-capable model, and Firefox now prefers an
+          OGG/Opus recording format where available. Real-use testing confirmed
+          successful speech-to-text transcription after the change.
+        </p>
+
+        <h3 style={{ fontSize: "1.05rem" }}>
+          Read-aloud controls were difficult to find after long answers (fixed 19 August 2026)
+        </h3>
+        <p>
+          A single read-aloud control was positioned near the question box, which
+          meant it could be out of view after a long response. Each substantive
+          answer now carries its own <strong>Listen to this answer</strong> and
+          <strong>Stop listening</strong> controls at the end of the answer.
+        </p>
+
+        <h3 style={{ fontSize: "1.05rem" }}>
+          Status and error feedback had insufficient visual contrast (fixed 19 August 2026)
+        </h3>
+        <p>
+          Some voice and read-aloud status messages used text that was too pale to
+          read comfortably against its background. These states were changed to
+          high-contrast text and clearer bordered status or error treatments.
+        </p>
+
+        <h3 style={{ fontSize: "1.05rem" }}>
+          Assistant answers exposed raw markdown symbols (fixed 19 August 2026)
+        </h3>
+        <p>
+          Some answers displayed formatting characters such as double asterisks
+          and raw list markers. The display and read-aloud layers now clean those
+          markers so answers are easier to read and listen to.
+        </p>
+
+        <h3 style={{ fontSize: "1.05rem" }}>
+          Guide layout contained unnecessary controls and empty space (fixed 19 August 2026)
+        </h3>
+        <p>
+          The floating Guide included an unnecessary “Open full page” action,
+          duplicated the Guide heading, and reserved excessive empty space between
+          the conversation and question box. These have been removed or reduced so
+          the interaction uses fewer controls, clearer grouping and less pointer
+          movement.
+        </p>
       </section>
 
       <section className="card stack" aria-labelledby="notyet-h">
@@ -173,27 +268,38 @@ export default function AccessibilityStatementPage() {
         </p>
         <ul>
           <li>
-            <strong>No screen reader testing has been carried out.</strong>
+            <strong>No structured screen reader walkthrough has been carried out.</strong>
           </li>
           <li>
-            <strong>No keyboard-only walkthrough has been carried out.</strong> We
+            <strong>No complete keyboard-only walkthrough has been carried out.</strong> We
             have not verified that every function can be reached and operated
-            without a mouse.
+            without a mouse across the full platform.
           </li>
           <li>
             <strong>
-              No testing at 200% zoom or at 320 pixels width has been carried out.
+              No systematic testing at 200% zoom or at 320 pixels width has been carried out.
             </strong>
           </li>
           <li>
-            <strong>Touch target sizes have not been measured.</strong>
+            <strong>Touch target sizes have not been measured systematically.</strong>
           </li>
           <li>
-            <strong>Reduced-motion behaviour has not been verified.</strong>
+            <strong>Reduced-motion behaviour has not been verified systematically.</strong>
           </li>
           <li>
-            Colour contrast has been measured on the sign-in and reset screens, but
-            not systematically across the assessment tools.
+            Colour contrast has been measured or corrected on several screens and
+            Guide states, but not systematically across every assessment tool.
+          </li>
+          <li>
+            BiasLens Guide multilingual text and terminology have not yet been
+            validated by native-language reviewers across all six supported
+            languages.
+          </li>
+          <li>
+            BiasLens Guide speech recognition and read-aloud have been confirmed in
+            Firefox for the real-use journey described above, but they have not yet
+            been tested systematically across browsers, operating systems, all six
+            languages, or a representative range of microphones and speech patterns.
           </li>
           <li>
             The platform is used regularly by a member of our team who types with
@@ -216,13 +322,15 @@ export default function AccessibilityStatementPage() {
         <p>BiasLens is built on services provided by other companies:</p>
         <ul>
           <li><strong>Supabase</strong> — accounts, sign-in and data storage</li>
-          <li><strong>Vercel</strong> — hosting</li>
+          <li><strong>Vercel</strong> — hosting and AI Gateway</li>
+          <li><strong>Google Gemini</strong> — AI responses and audio transcription used by the public BiasLens Guide</li>
           <li><strong>Resend</strong> — email delivery</li>
+          <li><strong>Your browser and operating system</strong> — speech synthesis voices used for optional read-aloud</li>
         </ul>
         <p>
           We have configured these services and we are responsible for how we use
           them. We cannot change how they are built internally. We have not
-          assessed their own conformance and have not yet requested their
+          assessed their own conformance and have not yet requested all relevant
           conformance reports. We will do so.
         </p>
         <p>
@@ -237,12 +345,15 @@ export default function AccessibilityStatementPage() {
         </h2>
         <p>
           This statement was prepared on <strong>31 July 2026</strong> and last
-          reviewed on <strong>1 August 2026</strong>.
+          reviewed on <strong>19 August 2026</strong>.
         </p>
         <p>
           It is based on an accessibility audit carried out between 29 and 31 July
           2026, covering the sign-in and authentication paths and a code-level
-          review of the assessment tools.
+          review of the assessment tools, together with iterative real-use testing
+          of BiasLens Guide on 18 and 19 August 2026. That Guide testing covered
+          typed and spoken questions, visible feedback, read-aloud, scrolling,
+          control placement, error recovery and pointer effort in Firefox.
         </p>
         <p>
           <strong>Method: self-assessment by BeAccessible.</strong> No independent
