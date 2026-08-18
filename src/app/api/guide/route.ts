@@ -15,6 +15,7 @@ type GuideRequest = {
 
 const MAX_MESSAGES = 12;
 const MAX_MESSAGE_LENGTH = 4000;
+const DEFAULT_GUIDE_MODEL = "inclusionai/ling-3.0-flash-free";
 
 function validMessages(value: unknown): value is GuideMessage[] {
   if (!Array.isArray(value) || value.length === 0 || value.length > MAX_MESSAGES) return false;
@@ -50,7 +51,7 @@ export async function POST(request: Request) {
 
   try {
     const { text } = await generateText({
-      model: process.env.BIASLENS_GUIDE_MODEL || "openai/gpt-5.6-luna",
+      model: process.env.BIASLENS_GUIDE_MODEL || DEFAULT_GUIDE_MODEL,
       system: buildGuideInstructions(language),
       messages: body.messages.map((message) => ({
         role: message.role,
