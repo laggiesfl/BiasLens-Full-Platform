@@ -26,6 +26,14 @@ function preferredAudioType() {
   return candidates.find((type) => MediaRecorder.isTypeSupported(type)) || "";
 }
 
+function speechText(content: string) {
+  return content
+    .replace(/\*\*/g, "")
+    .replace(/^\s*\*\s+/gm, "")
+    .replace(/^\s*-\s+/gm, "")
+    .trim();
+}
+
 export function BiasLensGuide() {
   const [language, setLanguage] = useState<GuideLanguage>("en");
   const languageConfig = useMemo(() => getGuideLanguage(language), [language]);
@@ -100,7 +108,7 @@ export function BiasLensGuide() {
           language,
         },
       ]);
-      setStatus("Answer ready.");
+      setStatus("Answer ready. Listen controls are directly below the answer.");
     } catch (cause) {
       const message = cause instanceof Error ? cause.message : "BiasLens Guide could not answer just now.";
       setError(message);
@@ -225,7 +233,7 @@ export function BiasLensGuide() {
 
     setError("");
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(message.content);
+    const utterance = new SpeechSynthesisUtterance(speechText(message.content));
     const config = getGuideLanguage(message.language);
     utterance.lang = config.locale;
     const prefix = config.locale.split("-")[0].toLowerCase();
@@ -277,6 +285,7 @@ export function BiasLensGuide() {
             lang={getGuideLanguage(message.language).locale}
           >
             <strong>{message.role === "user" ? "You" : "BiasLens Guide"}</strong>
+            <div>{message.content}</div>
             {message.role === "assistant" && message.id !== "welcome" && (
               <div className={styles.answerControls}>
                 <button
@@ -297,7 +306,6 @@ export function BiasLensGuide() {
                 </button>
               </div>
             )}
-            <div>{message.content}</div>
           </article>
         ))}
         {busy && <p className={styles.thinking}>BiasLens Guide is typing…</p>}
