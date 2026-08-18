@@ -1,12 +1,7 @@
 "use client";
 
 import { FormEvent, useMemo, useRef, useState } from "react";
-import {
-  GUIDE_LANGUAGES,
-  STARTER_QUESTIONS,
-  getGuideLanguage,
-  type GuideLanguage,
-} from "@/lib/guide/languages";
+import { GUIDE_LANGUAGES, getGuideLanguage, type GuideLanguage } from "@/lib/guide/languages";
 import styles from "./BiasLensGuide.module.css";
 
 type ChatMessage = {
@@ -47,7 +42,7 @@ export function BiasLensGuide() {
     {
       id: "welcome",
       role: "assistant",
-      content: getGuideLanguage("en").welcome,
+      content: "Hello. Ask me anything about BiasLens, algorithmic bias, accessibility, evidence, or assessing an AI system.",
       language: "en",
     },
   ]);
@@ -56,17 +51,13 @@ export function BiasLensGuide() {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [isRecording, setIsRecording] = useState(false);
-  const [transcriptPending, setTranscriptPending] = useState(false);
-  const [speechRate, setSpeechRate] = useState("1");
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+
+  const latestAssistantMessage = [...messages].reverse().find((message) => message.role === "assistant");
 
   function changeLanguage(nextLanguage: GuideLanguage) {
     setLanguage(nextLanguage);
-    const next = getGuideLanguage(nextLanguage);
-    if (messages.length === 1 && messages[0].id === "welcome") {
-      setMessages([{ id: "welcome", role: "assistant", content: next.welcome, language: nextLanguage }]);
-    }
-    setStatus(`Language: ${next.label}`);
+    setStatus(`Language changed to ${getGuideLanguage(nextLanguage).label}.`);
     setError("");
   }
 
@@ -84,10 +75,9 @@ export function BiasLensGuide() {
 
     setMessages(nextMessages);
     setDraft("");
-    setTranscriptPending(false);
     setBusy(true);
     setError("");
-    setStatus("BiasLens Guide is preparing an answer.");
+    setStatus("BiasLens Guide is answering.");
 
     try {
       const response = await fetch("/api/guide", {
@@ -133,7 +123,6 @@ export function BiasLensGuide() {
 
   function startRecognition() {
     setError("");
-    setTranscriptPending(false);
 
     if (typeof window === "undefined") return;
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -151,19 +140,16 @@ export function BiasLensGuide() {
         const transcript = event.results[0]?.[0]?.transcript?.trim() || "";
         if (transcript) {
           setDraft(transcript);
-          setTranscriptPending(true);
-          setStatus("Voice transcription is ready. Please review it before sending.");
+          setStatus("Voice input added to the question box. Review it, then press Send.");
         }
       };
       recognition.onerror = () => {
-        setError("I could not confidently understand that. You can try speaking again or type your question instead.");
+        setError("I could not understand that clearly. Try speaking again or type your question.");
       };
-      recognition.onend = () => {
-        setIsRecording(false);
-      };
+      recognition.onend = () => setIsRecording(false);
       recognitionRef.current = recognition;
       setIsRecording(true);
-      setStatus("Listening. Speak your question, then review the transcript before sending.");
+      setStatus("Listening…");
       recognition.start();
     } catch {
       setIsRecording(false);
@@ -177,92 +163,47 @@ export function BiasLensGuide() {
     setStatus("Voice input stopped.");
   }
 
-  function speak(text: string, messageLanguage: GuideLanguage) {
+  function listenToLatestAnswer() {
+    if (!latestAssistantMessage) return;
     if (typeof window === "undefined" || !("speechSynthesis" in window)) {
-      setError("Read-aloud is not available in this browser. The full answer remains available as text.");
+      setError("Read-aloud is not available in this browser. The answer remains available as text.");
       return;
     }
 
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    const config = getGuideLanguage(messageLanguage);
+    const utterance = new SpeechSynthesisUtterance(latestAssistantMessage.content);
+    const config = getGuideLanguage(latestAssistantMessage.language);
     utterance.lang = config.locale;
-    utterance.rate = Number(speechRate);
     const prefix = config.locale.split("-")[0].toLowerCase();
     const voice = window.speechSynthesis
       .getVoices()
       .find((candidate) => candidate.lang.toLowerCase().startsWith(prefix));
     if (voice) utterance.voice = voice;
-    utterance.onstart = () => setStatus("Reading answer aloud.");
+    utterance.onstart = () => setStatus("Reading the latest answer aloud.");
     utterance.onend = () => setStatus("Read-aloud finished.");
     window.speechSynthesis.speak(utterance);
-  }
-
-  function pauseOrResume() {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    if (window.speechSynthesis.paused) {
-      window.speechSynthesis.resume();
-      setStatus("Read-aloud resumed.");
-    } else if (window.speechSynthesis.speaking) {
-      window.speechSynthesis.pause();
-      setStatus("Read-aloud paused.");
-    }
-  }
-
-  function stopSpeaking() {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    setStatus("Read-aloud stopped.");
   }
 
   return (
     <section className={styles.guide} aria-labelledby="biaslens-guide-title">
       <div className={styles.header}>
-        <h1 id="biaslens-guide-title">BiasLens Guide</h1>
-        <p>{languageConfig.welcome}</p>
-        <p className={styles.privacy}>{languageConfig.privacyNote}</p>
-        <div className={styles.languageRow}>
-          <div>
-            <label htmlFor="guide-language">Language</label>
-            <select
-              id="guide-language"
-              value={language}
-              onChange={(event) => changeLanguage(event.target.value as GuideLanguage)}
-            >
-              {GUIDE_LANGUAGES.map((item) => (
-                <option value={item.code} key={item.code} lang={item.locale}>
-                  {item.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className={styles.rateControl}>
-            <label htmlFor="speech-rate">Read-aloud speed</label>
-            <select id="speech-rate" value={speechRate} onChange={(event) => setSpeechRate(event.target.value)}>
-              <option value="0.75">0.75×</option>
-              <option value="1">1×</option>
-              <option value="1.25">1.25×</option>
-              <option value="1.5">1.5×</option>
-            </select>
-          </div>
+        <div>
+          <h1 id="biaslens-guide-title">BiasLens Guide</h1>
+          <p className={styles.privacy}>Please do not share sensitive person-level information.</p>
         </div>
-      </div>
-
-      <div className={styles.starters}>
-        <h2>Start with a question</h2>
-        <div className={styles.starterGrid}>
-          {STARTER_QUESTIONS[language].map((question) => (
-            <button
-              key={question}
-              type="button"
-              className={styles.starterButton}
-              disabled={busy}
-              lang={languageConfig.locale}
-              onClick={() => void sendMessage(question)}
-            >
-              {question}
-            </button>
-          ))}
+        <div className={styles.languageControl}>
+          <label htmlFor="guide-language">Language</label>
+          <select
+            id="guide-language"
+            value={language}
+            onChange={(event) => changeLanguage(event.target.value as GuideLanguage)}
+          >
+            {GUIDE_LANGUAGES.map((item) => (
+              <option value={item.code} key={item.code} lang={item.locale}>
+                {item.label}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -275,21 +216,9 @@ export function BiasLensGuide() {
           >
             <strong>{message.role === "user" ? "You" : "BiasLens Guide"}</strong>
             <div>{message.content}</div>
-            {message.role === "assistant" && (
-              <div className={styles.messageActions}>
-                <button type="button" className={styles.smallButton} onClick={() => speak(message.content, message.language)}>
-                  {languageConfig.listen}
-                </button>
-                <button type="button" className={styles.smallButton} onClick={pauseOrResume}>
-                  Pause / Resume
-                </button>
-                <button type="button" className={styles.smallButton} onClick={stopSpeaking}>
-                  {languageConfig.stop}
-                </button>
-              </div>
-            )}
           </article>
         ))}
+        {busy && <p className={styles.thinking}>BiasLens Guide is typing…</p>}
       </div>
 
       <form className={styles.composer} onSubmit={submit}>
@@ -300,51 +229,25 @@ export function BiasLensGuide() {
           maxLength={4000}
           lang={languageConfig.locale}
           placeholder={languageConfig.placeholder}
-          onChange={(event) => {
-            setDraft(event.target.value);
-            if (transcriptPending) setTranscriptPending(false);
-          }}
+          onChange={(event) => setDraft(event.target.value)}
         />
 
-        {transcriptPending && (
-          <div className={styles.transcriptBox}>
-            <strong>I heard:</strong>
-            <p lang={languageConfig.locale}>{draft}</p>
-            <div className={styles.controls}>
-              <button type="button" className={styles.button} disabled={!draft.trim() || busy} onClick={() => void sendMessage(draft)}>
-                {languageConfig.send}
-              </button>
-              <button type="button" className={styles.secondaryButton} onClick={startRecognition}>
-                Try again
-              </button>
-              <button
-                type="button"
-                className={styles.secondaryButton}
-                onClick={() => {
-                  setTranscriptPending(false);
-                  setDraft("");
-                  setStatus("Voice transcription cancelled.");
-                }}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
-
         <div className={styles.controls}>
-          <button type="submit" className={styles.button} disabled={!draft.trim() || busy || transcriptPending}>
+          <button type="submit" className={styles.button} disabled={!draft.trim() || busy}>
             {busy ? "Sending…" : languageConfig.send}
           </button>
           {!isRecording ? (
             <button type="button" className={styles.secondaryButton} onClick={startRecognition}>
-              {languageConfig.speak}
+              {languageConfig.speak || "Speak"}
             </button>
           ) : (
             <button type="button" className={styles.secondaryButton} onClick={stopRecognition}>
               Stop recording
             </button>
           )}
+          <button type="button" className={styles.secondaryButton} onClick={listenToLatestAnswer}>
+            Listen to latest answer
+          </button>
         </div>
 
         <p className={styles.status} role="status" aria-live="polite" aria-atomic="true">
