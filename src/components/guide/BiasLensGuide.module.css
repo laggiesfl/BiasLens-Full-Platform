@@ -64,7 +64,7 @@
 }
 
 .embedded .messages {
-  min-height: 180px;
+  min-height: 0;
   padding: 1rem;
 }
 
