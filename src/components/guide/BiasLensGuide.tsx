@@ -11,28 +11,19 @@ type ChatMessage = {
   language: GuideLanguage;
 };
 
-type SpeechRecognitionLike = {
-  lang: string;
-  interimResults: boolean;
-  continuous: boolean;
-  onresult: ((event: { results: ArrayLike<{ 0: { transcript: string } }> }) => void) | null;
-  onerror: ((event: { error: string }) => void) | null;
-  onend: (() => void) | null;
-  start: () => void;
-  stop: () => void;
-};
-
-type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
-
-declare global {
-  interface Window {
-    SpeechRecognition?: SpeechRecognitionConstructor;
-    webkitSpeechRecognition?: SpeechRecognitionConstructor;
-  }
-}
-
 function makeId(prefix: string) {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function preferredAudioType() {
+  if (typeof MediaRecorder === "undefined") return "";
+  const candidates = [
+    "audio/webm;codecs=opus",
+    "audio/webm",
+    "audio/ogg;codecs=opus",
+    "audio/ogg",
+  ];
+  return candidates.find((type) => MediaRecorder.isTypeSupported(type)) || "";
 }
 
 export function BiasLensGuide() {
@@ -51,7 +42,12 @@ export function BiasLensGuide() {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [isRecording, setIsRecording] = useState(false);
-  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const [isTranscribing, setIsTranscribing] = useState(false);
+
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const recordingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const latestAssistantMessage = [...messages].reverse().find((message) => message.role === "assistant");
 
@@ -121,46 +117,105 @@ export function BiasLensGuide() {
     void sendMessage(draft);
   }
 
-  function startRecognition() {
+  function stopMediaStream() {
+    mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
+    mediaStreamRef.current = null;
+    if (recordingTimeoutRef.current) {
+      clearTimeout(recordingTimeoutRef.current);
+      recordingTimeoutRef.current = null;
+    }
+  }
+
+  async function transcribeRecording(blob: Blob) {
+    setIsTranscribing(true);
+    setStatus("Turning your voice into text…");
     setError("");
 
-    if (typeof window === "undefined") return;
-    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!Recognition) {
-      setError("Voice input is not available in this browser. You can type your question instead.");
+    try {
+      const formData = new FormData();
+      const extension = blob.type.includes("ogg") ? "ogg" : "webm";
+      formData.append("audio", new File([blob], `biaslens-question.${extension}`, { type: blob.type || "audio/webm" }));
+
+      const response = await fetch("/api/guide/transcribe", {
+        method: "POST",
+        body: formData,
+      });
+      const payload = (await response.json()) as { text?: string; error?: string };
+
+      if (!response.ok || !payload.text) {
+        throw new Error(payload.error || "Voice input could not be transcribed.");
+      }
+
+      setDraft(payload.text);
+      setStatus("Voice question added to the question box. Review it, then press Send.");
+    } catch (cause) {
+      const message = cause instanceof Error ? cause.message : "Voice input could not be transcribed.";
+      setError(message);
+      setStatus("");
+    } finally {
+      setIsTranscribing(false);
+    }
+  }
+
+  async function startRecording() {
+    setError("");
+
+    if (
+      typeof window === "undefined" ||
+      typeof MediaRecorder === "undefined" ||
+      !navigator.mediaDevices?.getUserMedia
+    ) {
+      setError("Voice input is not supported by this browser. You can still type your question.");
       return;
     }
 
     try {
-      const recognition = new Recognition();
-      recognition.lang = languageConfig.locale;
-      recognition.interimResults = false;
-      recognition.continuous = false;
-      recognition.onresult = (event) => {
-        const transcript = event.results[0]?.[0]?.transcript?.trim() || "";
-        if (transcript) {
-          setDraft(transcript);
-          setStatus("Voice input added to the question box. Review it, then press Send.");
-        }
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaStreamRef.current = stream;
+      audioChunksRef.current = [];
+
+      const mimeType = preferredAudioType();
+      const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
+      mediaRecorderRef.current = recorder;
+
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) audioChunksRef.current.push(event.data);
       };
-      recognition.onerror = () => {
-        setError("I could not understand that clearly. Try speaking again or type your question.");
+
+      recorder.onerror = () => {
+        setError("The microphone recording failed. Please try again or type your question.");
+        setIsRecording(false);
+        stopMediaStream();
       };
-      recognition.onend = () => setIsRecording(false);
-      recognitionRef.current = recognition;
+
+      recorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: recorder.mimeType || mimeType || "audio/webm",
+        });
+        setIsRecording(false);
+        stopMediaStream();
+        if (audioBlob.size > 0) void transcribeRecording(audioBlob);
+      };
+
+      recorder.start();
       setIsRecording(true);
-      setStatus("Listening…");
-      recognition.start();
+      setStatus("Listening… Speak your question, then press Stop recording.");
+      recordingTimeoutRef.current = setTimeout(() => {
+        if (recorder.state === "recording") recorder.stop();
+      }, 45_000);
     } catch {
       setIsRecording(false);
-      setError("Voice input could not start. You can type your question instead.");
+      stopMediaStream();
+      setError("Microphone access was not available. You can type your question instead.");
     }
   }
 
-  function stopRecognition() {
-    recognitionRef.current?.stop();
-    setIsRecording(false);
-    setStatus("Voice input stopped.");
+  function stopRecording() {
+    const recorder = mediaRecorderRef.current;
+    if (recorder?.state === "recording") {
+      recorder.stop();
+      setStatus("Recording stopped. Turning your voice into text…");
+    }
   }
 
   function listenToLatestAnswer() {
@@ -170,6 +225,7 @@ export function BiasLensGuide() {
       return;
     }
 
+    setError("");
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(latestAssistantMessage.content);
     const config = getGuideLanguage(latestAssistantMessage.language);
@@ -181,6 +237,7 @@ export function BiasLensGuide() {
     if (voice) utterance.voice = voice;
     utterance.onstart = () => setStatus("Reading the latest answer aloud.");
     utterance.onend = () => setStatus("Read-aloud finished.");
+    utterance.onerror = () => setError("Read-aloud could not start. The answer remains available as text.");
     window.speechSynthesis.speak(utterance);
   }
 
@@ -233,15 +290,20 @@ export function BiasLensGuide() {
         />
 
         <div className={styles.controls}>
-          <button type="submit" className={styles.button} disabled={!draft.trim() || busy}>
+          <button type="submit" className={styles.button} disabled={!draft.trim() || busy || isTranscribing}>
             {busy ? "Sending…" : languageConfig.send}
           </button>
           {!isRecording ? (
-            <button type="button" className={styles.secondaryButton} onClick={startRecognition}>
-              {languageConfig.speak || "Speak"}
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => void startRecording()}
+              disabled={busy || isTranscribing}
+            >
+              {isTranscribing ? "Transcribing…" : languageConfig.speak || "Speak"}
             </button>
           ) : (
-            <button type="button" className={styles.secondaryButton} onClick={stopRecognition}>
+            <button type="button" className={styles.secondaryButton} onClick={stopRecording}>
               Stop recording
             </button>
           )}
@@ -250,9 +312,11 @@ export function BiasLensGuide() {
           </button>
         </div>
 
-        <p className={styles.status} role="status" aria-live="polite" aria-atomic="true">
-          {status}
-        </p>
+        {status && (
+          <p className={styles.status} role="status" aria-live="polite" aria-atomic="true">
+            {status}
+          </p>
+        )}
         {error && (
           <p className={styles.error} role="alert">
             {error}
