@@ -22,9 +22,11 @@ describe("BiasLens Guide normal chatbot experience", () => {
     expect(guide).toContain("Speak");
   });
 
-  it("offers one listen control for the latest answer instead of controls on every message", () => {
+  it("keeps read-aloud controls directly on each real assistant answer", () => {
     const guide = read("src/components/guide/BiasLensGuide.tsx");
-    expect(guide).toContain("Listen to latest answer");
-    expect(guide).not.toContain("messageActions");
+    expect(guide).toContain("Listen to this answer");
+    expect(guide).toContain("Stop listening");
+    expect(guide).toContain('message.role === "assistant" && message.id !== "welcome"');
+    expect(guide).not.toContain("Listen to latest answer");
   });
 });

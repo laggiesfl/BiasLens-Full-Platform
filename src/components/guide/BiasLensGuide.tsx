@@ -49,8 +49,6 @@ export function BiasLensGuide() {
   const audioChunksRef = useRef<Blob[]>([]);
   const recordingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const latestAssistantMessage = [...messages].reverse().find((message) => message.role === "assistant");
-
   function changeLanguage(nextLanguage: GuideLanguage) {
     setLanguage(nextLanguage);
     setStatus(`Language changed to ${getGuideLanguage(nextLanguage).label}.`);
@@ -219,8 +217,7 @@ export function BiasLensGuide() {
     }
   }
 
-  function listenToLatestAnswer() {
-    if (!latestAssistantMessage) return;
+  function listenToAnswer(message: ChatMessage) {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) {
       setError("Read-aloud is not available in this browser. The answer remains available as text.");
       return;
@@ -228,18 +225,25 @@ export function BiasLensGuide() {
 
     setError("");
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(latestAssistantMessage.content);
-    const config = getGuideLanguage(latestAssistantMessage.language);
+    const utterance = new SpeechSynthesisUtterance(message.content);
+    const config = getGuideLanguage(message.language);
     utterance.lang = config.locale;
     const prefix = config.locale.split("-")[0].toLowerCase();
     const voice = window.speechSynthesis
       .getVoices()
       .find((candidate) => candidate.lang.toLowerCase().startsWith(prefix));
     if (voice) utterance.voice = voice;
-    utterance.onstart = () => setStatus("Reading the latest answer aloud.");
+    utterance.onstart = () => setStatus("Reading this answer aloud.");
     utterance.onend = () => setStatus("Read-aloud finished.");
     utterance.onerror = () => setError("Read-aloud could not start. The answer remains available as text.");
     window.speechSynthesis.speak(utterance);
+  }
+
+  function stopListening() {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+      setStatus("Read-aloud stopped.");
+    }
   }
 
   return (
@@ -273,6 +277,26 @@ export function BiasLensGuide() {
             lang={getGuideLanguage(message.language).locale}
           >
             <strong>{message.role === "user" ? "You" : "BiasLens Guide"}</strong>
+            {message.role === "assistant" && message.id !== "welcome" && (
+              <div className={styles.answerControls}>
+                <button
+                  type="button"
+                  className={styles.secondaryButton}
+                  onClick={() => listenToAnswer(message)}
+                  aria-label="Listen to this BiasLens Guide answer"
+                >
+                  Listen to this answer
+                </button>
+                <button
+                  type="button"
+                  className={styles.secondaryButton}
+                  onClick={stopListening}
+                  aria-label="Stop listening to the BiasLens Guide answer"
+                >
+                  Stop listening
+                </button>
+              </div>
+            )}
             <div>{message.content}</div>
           </article>
         ))}
@@ -308,9 +332,6 @@ export function BiasLensGuide() {
               Stop recording
             </button>
           )}
-          <button type="button" className={styles.secondaryButton} onClick={listenToLatestAnswer}>
-            Listen to latest answer
-          </button>
         </div>
 
         {status && (

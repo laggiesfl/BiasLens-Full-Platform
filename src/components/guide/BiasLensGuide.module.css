@@ -84,6 +84,17 @@
   border: 1px solid #c5d4e6;
 }
 
+.answerControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.4rem 0 0.7rem;
+}
+
+.answerControls .secondaryButton {
+  min-height: 40px;
+}
+
 .thinking {
   align-self: flex-start;
   margin: 0;
@@ -203,5 +214,9 @@
   .button,
   .secondaryButton {
     flex: 1 1 auto;
+  }
+
+  .answerControls .secondaryButton {
+    flex: 1 1 100%;
   }
 }
