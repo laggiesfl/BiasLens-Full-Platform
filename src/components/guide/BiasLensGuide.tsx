@@ -26,11 +26,17 @@ function preferredAudioType() {
   return candidates.find((type) => MediaRecorder.isTypeSupported(type)) || "";
 }
 
-function speechText(content: string) {
+function displayText(content: string) {
   return content
     .replace(/\*\*/g, "")
-    .replace(/^\s*\*\s+/gm, "")
-    .replace(/^\s*-\s+/gm, "")
+    .replace(/^\s*\*\s+/gm, "• ")
+    .replace(/^\s*-\s+/gm, "• ")
+    .trim();
+}
+
+function speechText(content: string) {
+  return displayText(content)
+    .replace(/^\s*•\s+/gm, "")
     .trim();
 }
 
@@ -285,7 +291,7 @@ export function BiasLensGuide() {
             lang={getGuideLanguage(message.language).locale}
           >
             <strong>{message.role === "user" ? "You" : "BiasLens Guide"}</strong>
-            <div>{message.content}</div>
+            <div>{message.role === "assistant" ? displayText(message.content) : message.content}</div>
             {message.role === "assistant" && message.id !== "welcome" && (
               <div className={styles.answerControls}>
                 <button
