@@ -64,7 +64,7 @@ export function GuideLauncher() {
             </button>
           </div>
           <div className={styles.panelBody}>
-            <BiasLensGuide />
+            <BiasLensGuide embedded />
           </div>
         </aside>
       )}
