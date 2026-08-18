@@ -31,6 +31,12 @@
   font-size: 0.9rem;
 }
 
+.embedded .header {
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0.7rem 1rem;
+}
+
 .languageControl label {
   display: block;
   color: #17324d;
@@ -50,15 +56,21 @@
 
 .messages {
   min-height: 280px;
-  padding: 1rem;
+  padding: 1.1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 1rem;
+  background: #ffffff;
+}
+
+.embedded .messages {
+  min-height: 180px;
+  padding: 1rem;
 }
 
 .message {
   max-width: 82%;
-  padding: 0.75rem 0.9rem;
+  padding: 0.8rem 0.95rem;
   border-radius: 12px;
   line-height: 1.5;
   white-space: pre-wrap;
@@ -66,7 +78,7 @@
 
 .message strong {
   display: block;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.3rem;
 }
 
 .userMessage {
@@ -85,9 +97,9 @@
 .answerControls {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0.8rem 0 0;
-  padding-top: 0.7rem;
+  gap: 0.55rem;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
   border-top: 1px solid #c5d4e6;
 }
 
@@ -103,21 +115,21 @@
 }
 
 .composer {
-  padding: 1rem;
-  border-top: 1px solid #c5d4e6;
-  background: #fff;
+  padding: 1.1rem;
+  border-top: 2px solid #d7e1ee;
+  background: #f8fafc;
 }
 
 .composer label {
   display: block;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
   color: #17324d;
   font-weight: 700;
 }
 
 .composer textarea {
   width: 100%;
-  min-height: 88px;
+  min-height: 92px;
   resize: vertical;
   border: 2px solid #1f3f6b;
   border-radius: 10px;
@@ -128,10 +140,10 @@
 }
 
 .controls {
-  margin-top: 0.7rem;
+  margin-top: 0.75rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.55rem;
+  gap: 0.6rem;
   align-items: center;
 }
 
@@ -172,7 +184,7 @@
 }
 
 .status {
-  margin: 0.75rem 0 0;
+  margin: 0.85rem 0 0;
   padding: 0.7rem 0.8rem;
   border-left: 5px solid #1f3f6b;
   background: #e8eef3;
@@ -182,7 +194,7 @@
 }
 
 .error {
-  margin: 0.75rem 0 0;
+  margin: 0.85rem 0 0;
   padding: 0.75rem 0.85rem;
   border: 2px solid #7a1f5c;
   border-left-width: 6px;
@@ -200,6 +212,10 @@
 
   .header {
     align-items: stretch;
+  }
+
+  .embedded .header {
+    padding: 0.65rem 0.8rem;
   }
 
   .languageControl,
