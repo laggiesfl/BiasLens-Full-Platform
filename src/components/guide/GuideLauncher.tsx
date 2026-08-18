@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { BiasLensGuide } from "./BiasLensGuide";
@@ -52,22 +51,17 @@ export function GuideLauncher() {
         >
           <div className={styles.panelHeader}>
             <strong id="guide-launcher-title">BiasLens Guide</strong>
-            <div className={styles.panelActions}>
-              <Link className={styles.fullPage} href="/guide">
-                Open full page
-              </Link>
-              <button
-                ref={closeRef}
-                type="button"
-                className={styles.close}
-                onClick={() => {
-                  setOpen(false);
-                  requestAnimationFrame(() => launcherRef.current?.focus());
-                }}
-              >
-                Close
-              </button>
-            </div>
+            <button
+              ref={closeRef}
+              type="button"
+              className={styles.close}
+              onClick={() => {
+                setOpen(false);
+                requestAnimationFrame(() => launcherRef.current?.focus());
+              }}
+            >
+              Close
+            </button>
           </div>
           <div className={styles.panelBody}>
             <BiasLensGuide />
