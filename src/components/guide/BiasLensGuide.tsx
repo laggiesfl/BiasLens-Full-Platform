@@ -18,10 +18,10 @@ function makeId(prefix: string) {
 function preferredAudioType() {
   if (typeof MediaRecorder === "undefined") return "";
   const candidates = [
-    "audio/webm;codecs=opus",
-    "audio/webm",
     "audio/ogg;codecs=opus",
     "audio/ogg",
+    "audio/webm;codecs=opus",
+    "audio/webm",
   ];
   return candidates.find((type) => MediaRecorder.isTypeSupported(type)) || "";
 }
@@ -134,7 +134,8 @@ export function BiasLensGuide() {
     try {
       const formData = new FormData();
       const extension = blob.type.includes("ogg") ? "ogg" : "webm";
-      formData.append("audio", new File([blob], `biaslens-question.${extension}`, { type: blob.type || "audio/webm" }));
+      formData.append("audio", new File([blob], `biaslens-question.${extension}`, { type: blob.type || "audio/ogg" }));
+      formData.append("language", languageConfig.locale);
 
       const response = await fetch("/api/guide/transcribe", {
         method: "POST",
@@ -190,7 +191,7 @@ export function BiasLensGuide() {
 
       recorder.onstop = () => {
         const audioBlob = new Blob(audioChunksRef.current, {
-          type: recorder.mimeType || mimeType || "audio/webm",
+          type: recorder.mimeType || mimeType || "audio/ogg",
         });
         setIsRecording(false);
         stopMediaStream();
