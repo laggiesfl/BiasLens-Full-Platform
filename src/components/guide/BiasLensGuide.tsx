@@ -11,6 +11,10 @@ type ChatMessage = {
   language: GuideLanguage;
 };
 
+type BiasLensGuideProps = {
+  embedded?: boolean;
+};
+
 function makeId(prefix: string) {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
@@ -40,7 +44,7 @@ function speechText(content: string) {
     .trim();
 }
 
-export function BiasLensGuide() {
+export function BiasLensGuide({ embedded = false }: BiasLensGuideProps) {
   const [language, setLanguage] = useState<GuideLanguage>("en");
   const languageConfig = useMemo(() => getGuideLanguage(language), [language]);
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -261,12 +265,18 @@ export function BiasLensGuide() {
   }
 
   return (
-    <section className={styles.guide} aria-labelledby="biaslens-guide-title">
+    <section
+      className={`${styles.guide} ${embedded ? styles.embedded : ""}`}
+      aria-labelledby={embedded ? undefined : "biaslens-guide-title"}
+      aria-label={embedded ? "BiasLens Guide" : undefined}
+    >
       <div className={styles.header}>
-        <div>
-          <h1 id="biaslens-guide-title">BiasLens Guide</h1>
-          <p className={styles.privacy}>Please do not share sensitive person-level information.</p>
-        </div>
+        {!embedded && (
+          <div>
+            <h1 id="biaslens-guide-title">BiasLens Guide</h1>
+            <p className={styles.privacy}>Please do not share sensitive person-level information.</p>
+          </div>
+        )}
         <div className={styles.languageControl}>
           <label htmlFor="guide-language">Language</label>
           <select
