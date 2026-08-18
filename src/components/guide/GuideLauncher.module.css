@@ -21,8 +21,7 @@
 }
 
 .launcher:focus-visible,
-.close:focus-visible,
-.fullPage:focus-visible {
+.close:focus-visible {
   outline: 4px solid #d9a441;
   outline-offset: 3px;
 }
@@ -30,10 +29,10 @@
 .panel {
   position: fixed;
   right: 1rem;
-  bottom: 5.5rem;
+  bottom: 1rem;
   z-index: 59;
   width: min(680px, calc(100vw - 2rem));
-  max-height: calc(100vh - 7rem);
+  max-height: calc(100vh - 2rem);
   overflow: auto;
   background: #ffffff;
   border: 2px solid #1f3f6b;
@@ -49,7 +48,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.7rem 0.9rem;
+  padding: 0.8rem 1rem;
   background: #e6eef8;
   border-bottom: 1px solid #b8c9df;
 }
@@ -58,31 +57,24 @@
   color: #17324d;
 }
 
-.panelActions {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.close,
-.fullPage {
-  min-height: 40px;
-  padding: 0.45rem 0.65rem;
-  border: 1px solid #1f3f6b;
+.close {
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #1f3f6b;
   border-radius: 8px;
   background: #ffffff;
   color: #17324d;
   font: inherit;
   font-weight: 700;
-  text-decoration: none;
 }
 
 .panelBody {
-  padding: 0.75rem;
+  padding: 0;
 }
 
 .panelBody > section {
   border: 0;
+  border-radius: 0;
   box-shadow: none;
 }
 
@@ -96,7 +88,6 @@
     inset: 0.5rem;
     width: auto;
     max-height: none;
-    bottom: 4.75rem;
   }
 }
 
