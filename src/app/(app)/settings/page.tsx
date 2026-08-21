@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import { ROLE_OPTIONS, type Role } from "@/lib/roles";
-import { updateRole, updateAccountDetails } from "@/lib/actions/profile";
+import { roleLabel, type Role } from "@/lib/roles";
+import { updateAccountDetails } from "@/lib/actions/profile";
 
 export default async function SettingsPage({
   searchParams,
@@ -109,43 +109,13 @@ export default async function SettingsPage({
           Your role
         </h2>
         <p className="muted">
-          Changing your role changes the guidance and suggested next steps you
-          see. It does not delete any of your assessments.
+          Your role is chosen during onboarding and is then fixed to protect account
+          permissions. Contact BeAccessible if it needs to be corrected.
         </p>
-        <form action={updateRole}>
-          <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
-            <legend className="sr-only">Choose your role</legend>
-            <div className="stack">
-              {ROLE_OPTIONS.map((r) => (
-                <label
-                  key={r.value}
-                  style={{
-                    display: "flex",
-                    gap: 12,
-                    alignItems: "flex-start",
-                    padding: "8px 0",
-                  }}
-                >
-                  <input
-                    type="radio"
-                    name="role"
-                    value={r.value}
-                    defaultChecked={currentRole === r.value}
-                    style={{ width: 22, height: 22, marginTop: 4, flexShrink: 0 }}
-                    required
-                  />
-                  <span>
-                    <strong style={{ display: "block" }}>{r.label}</strong>
-                    <span className="muted">{r.description}</span>
-                  </span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-          <button type="submit" className="btn btn-primary" style={{ marginTop: 16 }}>
-            Save role
-          </button>
-        </form>
+        <dl style={{ margin: 0 }}>
+          <dt className="sr-only">Current role</dt>
+          <dd style={{ margin: 0, fontWeight: 700 }}>{roleLabel(currentRole)}</dd>
+        </dl>
       </section>
     </div>
   );
