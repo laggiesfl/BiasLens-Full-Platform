@@ -120,14 +120,14 @@ BiasLens will remain the evidence, bias-intelligence, uncertainty, provenance, a
 
 **Implementation decision:**
 
-The following BiasLens enhancements are being developed after this review and must therefore remain explicitly dated as post-review work:
+The following BiasLens enhancements were developed after this review and are therefore explicitly dated as post-review work:
 
 1. formal Evidence State model;
 2. structured telemetry/evidence intake specification;
 3. BiasLens interoperability contract for machine-readable evidence/risk signals;
 4. a controlled runtime-governance integration demonstration.
 
-No source code from the external materials is being copied into BiasLens as part of this work.
+No source code from the external materials was copied into BiasLens as part of this work.
 
 ## 6. Change register
 
@@ -135,12 +135,26 @@ No source code from the external materials is being copied into BiasLens as part
 |---|---|---|---|---|
 | 18 Aug 2026 | Baseline repository state captured at commit `4b74124c...` | Pre-existing BiasLens | BiasLens | Evidence-led assessment, uncertainty, evidence log, affected groups, oversight, risk classification and Algorithm Defence File already present. |
 | 21 Aug 2026 | Provenance record established | BiasLens-original governance control | BiasLens + external chronology/provenance review | Creates a durable method for distinguishing pre-existing capabilities from later influences. |
-| 21 Aug 2026 | Evidence State enhancement initiated | Externally influenced, BiasLens-specific implementation | Samirac epistemic-state concepts; adapted to BiasLens evidence methodology | Kept distinct from evidence collection status. |
-| 21 Aug 2026 | Telemetry/evidence intake specification initiated | Interoperability enhancement | BiasLens pilot requirements + external telemetry architecture review | BiasLens consumes operational evidence; it does not become a telemetry platform. |
+| 21 Aug 2026 | Evidence State model implemented on feature branch | Externally influenced, BiasLens-specific implementation | Samirac epistemic-state concepts; adapted to BiasLens evidence methodology | Adds Established, Derived, Inferred, Unknown and Conflicted; kept distinct from collection status; includes rationale, source reference, validation and audit logging. |
+| 21 Aug 2026 | Telemetry/evidence intake specification completed | Interoperability enhancement | BiasLens pilot requirements + external telemetry architecture review | Defines structured operational evidence intake, provenance, privacy thresholds, validation, and a batch-first implementation path. BiasLens consumes operational evidence; it does not become a telemetry platform. |
+| 21 Aug 2026 | BiasLens interoperability contract completed | BiasLens-specific interoperability layer | BiasLens methodology + external architecture review | Defines machine-readable evidence/risk signals and advisory dispositions while expressly withholding runtime execution authority. |
+| 21 Aug 2026 | Machine-readable interoperability schema added | BiasLens-specific implementation | BiasLens interoperability contract | JSON Schema 2020-12 representation of the 0.1 contract. |
+| 21 Aug 2026 | Controlled runtime-governance demo added | BiasLens-specific demonstration | BiasLens interoperability design; conceptually adjacent to external execution-boundary demos | Fictional recruitment scenario demonstrates BiasLens evidence signals informing a separate governance layer without claiming an external architecture implementation. |
 
 ## 7. Accessibility and Universal Design provenance
 
 Accessibility and Universal Design are foundational BiasLens product requirements, not later optional enhancements. The repository baseline already documents semantic structure, visible keyboard focus, reflow, explicit form labels and errors, reduced-motion support, and a WCAG 2.2 AAA target where feasible.
+
+The 21 August 2026 Evidence State implementation preserves these requirements by:
+
+- using text labels and symbols rather than colour alone;
+- exposing plain-language definitions for each Evidence State;
+- keeping form controls explicitly labelled;
+- using 44px minimum action targets in the evidence-update area;
+- keeping keyboard-operable native controls;
+- providing visible rationale fields so uncertainty is perceptible rather than implicit;
+- retaining a logical table structure with captions and header cells;
+- providing clear correction paths rather than silent failure.
 
 Future provenance records must note whether a change affects:
 
@@ -154,6 +168,14 @@ Future provenance records must note whether a change affects:
 - error prevention and recovery;
 - one-handed and low-effort interaction.
 
-## 8. Maintenance rule
+## 8. Production boundary for this change set
+
+The repository branch `biaslens-provenance-evidence-foundation` contains the implementation work described above.
+
+The Evidence State UI and server actions depend on a BiasLens database upgrade. The Supabase project currently connected to ChatGPT does not match the BiasLens schema, so the database change has deliberately **not** been executed against that unrelated project.
+
+Production merge must occur only after the correct BiasLens Supabase project is positively identified, the evidence-state upgrade is applied there, and the preview assessment workflow is retested end to end.
+
+## 9. Maintenance rule
 
 This document should be updated in the same pull request as any material methodology or architecture change. The change register is append-only except for corrections that clearly record what was corrected and why.
