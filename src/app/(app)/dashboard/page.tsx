@@ -25,6 +25,7 @@ export default async function DashboardPage() {
     .limit(5);
 
   const greetingName = profile?.full_name?.split(" ")[0] || "there";
+  const mostRecentAssessment = assessments?.[0] ?? null;
 
   return (
     <div className="stack">
@@ -35,6 +36,36 @@ export default async function DashboardPage() {
           {config?.primaryNeed}
         </p>
       </div>
+
+      <section className="card" aria-labelledby="quick-access-h">
+        <h2 id="quick-access-h" style={{ fontSize: "1.2rem" }}>
+          Quick access
+        </h2>
+        <div className="cluster" style={{ gap: 12, flexWrap: "wrap" }}>
+          <Link href="/assessments" className="btn btn-primary">
+            My Assessments
+          </Link>
+          {mostRecentAssessment ? (
+            <Link
+              href={`/assessments/${mostRecentAssessment.id}/evidence`}
+              className="btn btn-secondary"
+            >
+              Evidence Log
+              <span className="sr-only"> for {mostRecentAssessment.title}</span>
+            </Link>
+          ) : (
+            <Link href="/assessments" className="btn btn-secondary">
+              Start an assessment to use Evidence Log
+            </Link>
+          )}
+        </div>
+        {!mostRecentAssessment ? (
+          <p className="muted" style={{ marginBottom: 0 }}>
+            Evidence Log belongs to an assessment, so create your first assessment
+            once and it will then be available directly from this Dashboard.
+          </p>
+        ) : null}
+      </section>
 
       <div className="grid grid-2">
         <section className="card" aria-labelledby="next-steps-h">
@@ -73,8 +104,16 @@ export default async function DashboardPage() {
                     borderBottom: "1px solid var(--ba-border)",
                   }}
                 >
-                  <div className="cluster between">
-                    <Link href={`/assessments/${a.id}`}>{a.title}</Link>
+                  <div className="cluster between" style={{ gap: 12 }}>
+                    <div>
+                      <Link href={`/assessments/${a.id}`}>{a.title}</Link>
+                      <div style={{ marginTop: 6 }}>
+                        <Link href={`/assessments/${a.id}/evidence`}>
+                          Open Evidence Log
+                          <span className="sr-only"> for {a.title}</span>
+                        </Link>
+                      </div>
+                    </div>
                     <StatusBadge status={a.status} />
                   </div>
                 </li>
@@ -98,10 +137,10 @@ export default async function DashboardPage() {
           <li>Guided Bias Risk Questionnaire (plain language, saves as you go)</li>
           <li>Risk classification and Bias Risk Report, with Word, PDF and CSV export</li>
           <li>Evidence Log with file attachments and follow-up dates</li>
-            <li>Fairness Metrics Calculator — disparate impact and 4/5 rule analysis</li>
-            <li>Compliance Mapper — EU AI Act, GDPR, POPIA, EEA, UNCRPD and UK AI framework</li>
-            <li>Access Request Generator — formal rights request letters</li>
-            <li>AIA / FRIA Builder — Article 27 Fundamental Rights Impact Assessment</li>
+          <li>Fairness Metrics Calculator — disparate impact and 4/5 rule analysis</li>
+          <li>Compliance Mapper — EU AI Act, GDPR, POPIA, EEA, UNCRPD and UK AI framework</li>
+          <li>Access Request Generator — formal rights request letters</li>
+          <li>AIA / FRIA Builder — Article 27 Fundamental Rights Impact Assessment</li>
         </ul>
       </section>
     </div>
