@@ -27,7 +27,14 @@ export function PasswordField({
   return (
     <div className="field">
       <label htmlFor={id}>{label}</label>
-      <div style={{ position: "relative" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1fr) auto",
+          alignItems: "stretch",
+          width: "100%",
+        }}
+      >
         <input
           id={id}
           name={name}
@@ -36,7 +43,13 @@ export function PasswordField({
           minLength={minLength}
           aria-describedby={describedBy}
           required
-          style={{ paddingRight: 96 }}
+          style={{
+            width: "100%",
+            minWidth: 0,
+            margin: 0,
+            borderTopRightRadius: 0,
+            borderBottomRightRadius: 0,
+          }}
         />
         <button
           type="button"
@@ -45,12 +58,15 @@ export function PasswordField({
           aria-controls={id}
           className="btn btn-secondary"
           style={{
-            position: "absolute",
-            right: 4,
-            top: 4,
-            minHeight: 40,
-            height: "calc(100% - 8px)",
-            padding: "0 12px",
+            minWidth: 88,
+            minHeight: 48,
+            height: "100%",
+            margin: 0,
+            padding: "0 18px",
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
+            borderLeftWidth: 0,
+            whiteSpace: "nowrap",
           }}
         >
           {show ? "Hide" : "Show"}
