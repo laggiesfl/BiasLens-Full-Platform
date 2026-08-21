@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biaslens.beaccessible.co.za/schemas/interoperability-signal-0.1.schema.json",
+  "title": "BiasLens Interoperability Signal 0.1",
+  "description": "Advisory evidence and bias-intelligence signal. This schema does not grant runtime execution authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "signal_id",
+    "generated_at",
+    "assessment_id",
+    "system_name",
+    "decision_context",
+    "evidence_summary",
+    "bias_risk_signals",
+    "unresolved_unknowns",
+    "material_conflicts",
+    "human_review",
+    "freshness",
+    "provenance_refs",
+    "limitations",
+    "advisory_disposition"
+  ],
+  "properties": {
+    "contract_version": {
+      "const": "0.1"
+    },
+    "signal_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "assessment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "system_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "system_version": {
+      "type": ["string", "null"]
+    },
+    "decision_context": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["established", "derived", "inferred", "unknown", "conflicted"],
+      "properties": {
+        "established": { "type": "integer", "minimum": 0 },
+        "derived": { "type": "integer", "minimum": 0 },
+        "inferred": { "type": "integer", "minimum": 0 },
+        "unknown": { "type": "integer", "minimum": 0 },
+        "conflicted": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "bias_risk_signals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "signal_code",
+          "title",
+          "description",
+          "affected_groups",
+          "evidence_state",
+          "materiality",
+          "provenance_refs",
+          "limitations",
+          "recommended_next_action"
+        ],
+        "properties": {
+          "signal_code": { "type": "string", "minLength": 1 },
+          "title": { "type": "string", "minLength": 1 },
+          "description": { "type": "string", "minLength": 1 },
+          "affected_groups": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "uniqueItems": true
+          },
+          "evidence_state": {
+            "enum": ["established", "derived", "inferred", "unknown", "conflicted"]
+          },
+          "materiality": {
+            "enum": ["low", "medium", "high", "critical"]
+          },
+          "provenance_refs": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "uniqueItems": true
+          },
+          "limitations": { "type": "string" },
+          "recommended_next_action": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "unresolved_unknowns": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "material_conflicts": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "human_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "reason"],
+      "properties": {
+        "required": { "type": "boolean" },
+        "reason": { "type": "string" }
+      }
+    },
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "checked_at"],
+      "properties": {
+        "status": { "enum": ["current", "stale", "mixed", "unknown"] },
+        "checked_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "provenance_refs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "advisory_disposition": {
+      "enum": [
+        "sufficient_for_current_purpose",
+        "conditions_required",
+        "human_review_required",
+        "insufficient_evidence",
+        "conflict_requires_resolution",
+        "escalation_recommended"
+      ]
+    }
+  }
+}
