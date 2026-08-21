@@ -9,6 +9,11 @@
 --
 -- This migration is intentionally narrow. It does not alter ADF or Voice of
 -- Disability objects in the shared Supabase project.
+--
+-- Preconditions:
+-- - public.is_biaslens_invited() exists in the BiasLens production schema.
+--   This is verified before applying the migration. PostgreSQL does not support
+--   ALTER FUNCTION IF EXISTS, so valid ALTER FUNCTION syntax is used below.
 
 begin;
 
@@ -20,7 +25,7 @@ drop view if exists public.account_overview;
 -- The invitation helper is used by BiasLens RLS policies and must remain
 -- available to authenticated users. Its referenced table is already schema
 -- qualified; an empty search_path prevents privileged name-resolution drift.
-alter function if exists public.is_biaslens_invited() set search_path = '';
+alter function public.is_biaslens_invited() set search_path = '';
 
 revoke execute on function public.is_biaslens_invited() from public;
 revoke execute on function public.is_biaslens_invited() from anon;
