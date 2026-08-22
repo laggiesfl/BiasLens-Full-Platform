@@ -9,7 +9,13 @@ import {
   type AssessmentAnswer,
   type EvidenceState,
 } from "@/lib/agent/core-service";
+import { getAssessmentQuestionState } from "@/lib/agent/methodology";
 import { runAssessmentTurn, type AgentTurnResult } from "@/lib/agent/orchestrator";
+import {
+  buildAssessmentAgentSummary,
+  type PersistedRiskSignal,
+  type SummaryEvidenceItem,
+} from "@/lib/agent/summary";
 
 type ParamsContext = { params: Promise<{ id: string }> };
 
@@ -21,6 +27,8 @@ type AccessibleAssessment = {
 type LoadedAgentContext = {
   answers: Answers;
   evidenceStates?: EvidenceState[];
+  evidenceItems?: SummaryEvidenceItem[];
+  riskSignals?: PersistedRiskSignal[];
 };
 
 type AgentPostDependencies = {
@@ -155,8 +163,9 @@ export function createAgentPostHandler(deps: AgentPostDependencies) {
       }
 
       const loaded = await deps.loadContext(assessmentId);
+      const role = assessment.role_context ?? "civil_society";
       const result = await deps.runTurn({
-        role: assessment.role_context ?? "civil_society",
+        role,
         answers: loaded.answers,
         evidenceStates: loaded.evidenceStates ?? [],
       });
@@ -167,7 +176,19 @@ export function createAgentPostHandler(deps: AgentPostDependencies) {
         questionId: result.type === "question" ? result.question.id : null,
       });
 
-      return Response.json(result, { status: 200 });
+      if (result.type === "question") {
+        return Response.json(result, { status: 200 });
+      }
+
+      const questionState = getAssessmentQuestionState(role, loaded.answers);
+      const summary = buildAssessmentAgentSummary({
+        answers: loaded.answers,
+        visibleQuestionIds: questionState.visibleQuestions.map((question) => question.id),
+        evidence: loaded.evidenceItems ?? [],
+        riskSignals: loaded.riskSignals ?? [],
+      });
+
+      return Response.json({ ...result, summary }, { status: 200 });
     } catch {
       return jsonError("BiasLens could not complete this assessment step.", 500);
     }
@@ -201,14 +222,26 @@ export async function POST(request: Request, context: ParamsContext) {
       const loaded = await getAgentAssessmentContext(supabase, assessmentId);
       const { data: evidence } = await supabase
         .from("evidence_log_entries")
-        .select("evidence_state")
+        .select("id, document_name, evidence_state, evidence_state_rationale, source_uri")
         .eq("assessment_id", assessmentId);
+
+      const evidenceItems = (evidence ?? [])
+        .filter((item) => item.evidence_state)
+        .map((item) => ({
+          id: item.id,
+          label: item.document_name,
+          state: item.evidence_state as EvidenceState,
+          rationale: item.evidence_state_rationale,
+          sourceUri: item.source_uri,
+        }));
 
       return {
         answers: (loaded.questionnaire.answers ?? {}) as Answers,
-        evidenceStates: (evidence ?? [])
-          .map((item) => item.evidence_state)
-          .filter(Boolean) as EvidenceState[],
+        evidenceStates: evidenceItems.map((item) => item.state),
+        evidenceItems,
+        // Risk-pathway signals are added only when they can be mapped from a
+        // persisted BiasLens risk record without inventing explanatory prose.
+        riskSignals: [],
       };
     },
     saveMessage: (assessmentId, input) => saveAgentMessage(supabase, assessmentId, input),
