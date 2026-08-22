@@ -103,7 +103,12 @@ function QuestionControl({
             const optionId = `${inputId}-${option.value.replace(/[^a-z0-9]+/gi, "-")}`;
             const checked = selected.includes(option.value);
             return (
-              <label key={option.value} htmlFor={optionId} className="agent-choice">
+              <label
+                key={option.value}
+                htmlFor={optionId}
+                className="check-option agent-choice"
+                style={{ minHeight: 48, padding: "8px 4px", cursor: "pointer" }}
+              >
                 <input
                   id={optionId}
                   type="checkbox"
@@ -141,7 +146,12 @@ function QuestionControl({
           {options.map((option) => {
             const optionId = `${inputId}-${option.value}`;
             return (
-              <label key={option.value} htmlFor={optionId} className="agent-choice">
+              <label
+                key={option.value}
+                htmlFor={optionId}
+                className="check-option agent-choice"
+                style={{ minHeight: 48, padding: "8px 4px", cursor: "pointer" }}
+              >
                 <input
                   id={optionId}
                   name={inputId}
@@ -316,11 +326,7 @@ export function AgentAssessment({
       {turn.type === "question" ? (
         <section className="card agent-question-card" aria-labelledby="agent-question-heading">
           <p className="agent-step-name">{turn.question.stepTitle}</p>
-          <h2
-            id="agent-question-heading"
-            ref={questionHeadingRef}
-            tabIndex={-1}
-          >
+          <h2 id="agent-question-heading" ref={questionHeadingRef} tabIndex={-1}>
             Current question
           </h2>
           <form onSubmit={submitAnswer} className="stack">
