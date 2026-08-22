@@ -1,0 +1,41 @@
+name: BiasLens Agent CI
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "src/lib/agent/**"
+      - "src/app/api/assessments/**/agent/**"
+      - "src/app/(app)/assessments/**/agent/**"
+      - "supabase/biaslens-agent-milestone-1.sql"
+      - ".github/workflows/biaslens-agent-ci.yml"
+
+jobs:
+  verify-agent:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run BiasLens Agent tests
+        run: >-
+          npm test --
+          src/lib/agent/__tests__/methodology.test.ts
+          src/lib/agent/__tests__/core-service.test.ts
+          src/lib/agent/__tests__/orchestrator.test.ts
+          src/app/api/assessments/[id]/agent/__tests__/route.test.ts
+
+      - name: Type-check
+        run: npx tsc --noEmit
+
+      - name: Build production bundle
+        run: npm run build
