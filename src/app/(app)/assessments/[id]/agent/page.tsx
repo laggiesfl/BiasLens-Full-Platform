@@ -3,7 +3,9 @@ import { createClient } from "@/lib/supabase/server";
 import type { Answers } from "@/lib/questionnaire";
 import type { Role } from "@/lib/roles";
 import type { EvidenceState } from "@/lib/agent/core-service";
+import { getAssessmentQuestionState } from "@/lib/agent/methodology";
 import { runAssessmentTurn } from "@/lib/agent/orchestrator";
+import { buildAssessmentAgentSummary } from "@/lib/agent/summary";
 import { BackLink } from "@/components/BackLink";
 import { AgentAssessment } from "./AgentAssessment";
 
@@ -31,20 +33,39 @@ export default async function BiasLensAgentAssessmentPage({
       .single(),
     supabase
       .from("evidence_log_entries")
-      .select("evidence_state")
+      .select("id, document_name, evidence_state, evidence_state_rationale, source_uri")
       .eq("assessment_id", id),
   ]);
 
   const answers = (questionnaire?.answers ?? {}) as Answers;
-  const evidenceStates = (evidence ?? [])
-    .map((item) => item.evidence_state)
-    .filter(Boolean) as EvidenceState[];
+  const role = (assessment.role_context ?? "civil_society") as Role;
+  const evidenceItems = (evidence ?? [])
+    .filter((item) => item.evidence_state)
+    .map((item) => ({
+      id: item.id,
+      label: item.document_name,
+      state: item.evidence_state as EvidenceState,
+      rationale: item.evidence_state_rationale,
+      sourceUri: item.source_uri,
+    }));
+  const evidenceStates = evidenceItems.map((item) => item.state);
 
   const initialTurn = await runAssessmentTurn({
-    role: (assessment.role_context ?? "civil_society") as Role,
+    role,
     answers,
     evidenceStates,
   });
+
+  const questionState = getAssessmentQuestionState(role, answers);
+  const initialSummary =
+    initialTurn.type === "question"
+      ? null
+      : buildAssessmentAgentSummary({
+          answers,
+          visibleQuestionIds: questionState.visibleQuestions.map((question) => question.id),
+          evidence: evidenceItems,
+          riskSignals: [],
+        });
 
   return (
     <div className="stack">
@@ -55,6 +76,7 @@ export default async function BiasLensAgentAssessmentPage({
         initialTurn={initialTurn}
         initialAnswers={answers}
         initialEvidenceStates={evidenceStates}
+        initialSummary={initialSummary}
       />
     </div>
   );
