@@ -38,6 +38,8 @@ The dedicated CI gate also runs:
 - TypeScript validation with `npx tsc --noEmit`;
 - the Next.js production build with `npm run build`.
 
+**Latest verified gate:** BiasLens Agent CI run 15 completed successfully on 22 August 2026. The focused BiasLens Agent tests, TypeScript validation and production build all completed successfully.
+
 A Vercel Preview deployment is created automatically from the branch. A `READY` deployment proves that Vercel successfully built and published that commit; it does not by itself prove the authenticated database workflow works end to end.
 
 ## Database status and blocker
