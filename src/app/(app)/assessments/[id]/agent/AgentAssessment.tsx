@@ -6,6 +6,8 @@ import type { Answers } from "@/lib/questionnaire";
 import type { AgentQuestion } from "@/lib/agent/types";
 import type { AgentTurnResult } from "@/lib/agent/orchestrator";
 import type { AssessmentAnswer, EvidenceState } from "@/lib/agent/core-service";
+import type { AssessmentAgentSummary } from "@/lib/agent/summary";
+import { AgentSummary } from "./AgentSummary";
 
 const EVIDENCE_STATE_LABELS: Record<EvidenceState, string> = {
   established: "Established",
@@ -197,14 +199,17 @@ export function AgentAssessment({
   initialTurn,
   initialAnswers,
   initialEvidenceStates,
+  initialSummary = null,
 }: {
   assessmentId: string;
   assessmentTitle: string;
   initialTurn: AgentTurnResult;
   initialAnswers: Answers;
   initialEvidenceStates: EvidenceState[];
+  initialSummary?: AssessmentAgentSummary | null;
 }) {
   const [turn, setTurn] = useState<AgentTurnResult>(initialTurn);
+  const [summary, setSummary] = useState<AssessmentAgentSummary | null>(initialSummary);
   const [answers, setAnswers] = useState<Answers>(initialAnswers);
   const [answer, setAnswer] = useState<AssessmentAnswer>(
     initialTurn.type === "question" ? blankAnswer(initialTurn.question) : ""
@@ -253,6 +258,7 @@ export function AgentAssessment({
 
       setAnswers((current) => ({ ...current, [currentQuestion.id]: answer }));
       setTurn(data as AgentTurnResult);
+      setSummary(data.summary ?? null);
       setStatus(
         data.type === "question"
           ? "Answer saved. The next question is ready."
@@ -365,6 +371,8 @@ export function AgentAssessment({
           <p>{turn.message}</p>
         </section>
       )}
+
+      {summary ? <AgentSummary summary={summary} /> : null}
 
       <details className="card agent-review-answers">
         <summary>Review answers already recorded</summary>
