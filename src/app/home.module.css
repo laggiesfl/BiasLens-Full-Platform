@@ -12,6 +12,17 @@
   color: #17324d;
 }
 
+.homeSectionLight h2,
+.homeSectionLight h3,
+.homeSectionLight p,
+.homeSectionLight li,
+.homeSectionWhite h2,
+.homeSectionWhite h3,
+.homeSectionWhite p,
+.homeSectionWhite li {
+  color: #17324d !important;
+}
+
 .homeSectionBlue {
   background: #17324d;
   color: #ffffff;
@@ -31,7 +42,7 @@
 }
 
 .sectionIntro h2 {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.8rem, 3.2vw, 2.55rem);
   margin-bottom: 0.75rem;
 }
 
@@ -71,6 +82,12 @@
   border-radius: 16px;
   padding: clamp(1.35rem, 2.5vw, 2rem);
   box-shadow: 0 8px 24px rgba(23, 50, 77, 0.08);
+}
+
+.card h3,
+.card p,
+.card li {
+  color: #17324d !important;
 }
 
 .card h3 {
@@ -122,6 +139,12 @@
   min-height: 100%;
 }
 
+.step h3,
+.step p,
+.step li {
+  color: #17324d !important;
+}
+
 .stepNumber {
   display: inline-grid;
   place-items: center;
@@ -146,6 +169,12 @@
   border: 1px solid #c9d6e8;
   border-radius: 12px;
   overflow: clip;
+}
+
+.detailsGroup summary,
+.detailsBody p,
+.detailsBody li {
+  color: #17324d !important;
 }
 
 .detailsGroup summary {
@@ -208,7 +237,7 @@
 }
 
 :global(.public-hero) {
-  padding: clamp(3.5rem, 8vw, 6.5rem) 0;
+  padding: clamp(3rem, 6vw, 5rem) 0;
 }
 
 :global(.public-hero-grid) {
@@ -217,14 +246,14 @@
 }
 
 :global(.public-hero h1) {
-  max-width: 13ch;
-  font-size: clamp(2.75rem, 7vw, 5.5rem);
-  line-height: 1.02;
+  max-width: 15ch;
+  font-size: clamp(2.5rem, 5.4vw, 4.25rem);
+  line-height: 1.06;
 }
 
 :global(.public-hero .public-lead) {
   max-width: 62ch;
-  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
   line-height: 1.7;
 }
 
@@ -265,7 +294,8 @@
   }
 
   :global(.public-hero h1) {
-    font-size: clamp(2.3rem, 12vw, 3.7rem);
+    max-width: 16ch;
+    font-size: clamp(2.15rem, 10vw, 3.2rem);
   }
 
   :global(.public-footer) {
