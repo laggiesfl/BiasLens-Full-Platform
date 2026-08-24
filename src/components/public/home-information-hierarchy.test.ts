@@ -42,4 +42,20 @@ describe("BiasLens public homepage information hierarchy", () => {
     expect(guideCss).toContain("top: 50%");
     expect(guideCss).toContain("transform: translateY(-50%)");
   });
+
+  it("keeps the hero heading prominent without overwhelming the first screen", () => {
+    const css = read("src/app/home.module.css");
+    expect(css).toContain("font-size: clamp(2.5rem, 5.4vw, 4.25rem)");
+    expect(css).toContain("max-width: 15ch");
+  });
+
+  it("forces readable dark text throughout light homepage sections and cards", () => {
+    const css = read("src/app/home.module.css");
+    expect(css).toContain(".homeSectionLight h2");
+    expect(css).toContain(".homeSectionWhite h2");
+    expect(css).toContain(".homeSectionLight p");
+    expect(css).toContain(".homeSectionWhite p");
+    expect(css).toContain(".card h3");
+    expect(css).toContain("color: #17324d !important");
+  });
 });
