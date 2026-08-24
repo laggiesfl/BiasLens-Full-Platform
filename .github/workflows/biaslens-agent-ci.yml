@@ -6,6 +6,9 @@ on:
       - main
     paths:
       - "src/lib/agent/**"
+      - "src/lib/actions/auth.ts"
+      - "src/lib/actions/auth-redirect-regression.test.ts"
+      - "src/app/auth/callback/**"
       - "src/app/api/assessments/**/agent/**"
       - "src/app/(app)/assessments/**/agent/**"
       - "src/app/(app)/assessments/**/page.tsx"
@@ -34,6 +37,7 @@ jobs:
             "src/lib/agent/__tests__/core-service.test.ts" \
             "src/lib/agent/__tests__/orchestrator.test.ts" \
             "src/lib/agent/__tests__/summary.test.ts" \
+            "src/lib/actions/auth-redirect-regression.test.ts" \
             "src/app/api/assessments/[id]/agent/__tests__/route.test.ts" \
             "src/app/(app)/assessments/[id]/agent/agent-ui-regression.test.ts"
 
