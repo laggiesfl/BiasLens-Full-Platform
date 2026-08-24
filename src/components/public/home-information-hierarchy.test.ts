@@ -58,4 +58,21 @@ describe("BiasLens public homepage information hierarchy", () => {
     expect(css).toContain(".card h3");
     expect(css).toContain("color: #17324d !important");
   });
+
+  it("uses one consistent card treatment across problem, capability, audience and proof cards", () => {
+    const css = read("src/app/home.module.css");
+    expect(css).toContain("border-top: 4px solid #4a78b5");
+    expect(css).toContain(".capabilityCard");
+    expect(css).toContain(".audienceCard");
+    expect(css).toContain(".proofGrid .card");
+  });
+
+  it("keeps proof-card links and the final primary action visible on dark sections", () => {
+    const css = read("src/app/home.module.css");
+    expect(css).toContain(".homeSectionBlue .card a");
+    expect(css).toContain("color: #1f3f6b !important");
+    expect(css).toContain(".finalPanel :global(.public-button-primary)");
+    expect(css).toContain("background: #ffffff");
+    expect(css).toContain("color: #17324d !important");
+  });
 });
