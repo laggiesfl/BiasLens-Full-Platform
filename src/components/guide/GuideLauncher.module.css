@@ -1,7 +1,7 @@
 .launcher {
   position: fixed;
   right: 1rem;
-  bottom: 1rem;
+  bottom: 5.5rem;
   z-index: 60;
   min-height: 48px;
   padding: 0.75rem 1rem;
@@ -28,8 +28,9 @@
 
 .panel {
   position: fixed;
+  top: 50%;
   right: 1rem;
-  bottom: 1rem;
+  transform: translateY(-50%);
   z-index: 59;
   width: min(680px, calc(100vw - 2rem));
   max-height: calc(100vh - 2rem);
@@ -37,7 +38,9 @@
   background: #ffffff;
   border: 2px solid #1f3f6b;
   border-radius: 16px;
-  box-shadow: 0 18px 55px rgba(23, 50, 77, 0.3);
+  box-shadow:
+    0 18px 55px rgba(23, 50, 77, 0.3),
+    0 0 0 100vmax rgba(23, 50, 77, 0.28);
 }
 
 .panelHeader {
@@ -81,11 +84,12 @@
 @media (max-width: 700px) {
   .launcher {
     right: 0.75rem;
-    bottom: 0.75rem;
+    bottom: 5rem;
   }
 
   .panel {
     inset: 0.5rem;
+    transform: none;
     width: auto;
     max-height: none;
   }

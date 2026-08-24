@@ -38,7 +38,7 @@ export async function GET(request: Request) {
   // every flow, and we set `next` ourselves when we request the reset.
   const isRecovery = type === "recovery" || next === "/update-password";
 
-  const destination = isRecovery ? "/update-password" : (next ?? "/");
+  const destination = isRecovery ? "/update-password" : (next ?? "/dashboard");
 
   // Send a failed reset back to the reset screen, not the sign-in screen.
   const failPage = isRecovery ? "/reset-password" : "/login";

@@ -26,6 +26,14 @@ const VALID_STATUS = [
   "not_applicable",
 ];
 
+const VALID_EVIDENCE_STATE = [
+  "established",
+  "derived",
+  "inferred",
+  "unknown",
+  "conflicted",
+];
+
 function safeFile(name: string) {
   return name.replace(/[^a-zA-Z0-9._-]+/g, "_").slice(0, 80);
 }
@@ -50,21 +58,28 @@ export async function addEvidence(formData: FormData) {
   if (!user) redirect("/login");
 
   const status = String(formData.get("status") ?? "not_requested");
+  const evidenceState = String(formData.get("evidence_state") ?? "unknown");
+
   const entry: Record<string, unknown> = {
     assessment_id: assessmentId,
     document_name: documentName,
     source: String(formData.get("source") ?? "").trim() || null,
+    source_uri: String(formData.get("source_uri") ?? "").trim() || null,
     requested_from: String(formData.get("requested_from") ?? "").trim() || null,
     date_requested: String(formData.get("date_requested") ?? "") || null,
     date_received: String(formData.get("date_received") ?? "") || null,
     status: VALID_STATUS.includes(status) ? status : "not_requested",
+    evidence_state: VALID_EVIDENCE_STATE.includes(evidenceState)
+      ? evidenceState
+      : "unknown",
+    evidence_state_rationale:
+      String(formData.get("evidence_state_rationale") ?? "").trim() || null,
     legal_basis: String(formData.get("legal_basis") ?? "").trim() || null,
     notes: String(formData.get("notes") ?? "").trim() || null,
     follow_up_date: String(formData.get("follow_up_date") ?? "") || null,
     created_by: user.id,
   };
 
-  // Optional file attachment
   const file = formData.get("file") as File | null;
   if (file && file.size > 0) {
     if (file.size > MAX_BYTES) {
@@ -96,7 +111,10 @@ export async function addEvidence(formData: FormData) {
     action: "evidence_added",
     entity_type: "assessment",
     entity_id: assessmentId,
-    metadata: { document_name: documentName },
+    metadata: {
+      document_name: documentName,
+      evidence_state: entry.evidence_state,
+    },
   });
 
   revalidatePath(`/assessments/${assessmentId}/evidence`);
@@ -123,8 +141,53 @@ export async function updateEvidenceStatus(formData: FormData) {
     .eq("id", id);
   if (error) back(assessmentId, error.message, false);
 
+  await supabase.from("activity_log").insert({
+    actor_id: user.id,
+    action: "evidence_collection_status_updated",
+    entity_type: "assessment",
+    entity_id: assessmentId,
+    metadata: { evidence_id: id, status },
+  });
+
   revalidatePath(`/assessments/${assessmentId}/evidence`);
-  back(assessmentId, "Status updated.");
+  back(assessmentId, "Collection status updated.");
+}
+
+export async function updateEvidenceState(formData: FormData) {
+  const assessmentId = String(formData.get("assessment_id") ?? "");
+  const id = String(formData.get("id") ?? "");
+  const evidenceState = String(formData.get("evidence_state") ?? "");
+  const rationale = String(formData.get("evidence_state_rationale") ?? "").trim();
+
+  if (!assessmentId || !id || !VALID_EVIDENCE_STATE.includes(evidenceState)) {
+    redirect(`/assessments/${assessmentId}/evidence`);
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const { error } = await supabase
+    .from("evidence_log_entries")
+    .update({
+      evidence_state: evidenceState,
+      evidence_state_rationale: rationale || null,
+    })
+    .eq("id", id);
+  if (error) back(assessmentId, error.message, false);
+
+  await supabase.from("activity_log").insert({
+    actor_id: user.id,
+    action: "evidence_state_updated",
+    entity_type: "assessment",
+    entity_id: assessmentId,
+    metadata: { evidence_id: id, evidence_state: evidenceState },
+  });
+
+  revalidatePath(`/assessments/${assessmentId}/evidence`);
+  back(assessmentId, "Evidence state updated.");
 }
 
 export async function deleteEvidence(formData: FormData) {
