@@ -6,9 +6,10 @@ const root = process.cwd();
 const read = (path: string) => readFileSync(join(root, path), "utf8");
 
 describe("BiasLens public homepage information hierarchy", () => {
-  it("uses six major content sections after the header", () => {
+  it("uses the approved six-section story including the hero and final proof/CTA section", () => {
     const page = read("src/app/page.tsx");
 
+    expect(page).toContain("Know what your evidence supports — and what it does not.");
     expect(page).toContain("The problem: AI assurance needs evidence");
     expect(page).toContain("What BiasLens does");
     expect(page).toContain("Who BiasLens is for");
@@ -33,5 +34,12 @@ describe("BiasLens public homepage information hierarchy", () => {
     expect(page).toContain("Assess one AI system");
     expect(page).toContain('href="/login"');
     expect(page).toContain("Sign in to BiasLens");
+  });
+
+  it("coordinates the floating guide with the other accessibility control area", () => {
+    const guideCss = read("src/components/guide/GuideLauncher.module.css");
+    expect(guideCss).toContain("bottom: 5.5rem");
+    expect(guideCss).toContain("top: 50%");
+    expect(guideCss).toContain("transform: translateY(-50%)");
   });
 });
