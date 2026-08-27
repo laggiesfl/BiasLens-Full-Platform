@@ -36,4 +36,16 @@ describe("BiasLens agent methodology", () => {
     });
     expect(state.answeredQuestionIds).toContain("children_vulnerable");
   });
+
+  it("asks whether earlier cases influence later processing without double-barrelled wording", () => {
+    const state = getAssessmentQuestionState("business", {});
+    const question = state.visibleQuestions.find((item) => item.id === "carries_state");
+
+    expect(question?.label).toBe(
+      "Does the system retain information from earlier cases or decisions and use it when processing later ones?"
+    );
+    expect(question?.help).toBe(
+      "Some systems use information from earlier cases while processing later ones. For example, a shortlisting system might compare a new applicant with applicants already processed. This matters because patterns can emerge during use even when the model has not been retrained."
+    );
+  });
 });
