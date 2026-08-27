@@ -90,4 +90,42 @@ describe("BiasLens evidence-grounded agent summary", () => {
     expect(summary.answeredCount).toBe(2);
     expect(summary.remainingCount).toBe(1);
   });
+
+  it("keeps a 28/28 guided intake with zero Evidence State records open for evidence review", () => {
+    const visibleQuestionIds = Array.from({ length: 28 }, (_, index) => `q-${index + 1}`);
+    const answers = Object.fromEntries(
+      visibleQuestionIds.map((questionId) => [questionId, "Recorded response"])
+    );
+
+    const summary = buildAssessmentAgentSummary({
+      answers,
+      visibleQuestionIds,
+      evidence: [],
+      riskSignals: [],
+    });
+
+    expect(summary.answeredCount).toBe(28);
+    expect(summary.remainingCount).toBe(0);
+    expect(summary.evidenceReviewRequired).toBe(true);
+    expect(summary.recommendedNextActions).toContain(
+      "Review and classify supporting evidence in BiasLens Core before treating the evidence assessment as complete."
+    );
+    expect(summary.limitations).toContain(
+      "Guided questionnaire completion does not mean the BiasLens evidence assessment is complete."
+    );
+  });
+
+  it.each(["established", "derived", "inferred", "unknown", "conflicted"] as const)(
+    "does not use the no-evidence completion state when %s evidence is recorded",
+    (state) => {
+      const summary = buildAssessmentAgentSummary({
+        answers: { system_name: "ScreenRight" },
+        visibleQuestionIds: ["system_name"],
+        evidence: [{ id: `ev-${state}`, label: `${state} record`, state }],
+        riskSignals: [],
+      });
+
+      expect(summary.evidenceReviewRequired).toBe(false);
+    }
+  );
 });

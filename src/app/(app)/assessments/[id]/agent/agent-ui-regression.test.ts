@@ -46,4 +46,10 @@ describe("BiasLens Agent accessible assessment interface", () => {
   it("disables submission while a request is being sent", () => {
     expect(source()).toContain("disabled={sending}");
   });
+
+  it("states that evidence review is still required after guided intake completion", () => {
+    expect(source()).toContain(
+      "Guided questions complete — evidence review still required"
+    );
+  });
 });

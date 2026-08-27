@@ -4,6 +4,8 @@ import {
   validateAgentFindingText,
   validateProposedQuestionId,
 } from "../orchestrator";
+import { getAssessmentQuestionState } from "../methodology";
+import type { Answers } from "@/lib/questionnaire";
 
 describe("BiasLens agent orchestration", () => {
   it("selects the next assessment question deterministically", async () => {
@@ -56,5 +58,31 @@ describe("BiasLens agent orchestration", () => {
       forceReviewCheck: true,
     });
     expect(result.type).toBe("human_review_required");
+  });
+
+  it("requires evidence review after all 28 guided questions are answered with zero Evidence State records", async () => {
+    const answers: Answers = {
+      decision_domain: "employment",
+      eu_reach: false,
+    };
+    const questionState = getAssessmentQuestionState("business", answers);
+    expect(questionState.visibleQuestions).toHaveLength(28);
+
+    for (const question of questionState.visibleQuestions) {
+      if (answers[question.id] !== undefined) continue;
+      answers[question.id] =
+        question.type === "multiselect" ? ["Recorded response"] : "Recorded response";
+    }
+
+    const result = await runAssessmentTurn({
+      role: "business",
+      answers,
+      evidenceStates: [],
+    });
+
+    expect(result.type).toBe("evidence_review_required");
+    expect(result.message).toBe(
+      "The guided intake is complete, but supporting evidence must still be reviewed and classified before the BiasLens evidence assessment is complete."
+    );
   });
 });
