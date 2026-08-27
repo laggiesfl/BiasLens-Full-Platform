@@ -30,13 +30,36 @@ export function AgentSummary({ summary }: { summary: AssessmentAgentSummary }) {
   return (
     <section className="card stack" aria-labelledby="agent-summary-heading">
       <div>
-        <p className="eyebrow">Evidence-based output</p>
-        <h2 id="agent-summary-heading">BiasLens assessment summary</h2>
-        <p>
-          This summary separates what is established from what remains unknown or
-          conflicted. It is not a binary bias or compliance verdict.
+        <p className="eyebrow">
+          {summary.evidenceReviewRequired ? "Guided intake summary" : "Evidence-based output"}
         </p>
+        <h2 id="agent-summary-heading">
+          {summary.evidenceReviewRequired
+            ? "BiasLens guided intake summary"
+            : "BiasLens assessment summary"}
+        </h2>
+        {summary.evidenceReviewRequired ? (
+          <p>
+            The guided intake is complete, but the evidence assessment is not. Supporting
+            evidence must still be reviewed and classified in BiasLens Core.
+          </p>
+        ) : (
+          <p>
+            This summary separates what is established from what remains unknown or
+            conflicted. It is not a binary bias or compliance verdict.
+          </p>
+        )}
       </div>
+
+      {summary.evidenceReviewRequired ? (
+        <section aria-labelledby="summary-evidence-review-heading">
+          <h3 id="summary-evidence-review-heading">Evidence review still required</h3>
+          <p>
+            No Evidence State record has been classified yet. Questionnaire responses are
+            not themselves evidence, and no evidence has been created from them.
+          </p>
+        </section>
+      ) : null}
 
       <section aria-labelledby="summary-progress-heading">
         <h3 id="summary-progress-heading">Assessment progress</h3>

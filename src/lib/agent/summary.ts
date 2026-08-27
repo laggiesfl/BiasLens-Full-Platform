@@ -39,6 +39,7 @@ export interface AssessmentAgentSummary {
   };
   answeredCount: number;
   remainingCount: number;
+  evidenceReviewRequired: boolean;
   establishedEvidence: SummaryEvidenceItem[];
   unknowns: SummaryEvidenceItem[];
   conflicts: SummaryEvidenceItem[];
@@ -75,6 +76,7 @@ export function buildAssessmentAgentSummary(
   const establishedEvidence = input.evidence.filter((item) => item.state === "established");
   const unknowns = input.evidence.filter((item) => item.state === "unknown");
   const conflicts = input.evidence.filter((item) => item.state === "conflicted");
+  const evidenceReviewRequired = remainingCount === 0 && input.evidence.length === 0;
 
   const potentialBiasPathways = input.riskSignals.map((signal) => ({
     title: signal.title,
@@ -91,6 +93,11 @@ export function buildAssessmentAgentSummary(
   const humanReviewRequired = CONSEQUENTIAL_DOMAINS.has(domain) && hasUnresolvedEvidence;
 
   const recommendedNextActions: string[] = [];
+  if (evidenceReviewRequired) {
+    recommendedNextActions.push(
+      "Review and classify supporting evidence in BiasLens Core before treating the evidence assessment as complete."
+    );
+  }
   if (unknowns.length) {
     recommendedNextActions.push("Obtain or generate evidence for the material Unknown items.");
   }
@@ -108,6 +115,11 @@ export function buildAssessmentAgentSummary(
     "This summary is an evidence and governance record; it is not an automatic legal or compliance determination.",
     "Potential bias pathways are investigation signals and do not by themselves prove discrimination.",
   ];
+  if (evidenceReviewRequired) {
+    limitations.push(
+      "Guided questionnaire completion does not mean the BiasLens evidence assessment is complete."
+    );
+  }
   if (unknowns.length) {
     limitations.push("Material evidence remains Unknown and should not be presented as established fact.");
   }
@@ -129,6 +141,7 @@ export function buildAssessmentAgentSummary(
     },
     answeredCount,
     remainingCount,
+    evidenceReviewRequired,
     establishedEvidence,
     unknowns,
     conflicts,

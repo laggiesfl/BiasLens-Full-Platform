@@ -262,6 +262,8 @@ export function AgentAssessment({
       setStatus(
         data.type === "question"
           ? "Answer saved. The next question is ready."
+          : data.type === "evidence_review_required"
+            ? "Answer saved. Guided questions are complete; evidence review is still required."
           : data.type === "human_review_required"
             ? "Answer saved. Human review is recommended."
             : "Answer saved. The guided questions are complete."
@@ -363,6 +365,17 @@ export function AgentAssessment({
           <p className="hint">
             This is an escalation for judgement, not a finding that the system is biased,
             unlawful or non-compliant.
+          </p>
+        </section>
+      ) : turn.type === "evidence_review_required" ? (
+        <section className="card" aria-labelledby="evidence-review-required-heading">
+          <h2 id="evidence-review-required-heading">
+            Guided questions complete — evidence review still required
+          </h2>
+          <p>{turn.message}</p>
+          <p className="hint">
+            Questionnaire answers are guided intake responses. They are not Evidence
+            State records and are not treated as supporting evidence.
           </p>
         </section>
       ) : (

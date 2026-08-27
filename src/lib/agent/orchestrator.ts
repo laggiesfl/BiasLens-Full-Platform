@@ -34,6 +34,11 @@ export type AgentTurnResult =
       evidenceStates: EvidenceState[];
     }
   | {
+      type: "evidence_review_required";
+      message: string;
+      evidenceStates: EvidenceState[];
+    }
+  | {
       type: "human_review_required";
       message: string;
       reason: string;
@@ -98,6 +103,15 @@ export async function runAssessmentTurn(
         ? `${question.label} ${question.help}`
         : question.label,
       question,
+      evidenceStates,
+    };
+  }
+
+  if (evidenceStates.length === 0) {
+    return {
+      type: "evidence_review_required",
+      message:
+        "The guided intake is complete, but supporting evidence must still be reviewed and classified before the BiasLens evidence assessment is complete.",
       evidenceStates,
     };
   }
