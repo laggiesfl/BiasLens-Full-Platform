@@ -169,6 +169,26 @@ export default async function AssessmentDetailPage({
         </div>
       </section>
 
+      <section className="card" aria-labelledby="agent-h">
+        <h2 id="agent-h" style={{ fontSize: "1.2rem" }}>
+          BiasLens Assess — guided agent
+        </h2>
+        <p className="muted">
+          Complete this assessment one question at a time with the BiasLens Agent.
+          It uses the same BiasLens methodology and evidence record, preserves
+          uncertainty, and escalates matters that need human judgement.
+        </p>
+        <p className="hint">
+          The agent does not issue automatic legal, compliance, biased/unbiased,
+          ALLOW or BLOCK verdicts.
+        </p>
+        <p style={{ marginBottom: 0 }}>
+          <Link href={`/assessments/${id}/agent`} className="btn btn-primary">
+            Start or continue with BiasLens Agent
+          </Link>
+        </p>
+      </section>
+
       <section className="card" aria-labelledby="next-h">
         <h2 id="next-h" style={{ fontSize: "1.2rem" }}>
           Guided Bias Risk Questionnaire

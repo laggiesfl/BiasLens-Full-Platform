@@ -356,14 +356,14 @@ export const QUESTIONNAIRE: Step[] = [
       {
         id: "carries_state",
         label:
-          "Does the system carry anything from one decision to the next, or start fresh each time?",
+          "Does the system retain information from earlier cases or decisions and use it when processing later ones?",
         type: "yesnounsure",
         options: [
           { value: "true", label: "It carries something forward" },
           { value: "false", label: "It starts fresh each time" },
           { value: "unsure", label: "Not sure" },
         ],
-        help: "Some systems remember what they have already seen while working through a batch — for example, a shortlisting tool that compares each applicant to the ones before. This is the single strongest warning sign for bias that develops through use, because a pattern can form from very few examples with no retraining at all.",
+        help: "Some systems use information from earlier cases while processing later ones. For example, a shortlisting system might compare a new applicant with applicants already processed. This matters because patterns can emerge during use even when the model has not been retrained.",
       },
       {
         id: "outputs_become_inputs",

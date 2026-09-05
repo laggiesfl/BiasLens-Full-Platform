@@ -47,7 +47,9 @@ export function ListenToPage({ targetId }: { targetId: string }) {
     }
 
     const target = document.getElementById(targetId);
-    const text = target?.innerText.replace(/\s+/g, " ").trim();
+    const clone = target?.cloneNode(true) as HTMLElement | undefined;
+    clone?.querySelectorAll("input, textarea, select, button, [data-speech-exclude]").forEach((element) => element.remove());
+    const text = clone?.innerText.replace(/\s+/g, " ").trim();
     if (!text) {
       setStatus("There is no page text available to read.");
       return;
