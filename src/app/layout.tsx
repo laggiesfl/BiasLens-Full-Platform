@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./public-pages.css";
 import "./public-accessibility-fixes.css";
+import { AccessibilityControls } from "@/components/AccessibilityControls";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://biaslens.beaccessible.co.za"),
@@ -30,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body><AccessibilityControls />{children}</body>
     </html>
   );
 }
