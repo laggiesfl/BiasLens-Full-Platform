@@ -23,6 +23,7 @@ const PUBLIC_PATHS = [
   "/signup",
   "/reset-password",
   "/auth/callback",
+  "/oauth/consent",
   "/accessibility-statement",
   "/privacy",
   "/methodology",
