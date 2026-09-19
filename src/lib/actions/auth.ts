@@ -11,20 +11,26 @@ function siteUrl() {
 export async function signIn(formData: FormData) {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
+  const requestedReturnTo = String(formData.get("return_to") ?? "").trim();
+  const returnTo = requestedReturnTo.startsWith("/") && !requestedReturnTo.startsWith("//")
+    ? requestedReturnTo
+    : "/";
 
   if (!email || !password) {
-    redirect("/login?error=" + encodeURIComponent("Enter your email and password."));
+    const suffix = returnTo !== "/" ? "&return_to=" + encodeURIComponent(returnTo) : "";
+    redirect("/login?error=" + encodeURIComponent("Enter your email and password.") + suffix);
   }
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    redirect("/login?error=" + encodeURIComponent(error.message));
+    const suffix = returnTo !== "/" ? "&return_to=" + encodeURIComponent(returnTo) : "";
+    redirect("/login?error=" + encodeURIComponent(error.message) + suffix);
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect(returnTo);
 }
 
 export async function signUp(formData: FormData) {

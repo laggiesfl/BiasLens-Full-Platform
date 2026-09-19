@@ -8,9 +8,12 @@ import { MagicLinkButton } from "@/components/MagicLinkButton";
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; message?: string }>;
+  searchParams: Promise<{ error?: string; message?: string; return_to?: string }>;
 }) {
   const sp = await searchParams;
+  const returnTo = sp.return_to?.startsWith("/") && !sp.return_to.startsWith("//")
+    ? sp.return_to
+    : "";
   const showCheckEmail = sp.message === "check-email";
 
   return (
@@ -40,6 +43,7 @@ export default async function LoginPage({
         ) : null}
 
         <form action={signIn} className="stack" style={{ marginTop: 0 }}>
+          {returnTo ? <input type="hidden" name="return_to" value={returnTo} /> : null}
           <div className="field">
             <label htmlFor="email">{t.auth.emailLabel}</label>
             <input
@@ -59,10 +63,16 @@ export default async function LoginPage({
           <button type="submit" className="btn btn-primary" style={{ width: "100%" }}>
             {t.common.signIn}
           </button>
-          <MagicLinkButton
-            label={t.auth.magicLink}
-            hint="The sign-in link uses the email address typed above. No password needed. Open the link in this browser."
-          />
+          {returnTo ? (
+            <p className="muted" style={{ margin: 0 }}>
+              Use password sign-in to return automatically to the pending connection request.
+            </p>
+          ) : (
+            <MagicLinkButton
+              label={t.auth.magicLink}
+              hint="The sign-in link uses the email address typed above. No password needed. Open the link in this browser."
+            />
+          )}
         </form>
 
         <p style={{ marginBottom: 0 }}>
