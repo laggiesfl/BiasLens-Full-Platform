@@ -293,12 +293,13 @@ export function BiasLensGuide({ embedded = false }: BiasLensGuideProps) {
         </div>
       </div>
 
-      <div role="note" style={{ margin: "0.75rem 1rem", padding: "0.85rem", border: "2px solid #1f3f6b", borderRadius: "8px", background: "#e6eef8", color: "#17324d", lineHeight: 1.5 }}>
-        <strong>You are interacting with AI.</strong>{" "}
-        BiasLens Guide generates answers using an external AI service. Questions and optional voice recordings are processed to respond to you. Answers may be incorrect and are not verified assessment findings. Do not submit sensitive personal information.{" "}
-        <a href="/ai-transparency" style={{ color: "#123359", textDecoration: "underline", fontWeight: 700 }}>Read AI Transparency</a>
-        {" · "}
-        <a href="/privacy" style={{ color: "#123359", textDecoration: "underline", fontWeight: 700 }}>Privacy Notice</a>
+      <div role="note" aria-labelledby="biaslens-ai-disclosure-title" style={{ margin: "0.75rem 1rem", padding: "1rem", border: "2px solid #1f3f6b", borderRadius: "8px", background: "#e6eef8", color: "#17324d", fontSize: "1rem", lineHeight: 1.6 }}>
+        <p id="biaslens-ai-disclosure-title" style={{ fontSize: "1.125rem", lineHeight: 1.35, fontWeight: 800, margin: "0 0 0.5rem" }}>You are interacting with AI</p>
+        <p style={{ margin: "0 0 0.75rem" }}>BiasLens Guide uses an external AI service. Submitted questions and optional voice recordings are processed to respond to you. Answers may be inaccurate and are not verified assessment findings. Do not share sensitive personal information.</p>
+        <p style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem 1rem", margin: 0 }}>
+          <a href="/ai-transparency" style={{ color: "#123359", textDecoration: "underline", textUnderlineOffset: "0.18em", fontWeight: 800 }}>AI Transparency Statement</a>
+          <a href="/privacy" style={{ color: "#123359", textDecoration: "underline", textUnderlineOffset: "0.18em", fontWeight: 800 }}>Privacy Notice</a>
+        </p>
       </div>
       <div className={styles.messages} aria-label="BiasLens Guide conversation" aria-live="off">
         {messages.map((message) => (
