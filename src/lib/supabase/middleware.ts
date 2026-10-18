@@ -26,6 +26,7 @@ const PUBLIC_PATHS = [
   "/oauth/consent",
   "/accessibility-statement",
   "/privacy",
+  "/ai-transparency",
   "/methodology",
   "/demo",
   "/guide",
