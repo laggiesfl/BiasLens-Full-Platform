@@ -16,21 +16,18 @@ export function GuideLauncher() {
   }, [open]);
 
   useEffect(() => {
-    if (!open) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [open]);
-
-  useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape" && open) {
+      if (!open) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
         setOpen(false);
         requestAnimationFrame(() => launcherRef.current?.focus());
+      }
+      // A return shortcut is useful when focus has moved into the main website.
+      // Do not trap Tab: this is a non-modal Guide and the page stays available.
+      if (event.altKey && event.shiftKey && event.key.toLowerCase() === "g") {
+        event.preventDefault();
+        closeRef.current?.focus();
       }
     }
     window.addEventListener("keydown", onKeyDown);
@@ -50,7 +47,10 @@ export function GuideLauncher() {
           aria-labelledby="guide-launcher-title"
         >
           <div className={styles.panelHeader}>
-            <strong id="guide-launcher-title">BiasLens Guide</strong>
+            <div>
+              <strong id="guide-launcher-title">BiasLens Guide</strong>
+              <span style={{ display: "block", fontSize: "0.75rem" }}>Return to Guide: Alt+Shift+G</span>
+            </div>
             <button
               ref={closeRef}
               type="button"
