@@ -13,10 +13,11 @@ describe("BiasLens Guide launcher placement", () => {
     expect(launcher).toContain("return null");
   });
 
-  it("locks background page scrolling while the Guide panel is open", () => {
+  it("keeps the Guide non-modal while providing an efficient keyboard return", () => {
     const launcher = read("src/components/guide/GuideLauncher.tsx");
-    expect(launcher).toContain('document.body.style.overflow = "hidden"');
-    expect(launcher).toContain("previousOverflow");
-    expect(launcher).toContain("document.body.style.overflow = previousOverflow");
+    expect(launcher).toContain('aria-modal="false"');
+    expect(launcher).toContain('event.altKey && event.shiftKey');
+    expect(launcher).toContain('closeRef.current?.focus()');
+    expect(launcher).not.toContain('document.body.style.overflow = "hidden"');
   });
 });
