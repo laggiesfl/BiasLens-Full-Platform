@@ -61,16 +61,17 @@ export default function Home() {
         <section className="public-hero">
           <div className="public-shell public-hero-grid">
             <div>
-              <span className="public-kicker">Evidence-led algorithmic accountability</span>
-              <h1>Know what your evidence supports — and what it does not.</h1>
+              <span className="public-kicker">Evidence-led AI accountability</span>
+              <h1>Can your organisation defend the decisions its AI makes?</h1>
               <p className="public-lead">
-                BiasLens helps organisations assess one AI system at a time, separate evidence from assumption,
-                identify bias risks, document uncertainty and build an accountable evidence trail.
+                AI is influencing decisions. But can you demonstrate that those decisions are fair,
+                accountable and supported by evidence?
               </p>
               <p className="public-lead">
-                If AI is influencing decisions about people, opportunities, access, recruitment, learning,
-                financial services or essential services, confident claims are not enough. Your organisation
-                needs evidence it can explain.
+                BiasLens helps organisations examine AI-enabled systems, identify potential bias risks,
+                document what the evidence actually supports, and build stronger accountability before
+                problems become regulatory, legal or reputational risks. Start with one AI system:
+                understand what you know, what remains uncertain and what requires further investigation.
               </p>
               <div className="public-actions" aria-label="Primary actions">
                 <Link href="/enquire" className="public-button public-button-primary">Assess one AI system</Link>
@@ -103,11 +104,12 @@ export default function Home() {
         <section id="why" className="public-section public-section-alt">
           <div className="public-shell">
             <div className="public-section-heading">
-              <h2>The market problem BiasLens is built to solve</h2>
+              <h2>Why AI accountability cannot rely on assumptions</h2>
               <p>
-                Many organisations can name the AI tools they have purchased. Fewer can show what evidence supports
-                how those systems influence decisions, which groups may be affected, what remains unknown or whether
-                vendor assurances have actually been substantiated.
+                Many organisations know which AI systems they use. Fewer can demonstrate how those systems
+                influence decisions, which people may be affected, what evidence supports their assurances
+                and which risks remain unresolved. BiasLens helps turn those unanswered questions into
+                a structured, evidence-led assessment.
               </p>
             </div>
             <div className="public-grid-3">
