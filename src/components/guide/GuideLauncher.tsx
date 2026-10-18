@@ -10,6 +10,7 @@ export function GuideLauncher() {
   const [open, setOpen] = useState(false);
   const closeRef = useRef<HTMLButtonElement | null>(null);
   const launcherRef = useRef<HTMLButtonElement | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (open) closeRef.current?.focus();
@@ -28,9 +29,33 @@ export function GuideLauncher() {
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape" && open) {
+      if (!open) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
         setOpen(false);
         requestAnimationFrame(() => launcherRef.current?.focus());
+        return;
+      }
+      if (event.key !== "Tab" || !panelRef.current) return;
+      const focusables = Array.from(panelRef.current.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )).filter((element) => element.getClientRects().length > 0);
+      if (!focusables.length) {
+        event.preventDefault();
+        closeRef.current?.focus();
+        return;
+      }
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (!panelRef.current.contains(document.activeElement)) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+      } else if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
       }
     }
     window.addEventListener("keydown", onKeyDown);
@@ -43,10 +68,11 @@ export function GuideLauncher() {
     <>
       {open && (
         <aside
+          ref={panelRef}
           id="biaslens-guide-panel"
           className={styles.panel}
           role="dialog"
-          aria-modal="false"
+          aria-modal="true"
           aria-labelledby="guide-launcher-title"
         >
           <div className={styles.panelHeader}>
