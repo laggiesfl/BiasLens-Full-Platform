@@ -255,8 +255,14 @@
   line-height: 1.5;
   margin: 0 0 0.4rem;
 }
-.guide .aiDisclosure a {
-  color: #123359;
+.guide .aiDisclosure a,
+.guide .aiDisclosure a:link,
+.guide .aiDisclosure a:visited,
+.guide .aiDisclosure a:hover,
+.guide .aiDisclosure a:focus {
+  color: #123359 !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #123359;
   font-weight: 800;
   text-decoration: underline;
   text-underline-offset: 0.18em;
