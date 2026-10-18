@@ -293,14 +293,14 @@ export function BiasLensGuide({ embedded = false }: BiasLensGuideProps) {
         </div>
       </div>
 
-      <div role="note" aria-labelledby="biaslens-ai-disclosure-title" style={{ margin: "0.75rem 1rem", padding: "1rem", border: "2px solid #1f3f6b", borderRadius: "8px", background: "#e6eef8", color: "#17324d", fontSize: "1rem", lineHeight: 1.6 }}>
-        <p id="biaslens-ai-disclosure-title" style={{ fontSize: "1.125rem", lineHeight: 1.35, fontWeight: 800, margin: "0 0 0.5rem" }}>You are interacting with AI</p>
-        <p style={{ margin: "0 0 0.75rem" }}>BiasLens Guide uses an external AI service. Submitted questions and optional voice recordings are processed to respond to you. Answers may be inaccurate and are not verified assessment findings. Do not share sensitive personal information.</p>
-        <p style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem 1rem", margin: 0 }}>
-          <a href="/ai-transparency" style={{ color: "#123359", textDecoration: "underline", textUnderlineOffset: "0.18em", fontWeight: 800 }}>AI Transparency Statement</a>
-          <a href="/privacy" style={{ color: "#123359", textDecoration: "underline", textUnderlineOffset: "0.18em", fontWeight: 800 }}>Privacy Notice</a>
-        </p>
-      </div>
+      <aside className={styles.aiDisclosure} aria-labelledby="biaslens-ai-disclosure-title">
+        <h2 id="biaslens-ai-disclosure-title">You are interacting with AI</h2>
+        <p>BiasLens Guide uses an external AI service. Submitted questions and optional voice recordings are processed to respond to you. Answers may be inaccurate and are not verified assessment findings. Do not share sensitive personal information.</p>
+        <nav aria-label="AI transparency and privacy information">
+          <a href="/ai-transparency">AI Transparency Statement</a>
+          <a href="/privacy">Privacy Notice</a>
+        </nav>
+      </aside>
       <div className={styles.messages} aria-label="BiasLens Guide conversation" aria-live="off">
         {messages.map((message) => (
           <article
