@@ -190,9 +190,10 @@ export default function AccessibilityStatementPage() {
           The page and the conversation panel could scroll independently, and more
           than one control could appear to close or leave the Guide. This increased
           mouse precision demands and made the interaction harder to understand.
-          The page behind the Guide is now locked while the panel is open, the
-          inner conversation scrollbar has been removed, and the open panel has a
-          single clear Close control.
+          The conversation scrollbar was simplified and the panel has a single
+          clear Close control. Following user testing, the floating Guide remains
+          non-modal so people can use the website while the Guide is open.
+          A keyboard shortcut (Alt+Shift+G) returns focus to the Guide.
         </p>
 
         <h3 style={{ fontSize: "1.05rem" }}>
@@ -268,12 +269,17 @@ export default function AccessibilityStatementPage() {
         </p>
         <ul>
           <li>
-            <strong>No structured screen reader walkthrough has been carried out.</strong>
+            <strong>Independent blind-user screen-reader assessment remains outstanding.</strong>{" "}
+            The planned assessment with a blind tester using their own assistive
+            technology has not yet been completed. Results must be recorded after
+            testing rather than anticipated or marked as passed.
           </li>
           <li>
-            <strong>No complete keyboard-only walkthrough has been carried out.</strong> We
-            have not verified that every function can be reached and operated
-            without a mouse across the full platform.
+            <strong>Complete platform-wide keyboard-only testing remains outstanding.</strong>{" "}
+            BiasLens Guide was tested in Firefox on 18 October 2026: Tab,
+            Shift+Tab, Escape and Alt+Shift+G worked, including returning to the
+            Guide while the surrounding page remained usable. These positive
+            results do not establish keyboard accessibility of every platform feature.
           </li>
           <li>
             <strong>
