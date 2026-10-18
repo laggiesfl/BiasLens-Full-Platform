@@ -24,7 +24,7 @@ describe("BiasLens Guide normal chatbot experience", () => {
 
   it("keeps read-aloud controls directly after each real assistant answer", () => {
     const guide = read("src/components/guide/BiasLensGuide.tsx");
-    const answerTextIndex = guide.indexOf("<div>{message.content}</div>");
+    const answerTextIndex = guide.indexOf('<div>{message.role === "assistant" ? displayText(message.content) : message.content}</div>');
     const answerControlsIndex = guide.indexOf("className={styles.answerControls}");
 
     expect(guide).toContain("Listen to this answer");
