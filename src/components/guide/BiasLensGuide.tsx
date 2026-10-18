@@ -293,6 +293,10 @@ export function BiasLensGuide({ embedded = false }: BiasLensGuideProps) {
         </div>
       </div>
 
+      <aside className={styles.aiDisclosure} aria-label="AI transparency notice">
+        <p><strong>You are interacting with AI.</strong> Responses may be inaccurate.</p>
+        <a href="/ai-transparency">Read the AI Transparency Statement</a>
+      </aside>
       <div className={styles.messages} aria-label="BiasLens Guide conversation" aria-live="off">
         {messages.map((message) => (
           <article

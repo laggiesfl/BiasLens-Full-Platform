@@ -250,7 +250,7 @@ export default function Home() {
                   <li>BiasLens does not turn incomplete evidence into reassurance.</li>
                   <li>BiasLens does not assess people as individual risk objects.</li>
                 </ul>
-                <p><Link href="/privacy">Read the Privacy Notice</Link> · <Link href="/accessibility-statement">Read the Accessibility Statement</Link></p>
+                <p><Link href="/ai-transparency">AI Transparency Statement</Link> · <Link href="/privacy">Read the Privacy Notice</Link> · <Link href="/accessibility-statement">Read the Accessibility Statement</Link></p>
               </article>
             </div>
           </div>
@@ -293,7 +293,7 @@ export default function Home() {
           <div>
             <h2>Accessibility and privacy</h2>
             <p>This public experience is designed for keyboard operation, screen-reader navigation, reflow and visible focus, with a read-aloud convenience control that does not replace semantic accessibility.</p>
-            <p><Link href="/accessibility-statement">Accessibility Statement</Link> · <Link href="/privacy">Privacy Notice</Link></p>
+            <p><Link href="/ai-transparency">AI Transparency Statement</Link> · <Link href="/accessibility-statement">Accessibility Statement</Link> · <Link href="/privacy">Privacy Notice</Link></p>
           </div>
         </div>
       </footer>

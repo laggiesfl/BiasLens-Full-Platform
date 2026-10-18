@@ -236,3 +236,38 @@
     flex: 1 1 100%;
   }
 }
+
+/* Compact AI disclosure; the full explanation lives on its own page. */
+.guide .aiDisclosure {
+  margin: 0.5rem 1rem;
+  padding: 0.75rem;
+  background: #e6eef8;
+  color: #17324d;
+  border: 2px solid #1f3f6b;
+  border-radius: 8px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.guide .aiDisclosure p {
+  color: #17324d;
+  opacity: 1;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0 0 0.4rem;
+}
+.guide .aiDisclosure a,
+.guide .aiDisclosure a:link,
+.guide .aiDisclosure a:visited,
+.guide .aiDisclosure a:hover,
+.guide .aiDisclosure a:focus {
+  color: #123359 !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #123359;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+.guide .aiDisclosure a:focus-visible {
+  outline: 4px solid #a66300;
+  outline-offset: 3px;
+}
