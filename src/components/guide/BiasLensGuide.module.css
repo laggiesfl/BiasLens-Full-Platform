@@ -236,3 +236,44 @@
     flex: 1 1 100%;
   }
 }
+
+/* Keep the mandatory AI notice readable even where the landing page has global text styles. */
+.guide .aiDisclosure {
+  margin: 0.75rem 1rem;
+  padding: 1rem;
+  background: #e6eef8;
+  color: #17324d;
+  border: 2px solid #1f3f6b;
+  border-radius: 8px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.guide .aiDisclosure h2 {
+  color: #17324d;
+  font-size: 1.125rem;
+  font-weight: 800;
+  line-height: 1.35;
+  margin: 0 0 0.5rem;
+}
+.guide .aiDisclosure p {
+  color: #17324d;
+  opacity: 1;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 0.75rem;
+}
+.guide .aiDisclosure nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+}
+.guide .aiDisclosure a {
+  color: #123359;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+.guide .aiDisclosure a:focus-visible {
+  outline: 4px solid #a66300;
+  outline-offset: 3px;
+}
