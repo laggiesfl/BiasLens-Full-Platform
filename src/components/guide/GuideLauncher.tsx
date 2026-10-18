@@ -47,7 +47,10 @@ export function GuideLauncher() {
           aria-labelledby="guide-launcher-title"
         >
           <div className={styles.panelHeader}>
-            <div>\n              <strong id="guide-launcher-title">BiasLens Guide</strong>\n              <span style={{ display: "block", fontSize: "0.75rem" }}>Return to Guide: Alt+Shift+G</span>\n            </div>
+            <div>
+              <strong id="guide-launcher-title">BiasLens Guide</strong>
+              <span style={{ display: "block", fontSize: "0.75rem" }}>Return to Guide: Alt+Shift+G</span>
+            </div>
             <button
               ref={closeRef}
               type="button"
