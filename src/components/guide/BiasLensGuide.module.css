@@ -237,35 +237,23 @@
   }
 }
 
-/* Keep the mandatory AI notice readable even where the landing page has global text styles. */
+/* Compact AI disclosure; the full explanation lives on its own page. */
 .guide .aiDisclosure {
-  margin: 0.75rem 1rem;
-  padding: 1rem;
+  margin: 0.5rem 1rem;
+  padding: 0.75rem;
   background: #e6eef8;
   color: #17324d;
   border: 2px solid #1f3f6b;
   border-radius: 8px;
   font-size: 1rem;
-  line-height: 1.6;
-}
-.guide .aiDisclosure h2 {
-  color: #17324d;
-  font-size: 1.125rem;
-  font-weight: 800;
-  line-height: 1.35;
-  margin: 0 0 0.5rem;
+  line-height: 1.5;
 }
 .guide .aiDisclosure p {
   color: #17324d;
   opacity: 1;
   font-size: 1rem;
-  line-height: 1.6;
-  margin: 0 0 0.75rem;
-}
-.guide .aiDisclosure nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem 1rem;
+  line-height: 1.5;
+  margin: 0 0 0.4rem;
 }
 .guide .aiDisclosure a {
   color: #123359;
