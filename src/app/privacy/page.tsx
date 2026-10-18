@@ -31,7 +31,7 @@ export default function PrivacyNoticePage() {
           how long for, and what you can ask us to do about it. It is written to
           be read before you decide whether to use the platform, not after.
         </p>
-        <p className="muted">Last updated 17 August 2026.</p>
+        <p className="muted">Last reviewed 18 October 2026.</p>
       </div>
 
       <section className="card stack" aria-labelledby="who-h">
@@ -113,6 +113,21 @@ export default function PrivacyNoticePage() {
         <p>
           Please do not put employee, applicant, health, disability, identification,
           credential or other sensitive person-level information into BiasLens Guide.
+          Using the microphone is optional. If you choose Speak, your recorded audio
+          is sent for AI-assisted transcription; the resulting text appears in the
+          question field for you to review and edit before pressing Send. Read-aloud
+          of answers uses speech features available in your browser or operating
+          system. You can use the Guide without voice input or read-aloud.
+        </p>
+
+        <h3 style={{ fontSize: "1.05rem" }}>Initial assessment enquiries</h3>
+        <p>
+          If you ask BeAccessible to assess an AI system, we collect the contact,
+          organisation and system information you choose to enter in the
+          qualification form. The enquiry is recorded in Airtable and a
+          notification is delivered using Resend to our business mailbox.
+          Please describe the system rather than submitting identifiable records
+          about applicants, employees or other individuals.
         </p>
 
         <h3 style={{ fontSize: "1.05rem" }}>Technical</h3>
@@ -226,20 +241,30 @@ export default function PrivacyNoticePage() {
             requests to the selected AI model.
           </li>
           <li>
-            <strong>OpenAI</strong> — the AI model provider used to generate public
-            BiasLens Guide responses. Only the Guide conversation submitted to that
-            feature is sent for model processing; private assessment content is not
-            connected to the Guide route.
+            <strong>Google Gemini (through Vercel AI Gateway)</strong> — the model
+            configured by default to generate public BiasLens Guide responses and
+            transcribe optional voice questions. Submitted conversation text or
+            recorded audio, as applicable, is sent for model processing. The Guide
+            does not have access to private assessment records.
           </li>
           <li>
-            <strong>Resend</strong> — sending the emails we send you, such as
-            invitations and sign-in links.
+            <strong>Airtable</strong> — records information deliberately submitted
+            through the initial assessment enquiry form, including contact details,
+            organisation, system description and the enquiry reference.
+          </li>
+          <li>
+            <strong>Resend</strong> — delivers transactional email, including
+            initial assessment enquiry notifications and relevant service messages.
           </li>
         </ul>
         <p>
           These providers operate internationally, which means information may be
           handled outside South Africa. We have not independently audited their
-          internal practices and we will not claim otherwise.
+          internal practices and we will not claim otherwise. The precise
+          processing locations, retention periods and training-use settings
+          applicable to AI requests and voice transcription require further
+          confirmation. We will not claim that a provider never retains or uses
+          request data without verifying its terms and configuration.
         </p>
       </section>
 
@@ -326,7 +351,11 @@ export default function PrivacyNoticePage() {
         </ul>
         <p>
           BiasLens Guide conversations are not written into the private BiasLens
-          assessment database by the Guide feature.
+          assessment database by the Guide feature. This does not establish how
+          long external AI or infrastructure providers retain request content.
+          We are verifying their applicable retention, international processing,
+          and model-training terms and will update this notice when confirmed.
+          Until then, please do not submit sensitive information to the public Guide.
         </p>
       </section>
 
