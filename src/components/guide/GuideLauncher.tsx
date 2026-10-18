@@ -10,21 +10,9 @@ export function GuideLauncher() {
   const [open, setOpen] = useState(false);
   const closeRef = useRef<HTMLButtonElement | null>(null);
   const launcherRef = useRef<HTMLButtonElement | null>(null);
-  const panelRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (open) closeRef.current?.focus();
-  }, [open]);
-
-  useEffect(() => {
-    if (!open) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
   }, [open]);
 
   useEffect(() => {
@@ -34,28 +22,12 @@ export function GuideLauncher() {
         event.preventDefault();
         setOpen(false);
         requestAnimationFrame(() => launcherRef.current?.focus());
-        return;
       }
-      if (event.key !== "Tab" || !panelRef.current) return;
-      const focusables = Array.from(panelRef.current.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      )).filter((element) => element.getClientRects().length > 0);
-      if (!focusables.length) {
+      // A return shortcut is useful when focus has moved into the main website.
+      // Do not trap Tab: this is a non-modal Guide and the page stays available.
+      if (event.altKey && event.shiftKey && event.key.toLowerCase() === "g") {
         event.preventDefault();
         closeRef.current?.focus();
-        return;
-      }
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-      if (!panelRef.current.contains(document.activeElement)) {
-        event.preventDefault();
-        (event.shiftKey ? last : first).focus();
-      } else if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
       }
     }
     window.addEventListener("keydown", onKeyDown);
@@ -68,15 +40,14 @@ export function GuideLauncher() {
     <>
       {open && (
         <aside
-          ref={panelRef}
           id="biaslens-guide-panel"
           className={styles.panel}
           role="dialog"
-          aria-modal="true"
+          aria-modal="false"
           aria-labelledby="guide-launcher-title"
         >
           <div className={styles.panelHeader}>
-            <strong id="guide-launcher-title">BiasLens Guide</strong>
+            <div>\n              <strong id="guide-launcher-title">BiasLens Guide</strong>\n              <span style={{ display: "block", fontSize: "0.75rem" }}>Return to Guide: Alt+Shift+G</span>\n            </div>
             <button
               ref={closeRef}
               type="button"
