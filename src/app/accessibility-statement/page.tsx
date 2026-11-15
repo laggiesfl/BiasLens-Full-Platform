@@ -54,7 +54,7 @@ export default function AccessibilityStatementPage() {
         </p>
         <p>
           This statement applies to the BiasLens platform at{" "}
-          <strong>biaslens.beaccessible.co.za</strong>, including the public
+          <strong>bias-lens-full-platform.vercel.app</strong> and <strong>biaslens.beaccessible.co.za</strong> where the same platform is deployed, including the public
           BiasLens Guide, assessment tools, the documents the platform generates,
           and the emails it sends.
         </p>
@@ -259,66 +259,18 @@ export default function AccessibilityStatementPage() {
       </section>
 
       <section className="card stack" aria-labelledby="notyet-h">
-        <h2 id="notyet-h" style={{ fontSize: "1.2rem" }}>
-          4. What we have not tested
-        </h2>
-        <p>
-          This is the honest limit of our assessment. An accessibility statement
-          that implies more testing than actually happened is worth less than no
-          statement at all.
-        </p>
+        <h2 id="notyet-h" style={{ fontSize: "1.2rem" }}>4. Testing coverage and remaining limitations</h2>
+        <p>Accessibility testing includes direct use of the platform in Firefox. On 15 November 2026, the product owner confirmed having completed keyboard navigation, zoom and reflow, reduced-motion and contrast checks in Firefox. These are self-assessment reports, not independent certification. The earlier statements that these activities had not been tested are now out of date.</p>
         <ul>
-          <li>
-            <strong>Independent blind-user screen-reader assessment remains outstanding.</strong>{" "}
-            The planned assessment with a blind tester using their own assistive
-            technology has not yet been completed. Results must be recorded after
-            testing rather than anticipated or marked as passed.
-          </li>
-          <li>
-            <strong>Complete platform-wide keyboard-only testing remains outstanding.</strong>{" "}
-            BiasLens Guide was tested in Firefox on 18 October 2026: Tab,
-            Shift+Tab, Escape and Alt+Shift+G worked, including returning to the
-            Guide while the surrounding page remained usable. These positive
-            results do not establish keyboard accessibility of every platform feature.
-          </li>
-          <li>
-            <strong>
-              No systematic testing at 200% zoom or at 320 pixels width has been carried out.
-            </strong>
-          </li>
-          <li>
-            <strong>Touch target sizes have not been measured systematically.</strong>
-          </li>
-          <li>
-            <strong>Reduced-motion behaviour has not been verified systematically.</strong>
-          </li>
-          <li>
-            Colour contrast has been measured or corrected on several screens and
-            Guide states, but not systematically across every assessment tool.
-          </li>
-          <li>
-            BiasLens Guide multilingual text and terminology have not yet been
-            validated by native-language reviewers across all six supported
-            languages.
-          </li>
-          <li>
-            BiasLens Guide speech recognition and read-aloud have been confirmed in
-            Firefox for the real-use journey described above, but they have not yet
-            been tested systematically across browsers, operating systems, all six
-            languages, or a representative range of microphones and speech patterns.
-          </li>
-          <li>
-            The platform is used regularly by a member of our team who types with
-            one hand. That is real lived experience of one kind of access need. It
-            is not a substitute for structured testing with people who use screen
-            readers, magnification or switch devices, and we have not yet done that
-            testing.
-          </li>
+          <li><strong>Independent blind-user screen-reader testing remains outstanding.</strong> Results will be documented after testing; no pass is presumed.</li>
+          <li>Keyboard navigation, including Guide controls, has been checked in Firefox. This does not establish compatibility with every assistive technology or browser combination.</li>
+          <li>Zoom, reflow, reduced motion and contrast have been checked in Firefox. Exact viewport sizes, measurement results and comprehensive case-by-case coverage are not specified in the available testing record.</li>
+          <li>Systematic touch-target measurements and testing across touch devices have not been independently verified in this statement.</li>
+          <li>Guide terminology across supported languages has not yet been independently validated by native-language reviewers.</li>
+          <li>Voice input and read-aloud have been tested in Firefox, but not systematically across every browser, operating system, microphone and language.</li>
+          <li>Testing by a person with lived experience of disability is valuable evidence, but does not replace targeted blind-user screen-reader evaluation.</li>
         </ul>
-        <p>
-          Until that work is done, we will not claim more than partial compliance,
-          however well the platform performs in the areas we have checked.
-        </p>
+        <p>We retain the partial WCAG 2.2 Level AA compliance declaration while the remaining independent testing and documentation gaps are addressed.</p>
       </section>
 
       <section className="card stack" aria-labelledby="third-h">
@@ -351,7 +303,7 @@ export default function AccessibilityStatementPage() {
         </h2>
         <p>
           This statement was prepared on <strong>31 July 2026</strong> and last
-          reviewed on <strong>19 August 2026</strong>.
+          updated on <strong>15 November 2026</strong>.
         </p>
         <p>
           It is based on an accessibility audit carried out between 29 and 31 July
@@ -360,6 +312,9 @@ export default function AccessibilityStatementPage() {
           of BiasLens Guide on 18 and 19 August 2026. That Guide testing covered
           typed and spoken questions, visible feedback, read-aloud, scrolling,
           control placement, error recovery and pointer effort in Firefox.
+        </p>
+        <p>
+          Following further Firefox testing, the product owner confirmed on 15 November 2026 that keyboard navigation, zoom and reflow, reduced motion and contrast had been checked. Detailed test measurements and independent blind-user screen-reader findings are not yet recorded here.
         </p>
         <p>
           <strong>Method: self-assessment by BeAccessible.</strong> No independent
