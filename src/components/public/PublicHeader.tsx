@@ -3,8 +3,21 @@ import { Logo } from "@/components/Logo";
 import { GuideLauncher } from "@/components/guide/GuideLauncher";
 import { ListenToPage } from "./ListenToPage";
 import { HomeSectionNavigator } from "./HomeSectionNavigator";
+import { createClient } from "@/lib/supabase/server";
 
-export function PublicHeader() {
+// Shows whether the visitor is signed in, so people are not left wondering after signing in.
+async function signedInEmail(): Promise<string | null> {
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    return data.user?.email ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function PublicHeader() {
+  const email = await signedInEmail();
   return (
     <>
       <header className="public-header">
@@ -28,7 +41,14 @@ export function PublicHeader() {
 
           <div className="public-header-actions">
             <ListenToPage targetId="main-content" />
-            <Link href="/login" className="public-text-link">Sign in</Link>
+            {email ? (
+              <>
+                <span className="public-signed-in" title={email}>Signed in</span>
+                <Link href="/dashboard" className="public-text-link">Go to dashboard</Link>
+              </>
+            ) : (
+              <Link href="/login" className="public-text-link">Sign in</Link>
+            )}
             <Link href="/enquire" className="public-button public-button-primary">Assess one AI system</Link>
           </div>
         </div>

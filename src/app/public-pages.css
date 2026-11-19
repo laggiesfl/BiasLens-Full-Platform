@@ -422,3 +422,19 @@
   html:focus-within { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* Signed-in indicator in the public header (19 Nov 2026) */
+.public-signed-in {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-weight: 700;
+  color: inherit;
+}
+.public-signed-in::before {
+  content: "";
+  width: .6rem;
+  height: .6rem;
+  border-radius: 50%;
+  background: currentColor;
+}
