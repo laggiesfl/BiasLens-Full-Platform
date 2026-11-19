@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PublicHeader } from "@/components/public/PublicHeader";
 import { PUBLIC_PROOF_DOWNLOADS } from "@/lib/export/publicProofPdfs";
+import { createClient } from "@/lib/supabase/server";
 
 const offers = [
   {
@@ -53,7 +54,14 @@ const offers = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  let signedIn = false;
+  try {
+    const { data } = await (await createClient()).auth.getUser();
+    signedIn = Boolean(data.user);
+  } catch {
+    signedIn = false;
+  }
   return (
     <div className="public-page">
       <PublicHeader />
@@ -75,7 +83,7 @@ export default function Home() {
               </p>
               <div className="public-actions" aria-label="Primary actions">
                 <Link href="/enquire" className="public-button public-button-primary">Assess one AI system</Link>
-                <Link href="/login" className="public-button public-button-secondary">Sign in to BiasLens</Link>
+                {signedIn ? <Link href="/dashboard" className="public-button public-button-secondary">Go to your dashboard</Link> : <Link href="/login" className="public-button public-button-secondary">Sign in to BiasLens</Link>}
               </div>
               <div className="public-tag-row" aria-label="BiasLens principles">
                 <span className="public-tag">Evidence, not assumption</span>
