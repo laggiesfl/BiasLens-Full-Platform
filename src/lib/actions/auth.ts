@@ -14,10 +14,10 @@ export async function signIn(formData: FormData) {
   const requestedReturnTo = String(formData.get("return_to") ?? "").trim();
   const returnTo = requestedReturnTo.startsWith("/") && !requestedReturnTo.startsWith("//")
     ? requestedReturnTo
-    : "/";
+    : "/dashboard";
 
   if (!email || !password) {
-    const suffix = returnTo !== "/" ? "&return_to=" + encodeURIComponent(returnTo) : "";
+    const suffix = returnTo !== "/dashboard" ? "&return_to=" + encodeURIComponent(returnTo) : "";
     redirect("/login?error=" + encodeURIComponent("Enter your email and password.") + suffix);
   }
 
@@ -25,7 +25,7 @@ export async function signIn(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    const suffix = returnTo !== "/" ? "&return_to=" + encodeURIComponent(returnTo) : "";
+    const suffix = returnTo !== "/dashboard" ? "&return_to=" + encodeURIComponent(returnTo) : "";
     redirect("/login?error=" + encodeURIComponent(error.message) + suffix);
   }
 
