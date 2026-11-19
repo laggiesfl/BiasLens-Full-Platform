@@ -16,7 +16,15 @@ async function signedInEmail(): Promise<string | null> {
   }
 }
 
-export async function PublicHeader() {
+const NAV = [
+  { href: "/who-its-for", label: "Who it is for" },
+  { href: "/offers", label: "Offers" },
+  { href: "/why-biaslens", label: "Why BiasLens" },
+  { href: "/proof", label: "Proof" },
+  { href: "/guide", label: "BiasLens Guide" },
+];
+
+export async function PublicHeader({ current }: { current?: string } = {}) {
   const email = await signedInEmail();
   return (
     <>
@@ -32,11 +40,9 @@ export async function PublicHeader() {
           </Link>
 
           <nav aria-label="Public navigation" className="public-nav">
-            <a href="/#why">Why BiasLens</a>
-            <a href="/#offers">Offers</a>
-            <a href="/#proof">Proof</a>
-            <Link href="/guide">BiasLens Guide</Link>
-            <a href="/#founder">Founder note</a>
+            {NAV.map((item) => (
+              <Link key={item.href} href={item.href} aria-current={current === item.href ? "page" : undefined}>{item.label}</Link>
+            ))}
           </nav>
 
           <div className="public-header-actions">
